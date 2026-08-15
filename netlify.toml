@@ -1,9 +1,0 @@
-[build]
-  command = "node generate-events-manifest.js"
-  publish = "."
-
-[[headers]]
-  for = "/_data/*"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Cache-Control = "no-cache"
