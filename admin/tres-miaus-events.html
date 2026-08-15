@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="/site-theme.js"></script>
+  <script src="/cms-data.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --terracotta: #C4633A;
+    --terracotta-light: #E8896A;
+    --terracotta-pale: #F5DDD3;
+    --sage: #7A9E7E;
+    --sage-dark: #527556;
+    --sage-light: #B5CEAB;
+    --sage-pale: #E8F0E5;
+    --ochre: #D4A84B;
+    --ochre-pale: #F5E9C8;
+    --bark: #3D2B1F;
+    --bark-light: #6B4C3B;
+    --warm-white: #FDFAF5;
+    --text-main: #2C1F14;
+    --text-muted: #7A6355;
+    --text-light: #B09B8A;
+    --pink: #E8B4B8;
+    --pink-dark: #C4848A;
+    --pink-pale: #F7E8E9;
+    --neptunes: #2D3B6B;
+    --neptunes-mid: #4A5C96;
+    --neptunes-light: #8FA3D4;
+    --neptunes-pale: #E8ECF7;
+    --neptunes-purple: #6B5A9E;
+    --neptunes-purple-light: #B8A8DC;
+    --herb: #2E7D5A;
+    --herb-deep: #1E4D3A;
+    --herb-light: #6DB89A;
+    --herb-pale: #DDF0E8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--text-main);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.25rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(245, 240, 232, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(196, 99, 58, 0.12);
+  }
+
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--bark); }
+  .nav-logo span { color: var(--terracotta); font-style: italic; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.8rem; font-weight: 400; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--terracotta); }
+  .nav-links a.active { color: var(--sage-dark); font-weight: 500; }
+  .nav-cta {
+    background: var(--terracotta); color: var(--warm-white) !important;
+    padding: 0.5rem 1.25rem; border-radius: 2rem; transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--bark) !important; }
+
+  /* PAGE HERO */
+  .page-hero {
+    padding-top: 5rem;
+    background: var(--pink);
+    padding-bottom: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 55vh;
+    align-items: end;
+  }
+
+  .page-hero-left {
+    padding: 4rem 3.5rem 4rem 5rem;
+  }
+
+  .page-eyebrow {
+    font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--pink-dark); font-weight: 500; margin-bottom: 1.25rem;
+    opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+  }
+
+  .page-hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 4vw, 3.75rem);
+    color: var(--bark); line-height: 1.1; margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 0.7s 0.35s forwards;
+  }
+
+  .page-hero-title em { font-style: italic; color: var(--bark-light); }
+
+  .page-hero-desc {
+    font-size: 0.95rem; color: var(--bark-light); line-height: 1.8; max-width: 380px;
+    opacity: 0; animation: fadeUp 0.7s 0.5s forwards;
+  }
+
+  .page-hero-right {
+    padding: 4rem 5rem 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.6s forwards;
+  }
+
+  .hero-stat-row {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .hero-stat {
+    background: rgba(61,43,31,0.08);
+    border: 1px solid rgba(61,43,31,0.12);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+    flex: 1;
+  }
+
+  .hero-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    color: var(--bark);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .hero-stat-num span { color: var(--pink-dark); font-style: italic; }
+
+  .hero-stat-label {
+    font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--bark-light);
+  }
+
+  /* FILTER BAR */
+  .filter-bar {
+    background: var(--warm-white);
+    border-bottom: 1px solid rgba(196,99,58,0.1);
+    padding: 1rem 5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 70px;
+    z-index: 50;
+  }
+
+  .filter-label {
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-light); font-weight: 500; margin-right: 0.5rem;
+  }
+
+  .filter-btn {
+    border: 1px solid rgba(196,99,58,0.2);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-family: 'DM Sans', sans-serif;
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover { border-color: var(--sage); color: var(--sage-dark); }
+  .filter-btn.active { background: var(--sage); color: var(--warm-white); border-color: var(--sage); }
+
+  /* UPCOMING EVENTS */
+  .events-section { padding: 5rem 5rem 3rem; }
+
+  .section-eyebrow {
+    font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--sage-dark); font-weight: 500; margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.25rem; color: var(--bark); line-height: 1.2; margin-bottom: 0.75rem;
+  }
+
+  .section-sub {
+    font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;
+    max-width: 520px; margin-bottom: 3rem;
+  }
+
+  /* FEATURED EVENT */
+  .featured-event {
+    background: var(--terracotta-light);
+    border-radius: 1.25rem;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 2rem;
+  }
+
+  .featured-photo {
+    background: var(--terracotta);
+    min-height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .featured-tag {
+    position: absolute;
+    top: 1.25rem; left: 1.25rem;
+    background: var(--neptunes-mid);
+    color: var(--warm-white);
+    font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 0.35rem 0.9rem; border-radius: 2rem; font-weight: 500;
+  }
+
+  .photo-placeholder {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 0.5rem; opacity: 0.3;
+  }
+
+  .photo-placeholder p {
+    font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--warm-white);
+  }
+
+  .featured-body {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: var(--warm-white);
+  }
+
+  .event-date {
+    font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--sage-light); margin-bottom: 0.75rem;
+  }
+
+  .featured-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem; color: var(--warm-white); line-height: 1.2; margin-bottom: 1rem;
+  }
+
+  .featured-title em { font-style: italic; color: var(--ochre-pale); }
+
+  .featured-desc {
+    font-size: 0.88rem; color: rgba(253,250,245,0.7); line-height: 1.8; margin-bottom: 1.75rem;
+  }
+
+  .event-meta {
+    display: flex; gap: 1.5rem; margin-bottom: 1.75rem; flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.78rem; color: rgba(253,250,245,0.6);
+  }
+
+  .btn-white {
+    background: var(--warm-white); color: var(--bark);
+    padding: 0.8rem 1.75rem; border-radius: 2rem;
+    text-decoration: none; font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.05em; transition: background 0.2s, transform 0.15s;
+    display: inline-block; align-self: flex-start;
+  }
+
+  .btn-white:hover { background: var(--cream); transform: translateY(-1px); }
+
+  /* EVENT CARDS GRID */
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  .event-card {
+    background: var(--warm-white);
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid rgba(196,99,58,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .event-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(61,43,31,0.09); }
+
+  .event-card-photo {
+    height: 150px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+
+  .event-card-photo.terracotta-bg { background: var(--terracotta-pale); }
+  .event-card-photo.sage-bg { background: var(--sage-pale); }
+  .event-card-photo.ochre-bg { background: var(--ochre-pale); }
+  .event-card-photo.purple-bg { background: #EAE8F5; }
+
+  .event-type-tag {
+    position: absolute; top: 0.75rem; left: 0.75rem;
+    font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.25rem 0.65rem; border-radius: 2rem; font-weight: 500;
+  }
+
+  .tag-neptunes { background: var(--neptunes-pale); color: var(--neptunes); }
+  .tag-community { background: var(--sage-pale); color: var(--sage-dark); }
+  .tag-workshop { background: var(--ochre-pale); color: var(--bark-light); }
+  .tag-social { background: #EAE8F5; color: #534AB7; }
+
+  .event-card-body { padding: 1.25rem; }
+
+  .card-date {
+    font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-light); margin-bottom: 0.4rem;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; color: var(--bark); margin-bottom: 0.5rem; line-height: 1.3;
+  }
+
+  .card-desc {
+    font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;
+  }
+
+  .card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .card-meta {
+    font-size: 0.72rem; color: var(--text-light);
+    display: flex; align-items: center; gap: 0.35rem;
+  }
+
+  .btn-small {
+    font-size: 0.75rem; font-weight: 500; color: var(--terracotta);
+    text-decoration: none; letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(196,99,58,0.3);
+    padding-bottom: 1px; transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-small:hover { color: var(--bark); border-color: var(--bark); }
+
+  .btn-small.sage { color: var(--sage-dark); border-color: rgba(82,117,86,0.3); }
+  .btn-small.sage:hover { color: var(--bark); border-color: var(--bark); }
+
+  /* NEPTUNES STRIP */
+  .neptunes-strip {
+    background: var(--neptunes-light);
+    padding: 4rem 5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .neptunes-text { color: var(--bark); }
+
+  .neptunes-eyebrow {
+    font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--herb-deep); font-weight: 500; margin-bottom: 1rem;
+  }
+
+  .neptunes-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; color: var(--bark); line-height: 1.2; margin-bottom: 1.25rem;
+  }
+
+  .neptunes-title em { font-style: italic; color: var(--neptunes); }
+
+  .neptunes-desc {
+    font-size: 0.88rem; color: var(--bark-light); line-height: 1.8; margin-bottom: 1.75rem;
+  }
+
+  .btn-outline-white {
+    border: 1.5px solid rgba(61,43,31,0.3); color: var(--bark);
+    padding: 0.8rem 1.75rem; border-radius: 2rem;
+    text-decoration: none; font-size: 0.82rem;
+    letter-spacing: 0.05em; transition: border-color 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+
+  .btn-outline-white:hover { border-color: var(--bark); transform: translateY(-1px); }
+
+  .neptunes-types {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  }
+
+  .neptunes-type {
+    background: rgba(255,255,255,0.45);
+    border: 1px solid rgba(61,43,31,0.1);
+    border-radius: 1rem;
+    padding: 1.25rem;
+  }
+
+  .neptunes-type-icon { font-size: 1.25rem; margin-bottom: 0.5rem; }
+  .neptunes-type-name { font-size: 0.85rem; font-weight: 500; color: var(--bark); margin-bottom: 0.25rem; }
+  .neptunes-type-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* PAST EVENTS / INSTAGRAM */
+  .past-section {
+    padding: 5rem 5rem;
+    background: var(--sage-pale);
+  }
+
+  .past-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 2.5rem;
+  }
+
+  .instagram-link {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.8rem; color: var(--sage-dark); text-decoration: none;
+    border-bottom: 1px solid rgba(82,117,86,0.3); padding-bottom: 2px;
+    transition: color 0.2s;
+  }
+
+  .instagram-link:hover { color: var(--bark); }
+
+  .past-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+  }
+
+  .past-item {
+    aspect-ratio: 1;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s;
+    cursor: pointer;
+  }
+
+  .past-item:hover { transform: scale(1.02); }
+  .past-item:hover .past-overlay { opacity: 1; }
+
+  .past-item.tc { background: var(--terracotta-pale); }
+  .past-item.sc { background: var(--sage-pale); border: 1px solid var(--sage-light); }
+  .past-item.oc { background: var(--ochre-pale); }
+  .past-item.pc { background: #EAE8F5; }
+  .past-item.dc { background: #EDE8DF; }
+  .past-item.gc { background: #E8F0E5; }
+  .past-item.bc { background: #E6F1FB; }
+  .past-item.rc { background: #FAECE7; }
+
+  .past-overlay {
+    position: absolute; inset: 0;
+    background: rgba(61,43,31,0.55);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.2s;
+    border-radius: 0.75rem;
+  }
+
+  .past-overlay p {
+    font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--warm-white); text-align: center; padding: 0 1rem;
+  }
+
+  /* HOST YOUR OWN CTA */
+  .host-cta {
+    padding: 5rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 4rem;
+  }
+
+  .host-cta-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.25rem; color: var(--bark); line-height: 1.2; margin-bottom: 0.75rem;
+  }
+
+  .host-cta-title em { font-style: italic; color: var(--sage-dark); }
+
+  .host-cta-sub {
+    font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; max-width: 480px;
+  }
+
+  .host-cta-actions { display: flex; flex-direction: column; gap: 1rem; }
+
+  .btn-primary {
+    background: var(--terracotta); color: var(--warm-white);
+    padding: 0.9rem 2rem; border-radius: 2rem; text-decoration: none;
+    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.05em;
+    transition: background 0.2s, transform 0.15s; text-align: center; white-space: nowrap;
+  }
+
+  .btn-primary:hover { background: var(--bark); transform: translateY(-1px); }
+
+  .btn-sage {
+    background: var(--sage); color: var(--warm-white);
+    padding: 0.9rem 2rem; border-radius: 2rem; text-decoration: none;
+    font-size: 0.85rem; font-weight: 400; letter-spacing: 0.05em;
+    transition: background 0.2s, transform 0.15s; text-align: center; white-space: nowrap;
+  }
+
+  .btn-sage:hover { background: var(--sage-dark); transform: translateY(-1px); }
+
+  /* FOOTER */
+  footer {
+    background: var(--bark); color: rgba(245,240,232,0.5);
+    padding: 2.5rem 5rem; display: flex;
+    align-items: center; justify-content: space-between; font-size: 0.78rem;
+  }
+
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--cream); }
+  .footer-logo span { color: var(--terracotta-light); font-style: italic; }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { color: rgba(245,240,232,0.45); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--terracotta-light); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s, transform 0.7s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><a href="index.html" style="text-decoration:none;color:inherit;">Tres <span>Miaus</span></a></div>
+  <ul class="nav-links">
+    <li><a href="tres-miaus-space.html">The space</a></li>
+    <li><a href="tres-miaus-events.html">Events</a></li>
+    <li><a href="tres-miaus-membership.html">Membership</a></li>
+    <li><a href="tres-miaus-about.html">About</a></li>
+    <li><a href="tres-miaus-rent.html" class="nav-cta">Book now</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-left">
+    <p class="page-eyebrow">Events</p>
+    <h1 class="page-hero-title">
+      Gatherings that<br>feel like <em>something</em>
+    </h1>
+    <p class="page-hero-desc">Our own Neptunes events, community workshops, and whatever the people who rent this space dream up. Something's always happening at Tres Miaus.</p>
+  </div>
+  <div class="page-hero-right">
+    <div class="hero-stat-row">
+      <div class="hero-stat">
+        <p class="hero-stat-num">2–3 <span>×</span></p>
+        <p class="hero-stat-label">Events per month</p>
+      </div>
+      <div class="hero-stat">
+        <p class="hero-stat-num">Free <span>&</span> paid</p>
+        <p class="hero-stat-label">Ticket options</p>
+      </div>
+    </div>
+    <div class="hero-stat">
+      <p class="hero-stat-num">All <span>kinds</span></p>
+      <p class="hero-stat-label">Workshops · gatherings · Neptunes · community</p>
+    </div>
+  </div>
+</section>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="filter-label">Filter by</span>
+  <button class="filter-btn active" onclick="filterEvents('all', this)">All events</button>
+  <button class="filter-btn" onclick="filterEvents('neptunes', this)">Neptunes</button>
+  <button class="filter-btn" onclick="filterEvents('workshop', this)">Workshops</button>
+  <button class="filter-btn" onclick="filterEvents('community', this)">Community</button>
+  <button class="filter-btn" onclick="filterEvents('social', this)">Social</button>
+</div>
+
+<!-- UPCOMING EVENTS -->
+<section class="events-section">
+  <div class="reveal">
+    <p class="section-eyebrow">What's coming up</p>
+    <h2 class="section-title">Upcoming events</h2>
+    <p class="section-sub">All events take place at Tres Miaus unless otherwise noted. Follow us on Instagram to stay up to date.</p>
+  </div>
+
+  <!-- FEATURED — rendered by cms-data.js -->
+  <div id="tm-featured-event" class="reveal"></div>
+
+  <!-- EVENT CARDS — rendered by cms-data.js -->
+  <div class="events-grid" id="tm-events-grid"></div>
+
+  <!-- Shown if no events in CMS yet -->
+  <div id="tm-no-events" style="display:none; padding: 3rem; text-align:center; color: var(--text-muted); font-style:italic;">
+    No upcoming events right now — follow us on Instagram for updates.
+  </div>
+</section>
+
+<!-- NEPTUNES STRIP -->
+<section class="neptunes-strip reveal">
+  <div class="neptunes-text">
+    <p class="neptunes-eyebrow">Our own programme</p>
+    <h2 class="neptunes-title">What are <em>Neptunes</em> events?</h2>
+    <p class="neptunes-desc">Neptunes is our in-house herbal-based practice series — a recurring programme of workshops, ceremonies, and rituals rooted in plant medicine, herbalism, and the natural world. A space to slow down, learn, and reconnect.</p>
+    <a href="#" class="btn-outline-white">Follow on Instagram for updates</a>
+  </div>
+  <div class="neptunes-types">
+    <div class="neptunes-type">
+      <p class="neptunes-type-icon">🌿</p>
+      <p class="neptunes-type-name">Herbalism & plant medicine</p>
+      <p class="neptunes-type-desc">Hands-on workshops exploring the healing properties of plants and herbs.</p>
+    </div>
+    <div class="neptunes-type">
+      <p class="neptunes-type-icon">🕯️</p>
+      <p class="neptunes-type-name">Candle & incense making</p>
+      <p class="neptunes-type-desc">Learn to craft ritual candles and incense blends using natural ingredients.</p>
+    </div>
+    <div class="neptunes-type">
+      <p class="neptunes-type-icon">🌙</p>
+      <p class="neptunes-type-name">Moon rituals & ceremonies</p>
+      <p class="neptunes-type-desc">New moon and full moon gatherings — intention setting, ceremony, and community.</p>
+    </div>
+    <div class="neptunes-type">
+      <p class="neptunes-type-icon">🪴</p>
+      <p class="neptunes-type-name">Ayurveda & witchy arts</p>
+      <p class="neptunes-type-desc">Ayurvedic wisdom, seasonal practices, and the kind of knowledge your grandmother had.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PAST EVENTS / INSTAGRAM FEED -->
+<section class="past-section">
+  <div class="past-header reveal">
+    <div>
+      <p class="section-eyebrow">From the feed</p>
+      <h2 class="section-title">Past moments</h2>
+    </div>
+    <a href="https://instagram.com/treismiaus" class="instagram-link" target="_blank">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      @treismiaus on Instagram
+    </a>
+  </div>
+  <div class="past-grid reveal">
+    <div class="past-item tc"><div class="past-overlay"><p>Neptunes Vol. 1</p></div><div class="photo-placeholder" style="color:var(--terracotta-light);opacity:0.4;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></div>
+    <div class="past-item sc"><div class="past-overlay"><p>Language exchange</p></div><div class="photo-placeholder" style="color:var(--sage);opacity:0.4;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></div>
+    <div class="past-item oc"><div class="past-overlay"><p>Morning workshop</p></div><div class="photo-placeholder" style="color:var(--ochre);opacity:0.4;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></div>
+    <div class="past-item pc"><div class="past-overlay"><p>Terrace social</p></div><div class="photo-placeholder" style="color:#7F77DD;opacity:0.4;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></div>
+    <div class="past-item gc"><div class="past-overlay"><p>Yuki in the sun</p></div><div class="photo-placeholder" style="color:var(--sage);opacity:0.4;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></div>
+    <div class="past-item dc"><div class="past-overlay"><p>Book club night</p></div><div class="photo-placeholder" style="color:var(--text-light);opacity:0.4;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></div>
+    <div class="past-item rc"><div class="past-overlay"><p>Louise causing chaos</p></div><div class="photo-placeholder" style="color:var(--terracotta-light);opacity:0.4;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></div>
+    <div class="past-item bc"><div class="past-overlay"><p>Writing workshop</p></div><div class="photo-placeholder" style="color:#378ADD;opacity:0.4;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></div>
+  </div>
+</section>
+
+<!-- HOST CTA -->
+<section class="host-cta reveal">
+  <div>
+    <h2 class="host-cta-title">Want to host your <em>own event?</em></h2>
+    <p class="host-cta-sub">The space is available to rent for your workshops, gatherings, classes, and more. Community and commercial rates — hourly, half-day, or full day.</p>
+  </div>
+  <div class="host-cta-actions">
+    <a href="#" class="btn-primary">Rent the space</a>
+    <a href="#" class="btn-sage">View memberships</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Tres <span>Miaus</span> — Event Space</div>
+  <div class="footer-links">
+    <a href="#">Instagram</a>
+    <a href="#">Contact</a>
+    <a href="#">Book now</a>
+  </div>
+  <p>Barcelona · treismiaus@email.com</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  function filterEvents(type, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cards = document.querySelectorAll('[data-type]');
+    cards.forEach(card => {
+      if (type === 'all' || card.dataset.type === type) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+</body>
+</html>
