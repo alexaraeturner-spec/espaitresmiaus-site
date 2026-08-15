@@ -280,7 +280,8 @@
   window.TM = {};
 
   async function init() {
-    // Load all data in parallel
+    console.log('TM: init started, readyState:', document.readyState);
+
     const [colours, spaceRates, massageRates, weeklyPkg, contact] = await Promise.all([
       fetchYAML('/_data/colours.yml'),
       fetchYAML('/_data/pricing/space_rates.yml'),
@@ -289,42 +290,52 @@
       fetchYAML('/_data/content/contact.yml'),
     ]);
 
-    // Store on window for debugging
     window.TM = { colours, pricing: { space: spaceRates, massage: massageRates, weekly: weeklyPkg }, contact };
 
-    // Apply colours
     if (colours) applyColours(colours);
-
-    // Apply contact info sitewide
     if (contact) renderContact(contact);
 
-    // Apply pricing if we're on the rent page
     if (document.getElementById('tm-community-aug') || document.getElementById('tm-massage-aug')) {
       renderPricing(spaceRates, massageRates, weeklyPkg);
     }
 
-    // Load and render events if we're on the events page
-    if (document.getElementById('tm-featured-event') || document.getElementById('tm-events-grid')) {
+    const featuredEl = document.getElementById('tm-featured-event');
+    const gridEl = document.getElementById('tm-events-grid');
+    console.log('TM: featuredEl:', featuredEl, 'gridEl:', gridEl);
+
+    if (featuredEl || gridEl) {
       try {
-        // Try both possible manifest locations
+        console.log('TM: fetching manifest...');
         let manifest = await fetchJSON('/_data/events-manifest.json');
-        if (!manifest) manifest = await fetchJSON('/events-manifest.json');
+        console.log('TM: _data manifest:', manifest);
+        if (!manifest) {
+          manifest = await fetchJSON('/events-manifest.json');
+          console.log('TM: root manifest:', manifest);
+        }
 
         if (manifest && manifest.events && manifest.events.length > 0) {
+          console.log('TM: found events:', manifest.events);
           const eventData = await Promise.all(
-            manifest.events.map(filename => fetchYAML('/_data/events/' + filename))
+            manifest.events.map(async filename => {
+              const data = await fetchYAML('/_data/events/' + filename);
+              console.log('TM: parsed', filename, ':', data);
+              return data;
+            })
           );
           const events = eventData.filter(Boolean);
+          console.log('TM: rendering', events.length, 'event(s)');
           window.TM.events = events;
           renderEvents(events);
         } else {
-          // No manifest or empty — show no events message
+          console.log('TM: no events found in manifest');
           const noEventsEl = document.getElementById('tm-no-events');
           if (noEventsEl) noEventsEl.style.display = 'block';
         }
       } catch (e) {
-        console.log('Could not load events:', e);
+        console.error('TM: error:', e);
       }
+    } else {
+      console.log('TM: not on events page, skipping event load');
     }
   }
 
