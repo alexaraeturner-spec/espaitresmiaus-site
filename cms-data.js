@@ -74,6 +74,13 @@
       const res = await fetch(path);
       if (!res.ok) return null;
       const text = await res.text();
+      // Handle markdown frontmatter (--- block at top of .md files)
+      if (text.startsWith('---')) {
+        const end = text.indexOf('---', 3);
+        if (end !== -1) {
+          return parseYAML(text.slice(3, end).trim());
+        }
+      }
       return parseYAML(text);
     } catch (e) {
       return null;
@@ -312,21 +319,25 @@
 
     // Load and render events if we're on the events page
     if (document.getElementById('tm-featured-event') || document.getElementById('tm-events-grid')) {
-      // Fetch all event files from the _data/events directory listing
-      // Netlify CMS saves events as individual YAML files in _data/events/
-      // We fetch a manifest file that lists them all
       try {
-        const manifest = await fetchJSON('/_data/events-manifest.json');
-        if (manifest && manifest.events) {
+        // Try both possible manifest locations
+        let manifest = await fetchJSON('/_data/events-manifest.json');
+        if (!manifest) manifest = await fetchJSON('/events-manifest.json');
+
+        if (manifest && manifest.events && manifest.events.length > 0) {
           const eventData = await Promise.all(
             manifest.events.map(filename => fetchYAML('/_data/events/' + filename))
           );
           const events = eventData.filter(Boolean);
           window.TM.events = events;
           renderEvents(events);
+        } else {
+          // No manifest or empty — show no events message
+          const noEventsEl = document.getElementById('tm-no-events');
+          if (noEventsEl) noEventsEl.style.display = 'block';
         }
       } catch (e) {
-        console.log('No events manifest found — showing placeholder events');
+        console.log('Could not load events:', e);
       }
     }
   }
