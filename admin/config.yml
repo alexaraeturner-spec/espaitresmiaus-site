@@ -14,6 +14,8 @@ collections:
     folder: "_data/events"
     create: true
     delete: true
+    extension: "yml"
+    format: "yml"
     slug: "{{slug}}"
     fields:
       - { label: "Event name", name: "title", widget: "string" }
