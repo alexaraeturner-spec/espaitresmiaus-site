@@ -1,5 +1,5 @@
 [build]
-  command = "node generate-events-manifest.js"
+  command = "node -e \"const fs=require('fs'),path=require('path'),ed=path.join(__dirname,'_data','events'),mp=path.join(__dirname,'_data','events-manifest.json'),mr=path.join(__dirname,'events-manifest.json');if(!fs.existsSync(ed))fs.mkdirSync(ed,{recursive:true});const ef=fs.readdirSync(ed).filter(f=>f.endsWith('.yml')||f.endsWith('.yaml')||f.endsWith('.md'));const m=JSON.stringify({events:ef},null,2);fs.writeFileSync(mp,m);fs.writeFileSync(mr,m);console.log('Events manifest updated -',ef.length,'event(s):',ef);\""
   publish = "."
 
 [[headers]]
