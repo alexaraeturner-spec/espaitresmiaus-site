@@ -18,52 +18,45 @@
   // ── YAML PARSER (minimal, handles simple key: value and lists) ──────────
   function parseYAML(text) {
     const result = {};
-    const lines = text.split('\n');
-    let i = 0;
+    if (!text || !text.trim()) return result;
 
-    function parseLine(line) {
-      const match = line.match(/^(\s*)([\w_-]+):\s*(.*)/);
-      if (!match) return null;
-      return { indent: match[1].length, key: match[2], value: match[3].trim() };
-    }
-
-    function parseValue(val) {
-      if (val === 'true') return true;
-      if (val === 'false') return false;
-      if (val === '' || val === null || val === undefined) return '';
-      if (!isNaN(val) && val !== '') return Number(val);
-      // Remove surrounding quotes
-      if ((val.startsWith('"') && val.endsWith('"')) ||
-          (val.startsWith("'") && val.endsWith("'"))) {
-        return val.slice(1, -1);
+    // Strip frontmatter delimiters if present
+    let content = text.trim();
+    if (content.startsWith('---')) {
+      const secondDash = content.indexOf('---', 3);
+      if (secondDash !== -1) {
+        content = content.slice(3, secondDash).trim();
       }
-      return val;
     }
 
-    while (i < lines.length) {
+    const lines = content.split('\n');
+    for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      if (!line.trim() || line.trim().startsWith('#')) { i++; continue; }
-      const parsed = parseLine(line);
-      if (!parsed) { i++; continue; }
+      if (!line.trim() || line.trim().startsWith('#')) continue;
 
-      if (parsed.value === '' || parsed.value === '|' || parsed.value === '>') {
-        // Could be an object or multiline — skip complex nesting, read simple children
-        const obj = {};
-        i++;
-        const baseIndent = parsed.indent;
-        while (i < lines.length) {
-          const child = lines[i];
-          if (!child.trim()) { i++; continue; }
-          const cp = parseLine(child);
-          if (!cp || cp.indent <= baseIndent) break;
-          obj[cp.key] = parseValue(cp.value);
+      const colonIdx = line.indexOf(':');
+      if (colonIdx === -1) continue;
+
+      const key = line.slice(0, colonIdx).trim();
+      let val = line.slice(colonIdx + 1).trim();
+
+      // Handle multiline quoted strings — collect continuation lines
+      if (val.startsWith('"')) {
+        while (!val.endsWith('"') || val.length === 1) {
           i++;
+          if (i >= lines.length) break;
+          val += ' ' + lines[i].trim();
         }
-        result[parsed.key] = Object.keys(obj).length > 0 ? obj : '';
-      } else {
-        result[parsed.key] = parseValue(parsed.value);
-        i++;
+        val = val.slice(1, -1); // strip surrounding quotes
+      } else if (val.startsWith("'")) {
+        val = val.slice(1, -1);
       }
+
+      // Type conversion
+      if (val === 'true') result[key] = true;
+      else if (val === 'false') result[key] = false;
+      else if (val !== '' && !isNaN(val)) result[key] = Number(val);
+      else result[key] = val;
     }
     return result;
   }
@@ -74,13 +67,6 @@
       const res = await fetch(path);
       if (!res.ok) return null;
       const text = await res.text();
-      // Handle markdown frontmatter (--- block at top of .md files)
-      if (text.startsWith('---')) {
-        const end = text.indexOf('---', 3);
-        if (end !== -1) {
-          return parseYAML(text.slice(3, end).trim());
-        }
-      }
       return parseYAML(text);
     } catch (e) {
       return null;
