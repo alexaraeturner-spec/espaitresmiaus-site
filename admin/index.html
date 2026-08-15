@@ -1,0 +1,88 @@
+
+/
+Claude finished the response
+should the files be uploaded within the admin folder, or below it?
+
+Below it — everything goes in the root of the repo, at the same level as your existing HTML files.
+
+Your repo structure should look like this after uploading:
+
+espaitresmiaus-site/
+├── admin/
+│   ├── index.html
+│   └── config.yml
+├── index.html
+├── tres-miaus-space.html
+├── tres-miaus-events.html
+├── tres-miaus-rent.html
+├── tres-miaus-membership.html
+├── tres-miaus-about.html
+├── tres-miaus-contact.html
+├── site-theme.js
+├── cms-data.js
+├── generate-events-manifest.js
+├── netlify.toml
+└── events-manifest.json
+The admin folder stays as it is — you're not touching that. Everything else gets dropped into the root alongside the HTML files.
+
+I accidentally added them in the admin folder
+
+No worries — easy fix! Here's how to move them:
+
+Delete the files from the wrong place first:
+
+In GitHub, go into your admin folder
+Click on cms-data.js
+Click the three dots menu (top right of the file view) → Delete file
+Commit the deletion
+Repeat for generate-events-manifest.js, netlify.toml, and events-manifest.json
+Then upload them to the right place:
+
+Go back to the root of your repo (click espaitresmiaus-site in the breadcrumb at the top)
+Make sure you can see the admin folder listed alongside your HTML files — that's the root level
+Click Add file → Upload files
+Drag in the 4 files plus all 7 HTML files
+Commit changes
+The key thing to check before uploading: you should see the admin folder in the file list on screen, not be inside it. If you can see admin/ as a folder alongside index.html, you're in the right place.
+
+I accidentally deleted the admin folder. can you remind me how to re up load it
+
+No problem! The admin folder just needs two files inside it. Here's how to recreate it:
+
+File 1 — admin/index.html
+
+In GitHub, click Add file → Create new file
+In the filename box type admin/index.html — typing the / creates the folder automatically
+Paste this content:
+html
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Espai Tres Miaus — Admin</title>
+</head>
+<body>
+  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+</body>
+</html>
+Click Commit changes
+File 2 — admin/config.yml
+
+Click Add file → Create new file again
+Type admin/config.yml in the filename box
+Paste the contents of the config.yml file you downloaded earlier
+Click Commit changes
+That's it — the admin folder is back. The config.yml is the longer file with all the collections (Events, Pricing, Colours etc.) — you should still have it downloaded from earlier. Let me know if you can't find it and I'll generate it again!
+
+
+
+
+
+
+
+Claude is AI and can make mistakes. Please double-check responses.
+
+
+Tres miaus contact · HTML
+
