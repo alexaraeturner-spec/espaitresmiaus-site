@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
   <script src="/site-theme.js"></script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Events — Tres Miaus</title>
+  <script src="/cms-data.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -597,137 +595,15 @@
     <p class="section-sub">All events take place at Tres Miaus unless otherwise noted. Follow us on Instagram to stay up to date.</p>
   </div>
 
-  <!-- FEATURED -->
-  <div class="featured-event reveal" data-type="neptunes">
-    <div class="featured-photo">
-      <span class="featured-tag">Neptunes · Featured</span>
-      <div class="photo-placeholder">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        <p>Event photo</p>
-      </div>
-    </div>
-    <div class="featured-body">
-      <p class="event-date">Saturday, 14 June 2025 · 18:00</p>
-      <h3 class="featured-title">Neptunes Vol. 1 — <em>Opening night</em></h3>
-      <p class="featured-desc">The first Neptunes event at Tres Miaus. An evening of plant medicine, herbal ritual, and community — come with curiosity and an open heart. Bring a friend, stay for the whole thing.</p>
-      <div class="event-meta">
-        <span class="meta-item">🕕 2 hours</span>
-        <span class="meta-item">👥 Up to 30 people</span>
-        <span class="meta-item">🎟 Free entry</span>
-      </div>
-      <a href="#" class="btn-white">Reserve your spot</a>
-    </div>
-  </div>
+  <!-- FEATURED — rendered by cms-data.js -->
+  <div id="tm-featured-event" class="reveal"></div>
 
-  <!-- EVENT CARDS -->
-  <div class="events-grid">
-    <div class="event-card reveal" data-type="workshop">
-      <div class="event-card-photo ochre-bg">
-        <span class="event-type-tag tag-workshop">Workshop</span>
-        <div class="photo-placeholder" style="color: var(--ochre);">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        </div>
-      </div>
-      <div class="event-card-body">
-        <p class="card-date">Sunday, 22 June · 10:00</p>
-        <h3 class="card-title">Morning journaling circle</h3>
-        <p class="card-desc">A guided writing session to start the week with clarity. No experience needed — just a willingness to show up.</p>
-        <div class="card-footer">
-          <span class="card-meta">⏱ 2 hrs · €8</span>
-          <a href="#" class="btn-small">Register →</a>
-        </div>
-      </div>
-    </div>
+  <!-- EVENT CARDS — rendered by cms-data.js -->
+  <div class="events-grid" id="tm-events-grid"></div>
 
-    <div class="event-card reveal" data-type="community">
-      <div class="event-card-photo sage-bg">
-        <span class="event-type-tag tag-community">Community</span>
-        <div class="photo-placeholder" style="color: var(--sage);">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        </div>
-      </div>
-      <div class="event-card-body">
-        <p class="card-date">Wednesday, 25 June · 19:00</p>
-        <h3 class="card-title">Language exchange — ES / EN</h3>
-        <p class="card-desc">Spanish and English speakers meet for an informal hour of conversation practice. All levels welcome.</p>
-        <div class="card-footer">
-          <span class="card-meta">⏱ 1.5 hrs · Free</span>
-          <a href="#" class="btn-small sage">Join →</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="event-card reveal" data-type="social">
-      <div class="event-card-photo purple-bg">
-        <span class="event-type-tag tag-social">Social</span>
-        <div class="photo-placeholder" style="color: #7F77DD;">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        </div>
-      </div>
-      <div class="event-card-body">
-        <p class="card-date">Friday, 27 June · 20:00</p>
-        <h3 class="card-title">Terrace social — summer edition</h3>
-        <p class="card-desc">An informal evening on the terrace. Bring something to drink, meet the regulars, and enjoy the Barcelona summer.</p>
-        <div class="card-footer">
-          <span class="card-meta">⏱ Open end · Free</span>
-          <a href="#" class="btn-small">RSVP →</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="event-card reveal" data-type="neptunes">
-      <div class="event-card-photo terracotta-bg">
-        <span class="event-type-tag tag-neptunes">Neptunes</span>
-        <div class="photo-placeholder" style="color: var(--terracotta-light);">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        </div>
-      </div>
-      <div class="event-card-body">
-        <p class="card-date">Saturday, 5 July · 17:00</p>
-        <h3 class="card-title">Neptunes Vol. 2</h3>
-        <p class="card-desc">The second edition — another evening of plant wisdom, ritual, and community. Details to follow on Instagram.</p>
-        <div class="card-footer">
-          <span class="card-meta">⏱ TBC · TBC</span>
-          <a href="#" class="btn-small">Follow for updates →</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="event-card reveal" data-type="workshop">
-      <div class="event-card-photo ochre-bg">
-        <span class="event-type-tag tag-workshop">Workshop</span>
-        <div class="photo-placeholder" style="color: var(--ochre);">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        </div>
-      </div>
-      <div class="event-card-body">
-        <p class="card-date">Sunday, 6 July · 11:00</p>
-        <h3 class="card-title">Creative writing — short form</h3>
-        <p class="card-desc">A two-hour workshop exploring short-form writing: prompts, sharing, and feedback in a supportive space.</p>
-        <div class="card-footer">
-          <span class="card-meta">⏱ 2 hrs · €12</span>
-          <a href="#" class="btn-small">Register →</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="event-card reveal" data-type="community">
-      <div class="event-card-photo sage-bg">
-        <span class="event-type-tag tag-community">Community</span>
-        <div class="photo-placeholder" style="color: var(--sage);">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        </div>
-      </div>
-      <div class="event-card-body">
-        <p class="card-date">Thursday, 10 July · 18:30</p>
-        <h3 class="card-title">Book club — first meeting</h3>
-        <p class="card-desc">The Tres Miaus reading group meets for the first time. Book TBD — follow us on Instagram for the announcement.</p>
-        <div class="card-footer">
-          <span class="card-meta">⏱ 1.5 hrs · Free</span>
-          <a href="#" class="btn-small sage">Join →</a>
-        </div>
-      </div>
-    </div>
+  <!-- Shown if no events in CMS yet -->
+  <div id="tm-no-events" style="display:none; padding: 3rem; text-align:center; color: var(--text-muted); font-style:italic;">
+    No upcoming events right now — follow us on Instagram for updates.
   </div>
 </section>
 
