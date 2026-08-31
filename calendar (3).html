@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espai Tres Miaus — September Calendar</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F1E6; --surface: #EAE3D0; --olive: #65704A; --olive-d: #4A5235;
+    --brick: #9A4C34; --accent: #8B1E1E; --bark: #2B2B28; --muted: #6B6B62;
+    --light: #9A9A90; --border: #D8CFB8; --ochre: #E8D9A0; --sage-t: #B8C4A0;
+    --white: #FFFFFF;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); font-family: 'DM Sans', sans-serif; font-weight: 300; color: var(--bark); min-height: 100vh; }
+
+  /* HEADER */
+  .header { background: var(--bark); padding: 1.5rem 1.5rem 1.2rem; text-align: center; }
+  .header-name { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--white); }
+  .header-name span { color: #C47058; font-style: italic; }
+  .header-sub { font-size: 0.78rem; color: var(--sage-t); margin-top: 0.2rem; letter-spacing: 0.08em; }
+  .header-contact { margin-top: 0.6rem; font-size: 0.75rem; color: var(--border); }
+
+  /* MONTH NAV */
+  .month-header { background: var(--olive); padding: 0.9rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+  .month-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--white); }
+  .month-nav { background: none; border: 1.5px solid var(--sage-t); color: var(--white); padding: 0.3rem 0.8rem; border-radius: 2rem; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; }
+  .month-nav:hover { background: rgba(255,255,255,0.15); }
+
+  /* LEGEND */
+  .legend { display: flex; gap: 0.75rem; padding: 0.75rem 1rem; background: var(--surface); flex-wrap: wrap; border-bottom: 1px solid var(--border); }
+  .legend-item { display: flex; align-items: center; gap: 0.3rem; font-size: 0.72rem; color: var(--muted); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* CALENDAR GRID */
+  .cal-wrap { padding: 0.75rem; }
+  .day-headers { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-bottom: 3px; }
+  .day-header { text-align: center; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 0.3rem 0; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .cal-day { background: var(--white); border-radius: 6px; min-height: 72px; padding: 0.3rem; border: 1px solid var(--border); position: relative; }
+  .cal-day.empty { background: transparent; border-color: transparent; }
+  .cal-day.today { border-color: var(--olive); border-width: 2px; }
+  .cal-day.has-events { background: var(--bg); }
+  .day-num { font-size: 0.78rem; font-weight: 500; color: var(--muted); margin-bottom: 0.25rem; }
+  .cal-day.today .day-num { color: var(--olive); font-weight: 700; }
+
+  /* EVENT CHIPS */
+  .event-chip { border-radius: 3px; padding: 0.15rem 0.3rem; font-size: 0.62rem; font-weight: 500; margin-bottom: 2px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: opacity 0.15s; }
+  .event-chip:hover { opacity: 0.8; }
+  .chip-cooking { background: #DDE3D0; color: #4A5235; }
+  .chip-theatre { background: #F0D8D0; color: #6B2018; }
+  .chip-massage { background: #EDE8F5; color: #534AB7; }
+  .chip-opening { background: #8B1E1E; color: #FFFFFF; }
+  .chip-available { background: #E8F5EC; color: #1A6B3C; }
+
+  /* EVENT LIST BELOW */
+  .events-section { padding: 0 0.75rem 1.5rem; }
+  .events-title { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--brick); margin-bottom: 0.75rem; padding-top: 0.5rem; border-top: 1px solid var(--border); }
+  .event-card { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.5rem; display: flex; gap: 0.75rem; align-items: flex-start; }
+  .event-date-block { min-width: 44px; text-align: center; background: var(--surface); border-radius: 6px; padding: 0.3rem 0.4rem; }
+  .event-date-day { font-size: 1.1rem; font-weight: 700; color: var(--bark); line-height: 1; }
+  .event-date-mon { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .event-info { flex: 1; }
+  .event-type-tag { font-size: 0.65rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+  .event-name { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--bark); margin: 0.1rem 0 0.2rem; }
+  .event-meta { font-size: 0.75rem; color: var(--muted); }
+  .event-book { font-size: 0.72rem; color: var(--olive); font-weight: 500; margin-top: 0.25rem; }
+
+  /* BOOKING BANNER */
+  .booking-banner { margin: 0 0.75rem 1rem; background: var(--olive); border-radius: 10px; padding: 1rem 1.25rem; text-align: center; }
+  .booking-banner p { color: var(--white); font-size: 0.85rem; margin-bottom: 0.3rem; }
+  .booking-banner strong { color: var(--ochre); }
+  .booking-banner .contact { color: var(--sage-t); font-size: 0.78rem; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(43,43,40,0.6); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--white); border-radius: 12px; padding: 1.5rem; max-width: 380px; width: 100%; }
+  .modal-type { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.4rem; }
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--bark); margin-bottom: 0.75rem; }
+  .modal-row { display: flex; gap: 0.5rem; margin-bottom: 0.4rem; font-size: 0.85rem; color: var(--muted); }
+  .modal-row span:first-child { font-weight: 500; color: var(--bark); min-width: 60px; }
+  .modal-close { margin-top: 1rem; width: 100%; padding: 0.6rem; background: var(--olive); color: var(--white); border: none; border-radius: 2rem; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; }
+  .modal-book { display: block; text-align: center; margin-top: 0.5rem; font-size: 0.8rem; color: var(--olive); }
+
+  @media (max-width: 480px) {
+    .cal-day { min-height: 60px; padding: 0.2rem; }
+    .event-chip { font-size: 0.55rem; padding: 0.1rem 0.2rem; }
+    .day-num { font-size: 0.72rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-name">Espai Tres <span>Miaus</span></div>
+  <div class="header-sub">Event Space — Raval, Barcelona</div>
+  <div class="header-contact">📍 Calle Riereta 32, Pral 2 &nbsp;·&nbsp; 📱 +34 683 56 59 85 &nbsp;·&nbsp; 📸 @espaitresmiaus</div>
+</div>
+
+<div class="month-header">
+  <div class="month-title" id="monthTitle">September 2026</div>
+  <div style="display:flex;gap:0.5rem;">
+    <button class="month-nav" onclick="changeMonth(-1)">← Prev</button>
+    <button class="month-nav" onclick="changeMonth(1)">Next →</button>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#8B1E1E"></div> Opening night</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#65704A"></div> Cooking class</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#9A4C34"></div> Theatre</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7B6DAE"></div> Massage</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#1A6B3C"></div> Available to book</div>
+</div>
+
+<div class="cal-wrap">
+  <div class="day-headers">
+    <div class="day-header">Mon</div><div class="day-header">Tue</div>
+    <div class="day-header">Wed</div><div class="day-header">Thu</div>
+    <div class="day-header">Fri</div><div class="day-header">Sat</div>
+    <div class="day-header">Sun</div>
+  </div>
+  <div class="cal-grid" id="calGrid"></div>
+</div>
+
+<div class="events-section">
+  <div class="events-title">Upcoming events</div>
+  <div id="eventsList"></div>
+</div>
+
+<div class="booking-banner">
+  <p>Want to rent the space? <strong>Check availability above</strong> and get in touch.</p>
+  <p class="contact">WhatsApp +34 683 56 59 85 &nbsp;·&nbsp; DM @espaitresmiaus</p>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-type" id="modalType"></div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-row"><span>Date</span><span id="modalDate"></span></div>
+    <div class="modal-row"><span>Time</span><span id="modalTime"></span></div>
+    <div class="modal-row"><span>Host</span><span id="modalHost"></span></div>
+    <div class="modal-row" id="modalPriceRow"><span>Price</span><span id="modalPrice"></span></div>
+    <div class="modal-row" id="modalNoteRow"><span>Note</span><span id="modalNote"></span></div>
+    <button class="modal-close" onclick="closeModal()">Close</button>
+    <a class="modal-book" href="https://wa.me/34683565985" target="_blank">📱 WhatsApp to enquire about booking</a>
+  </div>
+</div>
+
+<script>
+// ── EVENTS DATA ──
+// Edit this array to update the calendar!
+const EVENTS = [
+  { date: "2026-08-29", type: "Opening Night", name: "Opening Night!", time: "19:00 – 22:00", host: "Espai Tres Miaus", price: "Free entry", note: "Snacks & sips — come whenever!", chip: "chip-opening" },
+  { date: "2026-09-12", type: "Cooking Class", name: "Georgian Cooking Class", time: "17:00 - 21:00", host: "Masho", price: "60€", note: "", chip: "chip-cooking" },
+  { date: "2026-09-13", type: "Cooking Class", name: "Georgian Cooking Class", time: "11:00 - 15:00", host: "Masho", price: "60€", note: "", chip: "chip-cooking" },
+  { date: "2026-09-17", type: "Theatre", name: "Poly Drama Theatre", time: "18:00 - 20:30", host: "ChaTo", price: "Donation 3€", note: "", chip: "chip-theatre" },
+  { date: "2026-09-18", type: "Cooking Class", name: "Georgian Cooking Class", time: "17:00 - 21:00", host: "Masho", price: "60€", note: "", chip: "chip-cooking" },
+  { date: "2026-09-19", type: "Cooking Class", name: "Georgian Cooking Class", time: "11:00 - 15:00", host: "Masho", price: "60€", note: "", chip: "chip-cooking" },
+  { date: "2026-09-26", type: "Cooking Class", name: "Georgian Cooking Class", time: "17:00 - 21:00", host: "Masho", price: "60€", note: "", chip: "chip-cooking" },
+  { date: "2026-09-27", type: "Cooking Class", name: "Georgian Cooking Class", time: "11:00 - 15:00", host: "Masho", price: "60€", note: "", chip: "chip-cooking" },
+  { date: "2026-09-11", type: "Massage", name: "Massage with Ines", time: "15:00 - 17:00", host: "Ines", price: "TBC", note: "", chip: "chip-massage" },
+  { date: "2026-09-01", type: "Massage", name: "Massage with Ines", time: "Book directly", host: "Ines", price: "Contact Ines", note: "Available throughout September — book directly with Ines", chip: "chip-massage" },
+];
+
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const SHORT_MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+let currentYear = 2026;
+let currentMonth = 8; // 0-indexed, so 8 = September
+
+function getEventsForDate(y, m, d) {
+  const dateStr = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  return EVENTS.filter(e => e.date === dateStr);
+}
+
+function renderCalendar() {
+  const grid = document.getElementById('calGrid');
+  const title = document.getElementById('monthTitle');
+  grid.innerHTML = '';
+  title.textContent = `${MONTHS[currentMonth]} ${currentYear}`;
+
+  const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+  const offset = firstDay === 0 ? 6 : firstDay - 1; // Mon start
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const today = new Date();
+
+  // Empty cells
+  for (let i = 0; i < offset; i++) {
+    const empty = document.createElement('div');
+    empty.className = 'cal-day empty';
+    grid.appendChild(empty);
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const cell = document.createElement('div');
+    const events = getEventsForDate(currentYear, currentMonth, d);
+    const isToday = today.getFullYear() === currentYear && today.getMonth() === currentMonth && today.getDate() === d;
+    cell.className = 'cal-day' + (events.length ? ' has-events' : '') + (isToday ? ' today' : '');
+
+    const num = document.createElement('div');
+    num.className = 'day-num';
+    num.textContent = d;
+    cell.appendChild(num);
+
+    // Show max 2 chips, then +N
+    const shown = events.slice(0, 2);
+    shown.forEach(ev => {
+      const chip = document.createElement('div');
+      chip.className = `event-chip ${ev.chip}`;
+      chip.textContent = ev.name.split(' ').slice(0,2).join(' ');
+      chip.onclick = () => openModal(ev, d);
+      cell.appendChild(chip);
+    });
+
+    if (events.length > 2) {
+      const more = document.createElement('div');
+      more.className = 'event-chip chip-available';
+      more.textContent = `+${events.length - 2} more`;
+      cell.appendChild(more);
+    }
+
+    grid.appendChild(cell);
+  }
+
+  renderEventsList();
+}
+
+function renderEventsList() {
+  const list = document.getElementById('eventsList');
+  const relevant = EVENTS.filter(e => {
+    const eDate = new Date(e.date);
+    return eDate.getFullYear() === currentYear && eDate.getMonth() === currentMonth;
+  }).sort((a,b) => new Date(a.date) - new Date(b.date));
+
+  list.innerHTML = relevant.length ? relevant.map(ev => {
+    const d = new Date(ev.date);
+    const dayNum = d.getDate();
+    const mon = SHORT_MONTHS[d.getMonth()];
+    return `<div class="event-card" onclick="openModal(${JSON.stringify(ev).replace(/"/g,'&quot;')}, ${dayNum === 'All' ? 1 : dayNum})">
+      <div class="event-date-block">
+        <div class="event-date-day">${dayNum}</div>
+        <div class="event-date-mon">${mon}</div>
+      </div>
+      <div class="event-info">
+        <div class="event-type-tag">${ev.type}</div>
+        <div class="event-name">${ev.name}</div>
+        <div class="event-meta">${ev.time !== 'Book directly' ? '🕐 ' + ev.time : '📱 Book directly with host'} &nbsp;·&nbsp; Host: ${ev.host}</div>
+        ${ev.price && ev.price !== 'TBC' ? `<div class="event-book">🎟 ${ev.price}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('') : '<p style="color:var(--muted);font-size:0.85rem;padding:0.5rem 0;">No events this month yet.</p>';}
+
+function openModal(ev, day) {
+  const d = typeof ev === 'string' ? JSON.parse(ev) : ev;
+  document.getElementById('modalType').textContent = d.type;
+  document.getElementById('modalTitle').textContent = d.name;
+  document.getElementById('modalDate').textContent = d.type === "Massage" ? "Throughout September" : `${day} ${SHORT_MONTHS[currentMonth]} ${currentYear}`;
+  document.getElementById('modalTime').textContent = d.time;
+  document.getElementById('modalHost').textContent = d.host;
+  document.getElementById('modalPrice').textContent = d.price || "TBC";
+  document.getElementById('modalNote').textContent = d.note || "—";
+  document.getElementById('modalNoteRow').style.display = d.note ? 'flex' : 'none';
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+}
+
+function changeMonth(dir) {
+  currentMonth += dir;
+  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+  renderCalendar();
+}
+
+renderCalendar();
+</script>
+</body>
+</html>
