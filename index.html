@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="/site-theme.js"></script>
+  <script src="/cms-data.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espai Tres Miaus — Event space in Barcelona</title>
+<meta name="description" content="A warm, flexible event space in Barcelona with a plant-filled terrace, natural light, and three resident cats. Hourly, half-day and full-day rentals, memberships, and Neptune's Herbal Lab events.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --terracotta: #C4633A;
+    --terracotta-light: #E8896A;
+    --terracotta-pale: #F5DDD3;
+    --sage: #7A9E7E;
+    --sage-dark: #527556;
+    --sage-light: #B5CEAB;
+    --sage-pale: #E8F0E5;
+    --ochre: #D4A84B;
+    --ochre-pale: #F5E9C8;
+    --pink: #E8B4B8;
+    --pink-dark: #C4848A;
+    --pink-pale: #F7E8E9;
+    --bark: #3D2B1F;
+    --bark-light: #6B4C3B;
+    --warm-white: #FDFAF5;
+    --text-main: #2C1F14;
+    --text-muted: #7A6355;
+    --text-light: #B09B8A;
+    --neptunes: #2D3B6B;
+    --neptunes-mid: #4A5C96;
+    --neptunes-light: #8FA3D4;
+    --neptunes-pale: #E8ECF7;
+    --neptunes-purple: #6B5A9E;
+    --neptunes-purple-light: #B8A8DC;
+    --herb: #2E7D5A;
+    --herb-deep: #1E4D3A;
+    --herb-light: #6DB89A;
+    --herb-pale: #DDF0E8;
+    --border: #D8CFB8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--cream); color: var(--text-main); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+  /* Fixed grain overlay for warmth/depth — non-interactive, never scrolls */
+  .grain {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.32;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.25rem 2.5rem; display: flex; align-items: center; justify-content: space-between;
+    background: rgba(245,240,232,0.88); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(196,99,58,0.12);
+  }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--bark); }
+  .nav-logo span { color: var(--terracotta); font-style: italic; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-size: 0.8rem; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--terracotta); }
+  .nav-cta { background: var(--terracotta); color: var(--warm-white) !important; padding: 0.5rem 1.25rem; border-radius: 2rem; transition: background 0.2s !important; }
+  .nav-cta:hover { background: var(--bark) !important; }
+
+  /* ── HERO ── asymmetric split, dark editorial left, photo mosaic right ── */
+  .hero {
+    padding-top: 4.75rem;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    min-height: 100vh;
+    position: relative; z-index: 2;
+  }
+
+  .hero-left {
+    background: var(--herb-deep);
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 5rem 4rem 3rem 5rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-left::before {
+    content: ''; position: absolute; top: -120px; right: -110px;
+    width: 380px; height: 380px; border-radius: 50%;
+    background: rgba(255,255,255,0.035);
+  }
+  .hero-left::after {
+    content: ''; position: absolute; bottom: -90px; left: -80px;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: rgba(255,255,255,0.025);
+  }
+  .hero-inner { position: relative; z-index: 2; }
+
+  .hero-eyebrow {
+    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--herb-light); font-weight: 500; margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    opacity: 0; animation: fadeUp 0.7s 0.15s forwards;
+  }
+  .hero-eyebrow::after { content: ''; height: 1px; width: 56px; background: rgba(109,184,154,0.45); }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.75rem, 5.2vw, 4.75rem);
+    color: var(--warm-white); line-height: 1.05; letter-spacing: -0.01em;
+    margin-bottom: 1.75rem;
+    opacity: 0; animation: fadeUp 0.8s 0.3s forwards;
+  }
+  .hero-title em { font-style: italic; color: var(--herb-light); }
+
+  .hero-desc {
+    font-size: 1rem; color: rgba(253,250,245,0.68); line-height: 1.9; max-width: 460px;
+    margin-bottom: 2.5rem;
+    opacity: 0; animation: fadeUp 0.8s 0.45s forwards;
+  }
+
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+
+  .btn-primary { background: var(--terracotta); color: var(--warm-white); padding: 0.9rem 2rem; border-radius: 2rem; text-decoration: none; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.05em; transition: background 0.2s, transform 0.15s; text-align: center; white-space: nowrap; display: inline-block; }
+  .btn-primary:hover { background: var(--terracotta-light); transform: translateY(-1px); }
+  .btn-outline { border: 1.5px solid rgba(253,250,245,0.35); color: var(--warm-white); padding: 0.9rem 2rem; border-radius: 2rem; text-decoration: none; font-size: 0.85rem; letter-spacing: 0.05em; transition: border-color 0.2s, transform 0.15s; text-align: center; white-space: nowrap; display: inline-block; }
+  .btn-outline:hover { border-color: rgba(253,250,245,0.9); transform: translateY(-1px); }
+
+  .hero-meta {
+    display: flex; gap: 2.5rem; margin-top: 4rem; padding-top: 2rem;
+    border-top: 1px solid rgba(253,250,245,0.12); flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.8s 0.75s forwards;
+  }
+  .hero-metric-num { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--warm-white); line-height: 1; margin-bottom: 0.4rem; }
+  .hero-metric-label { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(253,250,245,0.5); }
+
+  /* hero photo mosaic */
+  .hero-right { display: grid; grid-template-rows: 1.4fr 1fr; grid-template-columns: 1fr 1fr; }
+  .photo-block { display: flex; align-items: flex-end; justify-content: flex-start; position: relative; overflow: hidden; opacity: 0; animation: fadeIn 1.1s forwards; }
+  .photo-block:nth-child(1) { grid-column: 1 / -1; background: var(--herb-pale); animation-delay: 0.35s; }
+  .photo-block:nth-child(2) { background: var(--terracotta-pale); animation-delay: 0.5s; }
+  .photo-block:nth-child(3) { background: var(--ochre-pale); animation-delay: 0.65s; }
+  .photo-label { position: absolute; bottom: 1rem; left: 1rem; background: rgba(61,43,31,0.5); color: var(--cream); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3rem 0.75rem; border-radius: 2rem; }
+  .photo-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem; opacity: 0.4; }
+  .photo-placeholder p { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+  .photo-placeholder svg { color: var(--text-muted); }
+
+  /* ── shared section furniture ── */
+  section { position: relative; z-index: 2; }
+  .section-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--terracotta); font-weight: 500; margin-bottom: 0.75rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 2.25rem; color: var(--bark); line-height: 1.2; margin-bottom: 1.5rem; }
+  .section-title em { font-style: italic; color: var(--terracotta); }
+  .section-lead { font-size: 0.95rem; color: var(--text-muted); line-height: 1.9; max-width: 520px; }
+
+  /* ── SPACES ── asymmetric zig-zag, deliberately not equal cards ── */
+  .spaces { padding: 7rem 5rem; }
+  .spaces-head { display: grid; grid-template-columns: 1fr auto; gap: 4rem; align-items: end; margin-bottom: 3.5rem; }
+  .spaces-head .section-title { margin-bottom: 0; }
+
+  .spaces-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1.25rem;
+  }
+  .space-card {
+    border-radius: 1.25rem; padding: 2rem; overflow: hidden;
+    border: 1px solid rgba(196,99,58,0.1);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    min-height: 230px; position: relative;
+    transition: transform 0.25s;
+  }
+  .space-card:hover { transform: translateY(-4px); }
+  .space-card.lead { grid-row: 1 / span 2; background: var(--sage-pale); min-height: 420px; }
+  .space-card.terrace { background: var(--herb-pale); grid-column: 2 / span 2; }
+  .space-card.kitchen { background: var(--warm-white); }
+  .space-card.massage { background: var(--pink-pale); }
+
+  .space-tag { position: absolute; top: 1.25rem; left: 1.25rem; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.3rem 0.75rem; border-radius: 2rem; background: rgba(253,250,245,0.75); color: var(--text-muted); }
+  .space-name { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--bark); margin-bottom: 0.5rem; }
+  .space-card.lead .space-name { font-size: 2rem; }
+  .space-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.75; max-width: 40ch; }
+
+  /* ── INCLUDED ── inline tag flow rather than a card grid ── */
+  .included { padding: 5rem 5rem 6rem; background: var(--terracotta-pale); }
+  .included-inner { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 5rem; align-items: start; }
+  .included-list { display: flex; flex-wrap: wrap; gap: 0.65rem; }
+  .included-item {
+    display: flex; align-items: center; gap: 0.6rem;
+    background: rgba(253,250,245,0.7); border: 1px solid rgba(196,99,58,0.14);
+    padding: 0.7rem 1.1rem; border-radius: 2rem;
+    font-size: 0.85rem; color: var(--bark-light);
+    transition: background 0.2s, transform 0.15s;
+  }
+  .included-item:hover { background: var(--warm-white); transform: translateY(-2px); }
+  .included-item svg { color: var(--terracotta); flex-shrink: 0; }
+  .included-note { margin-top: 2rem; font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; font-style: italic; }
+
+  /* ── NEPTUNES ── */
+  .neptunes-section { background: var(--neptunes-light); padding: 6.5rem 5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .neptunes-text { color: var(--bark); }
+  .neptunes-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--herb-deep); font-weight: 500; margin-bottom: 1rem; }
+  .neptunes-title { font-family: 'Playfair Display', serif; font-size: 2.25rem; color: var(--bark); line-height: 1.2; margin-bottom: 1.5rem; }
+  .neptunes-title em { font-style: italic; color: var(--neptunes); }
+  .neptunes-body { font-size: 0.93rem; color: var(--bark-light); line-height: 1.9; margin-bottom: 1.5rem; }
+  .neptunes-pillars { display: flex; flex-direction: column; gap: 0.85rem; margin-top: 2rem; }
+  .neptunes-pillar { display: flex; align-items: flex-start; gap: 0.85rem; }
+  .neptunes-pillar svg { color: var(--herb-deep); flex-shrink: 0; margin-top: 3px; }
+  .pillar-text { font-size: 0.85rem; color: var(--bark-light); line-height: 1.55; }
+  .pillar-text strong { display: block; color: var(--bark); font-weight: 500; margin-bottom: 2px; }
+  .neptunes-visual { display: flex; flex-direction: column; gap: 1rem; }
+  .neptunes-card { border-radius: 1rem; padding: 1.75rem; border: 1px solid rgba(61,43,31,0.1); }
+  .neptunes-card.deep { background: var(--neptunes); }
+  .neptunes-card.deep .neptunes-card-label { color: var(--herb-light); }
+  .neptunes-card.deep .neptunes-card-title { color: var(--warm-white); }
+  .neptunes-card.deep .neptunes-card-desc { color: rgba(253,250,245,0.62); }
+  .neptunes-card.mid { background: rgba(255,255,255,0.45); }
+  .neptunes-card-label { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--bark-light); font-weight: 500; margin-bottom: 0.5rem; }
+  .neptunes-card-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--bark); margin-bottom: 0.4rem; }
+  .neptunes-card-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.65; }
+  .neptunes-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+  .neptunes-tag { font-size: 0.68rem; padding: 0.25rem 0.75rem; border-radius: 2rem; background: rgba(45,59,107,0.12); border: 1px solid rgba(45,59,107,0.18); color: var(--neptunes); }
+  .neptunes-link { display: inline-flex; align-items: center; gap: 0.45rem; margin-top: 1.75rem; font-size: 0.85rem; color: var(--herb-deep); text-decoration: none; font-weight: 500; border-bottom: 1px solid rgba(30,77,58,0.3); padding-bottom: 2px; transition: gap 0.2s, border-color 0.2s; }
+  .neptunes-link:hover { gap: 0.8rem; border-color: var(--herb-deep); }
+
+  /* ── RATES ── two unequal panels ── */
+  .rates { padding: 7rem 5rem; }
+  .rates-head { max-width: 560px; margin-bottom: 3.5rem; }
+  .rates-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .rate-card { border-radius: 1.25rem; padding: 2.5rem; border: 1px solid rgba(196,99,58,0.14); background: var(--warm-white); display: flex; flex-direction: column; }
+  .rate-card.commercial { background: var(--bark); border-color: rgba(253,250,245,0.1); }
+  .rate-label { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--terracotta); font-weight: 500; margin-bottom: 0.85rem; }
+  .rate-card.commercial .rate-label { color: var(--terracotta-light); }
+  .rate-name { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--bark); margin-bottom: 0.5rem; }
+  .rate-card.commercial .rate-name { color: var(--warm-white); }
+  .rate-for { font-size: 0.84rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 1.75rem; }
+  .rate-card.commercial .rate-for { color: rgba(253,250,245,0.6); }
+  .rate-price { display: flex; align-items: baseline; gap: 0.4rem; margin-bottom: 0.4rem; }
+  .rate-amount { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--bark); line-height: 1; }
+  .rate-card.commercial .rate-amount { color: var(--warm-white); }
+  .rate-unit { font-size: 0.85rem; color: var(--text-muted); }
+  .rate-card.commercial .rate-unit { color: rgba(253,250,245,0.55); }
+  .rate-min { font-size: 0.76rem; color: var(--text-light); letter-spacing: 0.04em; margin-bottom: 1.75rem; }
+  .rate-card.commercial .rate-min { color: rgba(253,250,245,0.4); }
+  .rate-extras { border-top: 1px solid rgba(196,99,58,0.14); padding-top: 1.25rem; margin-top: auto; display: flex; flex-direction: column; gap: 0.6rem; }
+  .rate-card.commercial .rate-extras { border-color: rgba(253,250,245,0.12); }
+  .rate-extra { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.82rem; color: var(--text-muted); }
+  .rate-card.commercial .rate-extra { color: rgba(253,250,245,0.6); }
+  .rate-extra span:last-child { color: var(--bark); font-weight: 400; white-space: nowrap; }
+  .rate-card.commercial .rate-extra span:last-child { color: var(--warm-white); }
+  .rates-foot { margin-top: 2rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; font-size: 0.82rem; color: var(--text-muted); }
+  .text-link { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--terracotta); text-decoration: none; font-weight: 500; border-bottom: 1px solid rgba(196,99,58,0.3); padding-bottom: 2px; transition: gap 0.2s, border-color 0.2s; }
+  .text-link:hover { gap: 0.75rem; border-color: var(--terracotta); }
+
+  /* ── MEMBERSHIP ── offset tiers, middle raised ── */
+  .membership { padding: 6.5rem 5rem; background: var(--sage-pale); }
+  .membership-head { display: grid; grid-template-columns: 1fr auto; gap: 4rem; align-items: end; margin-bottom: 3.5rem; }
+  .membership-head .section-eyebrow { color: var(--sage-dark); }
+  .membership-head .section-title { margin-bottom: 0; }
+  .membership-head .section-title em { color: var(--sage-dark); }
+  .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: start; }
+  .tier { background: var(--warm-white); border-radius: 1.25rem; padding: 2.25rem; border: 1px solid rgba(122,158,126,0.22); transition: transform 0.25s; }
+  .tier:hover { transform: translateY(-4px); }
+  .tier.featured { background: var(--bark); border-color: transparent; transform: translateY(-1.5rem); position: relative; }
+  .tier.featured:hover { transform: translateY(-2rem); }
+  .tier-flag { position: absolute; top: -0.7rem; left: 2.25rem; background: var(--terracotta); color: var(--warm-white); font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 2rem; }
+  .tier-name { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--bark); margin-bottom: 0.2rem; }
+  .tier.featured .tier-name { color: var(--warm-white); }
+  .tier-sub { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sage-dark); margin-bottom: 1.5rem; }
+  .tier.featured .tier-sub { color: var(--terracotta-light); }
+  .tier-price { display: flex; align-items: baseline; gap: 0.3rem; margin-bottom: 1.25rem; }
+  .tier-amount { font-family: 'Playfair Display', serif; font-size: 2.25rem; color: var(--bark); line-height: 1; }
+  .tier.featured .tier-amount { color: var(--warm-white); }
+  .tier-per { font-size: 0.82rem; color: var(--text-muted); }
+  .tier.featured .tier-per { color: rgba(253,250,245,0.5); }
+  .tier-hours { font-size: 0.85rem; color: var(--bark-light); line-height: 1.7; padding-bottom: 1.25rem; margin-bottom: 1.25rem; border-bottom: 1px solid rgba(122,158,126,0.2); }
+  .tier.featured .tier-hours { color: rgba(253,250,245,0.72); border-color: rgba(253,250,245,0.12); }
+  .tier-hours strong { color: var(--bark); font-weight: 500; }
+  .tier.featured .tier-hours strong { color: var(--warm-white); }
+  .tier-perks { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+  .tier-perks li { display: flex; align-items: flex-start; gap: 0.55rem; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+  .tier.featured .tier-perks li { color: rgba(253,250,245,0.62); }
+  .tier-perks svg { color: var(--sage); flex-shrink: 0; margin-top: 4px; }
+  .tier.featured .tier-perks svg { color: var(--terracotta-light); }
+
+  /* ── EVENTS TEASER ── */
+  .events-teaser { padding: 7rem 5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .events-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .events-thumb { aspect-ratio: 1; border-radius: 1rem; display: flex; align-items: flex-end; padding: 1rem; position: relative; border: 1px solid rgba(196,99,58,0.1); overflow: hidden; }
+  .events-thumb:nth-child(1) { background: var(--neptunes-pale); }
+  .events-thumb:nth-child(2) { background: var(--ochre-pale); transform: translateY(1.75rem); }
+  .events-thumb:nth-child(3) { background: var(--pink-pale); }
+  .events-thumb:nth-child(4) { background: var(--herb-pale); transform: translateY(1.75rem); }
+  .events-thumb-label { font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); background: rgba(253,250,245,0.8); padding: 0.28rem 0.7rem; border-radius: 2rem; }
+
+  /* ── CTA + FOOTER ── */
+  .cta-section { background: var(--bark); padding: 5rem; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4rem; }
+  .cta-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--terracotta-light); font-weight: 500; margin-bottom: 1rem; }
+  .cta-title { font-family: 'Playfair Display', serif; font-size: 2.25rem; color: var(--warm-white); line-height: 1.2; margin-bottom: 0.75rem; }
+  .cta-title em { font-style: italic; color: var(--pink); }
+  .cta-sub { font-size: 0.9rem; color: rgba(253,250,245,0.6); line-height: 1.7; max-width: 460px; }
+  .cta-actions { display: flex; flex-direction: column; gap: 1rem; }
+
+  footer { background: var(--bark); color: rgba(245,240,232,0.5); padding: 2.5rem 5rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.78rem; border-top: 1px solid rgba(245,240,232,0.06); position: relative; z-index: 2; gap: 1.5rem; flex-wrap: wrap; }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--cream); }
+  .footer-logo span { color: var(--terracotta-light); font-style: italic; }
+  .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .footer-links a { color: rgba(245,240,232,0.45); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--terracotta-light); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s, transform 0.7s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0ms !important; transition-duration: 0.01ms !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1080px) {
+    .hero { grid-template-columns: 1fr; min-height: 0; }
+    .hero-left { padding: 4.5rem 2.5rem 3.5rem; }
+    .hero-right { grid-template-rows: 240px 180px; }
+    .spaces, .rates, .events-teaser { padding: 4.5rem 2.5rem; }
+    .included, .membership, .neptunes-section { padding: 4.5rem 2.5rem; }
+    .spaces-grid { grid-template-columns: 1fr 1fr; }
+    .space-card.lead { grid-row: auto; grid-column: 1 / -1; min-height: 300px; }
+    .space-card.terrace { grid-column: 1 / -1; }
+    .included-inner, .neptunes-section, .events-teaser { grid-template-columns: 1fr; gap: 3rem; }
+    .rates-grid, .tiers { grid-template-columns: 1fr; }
+    .tier.featured { transform: none; }
+    .tier.featured:hover { transform: translateY(-4px); }
+    .cta-section { grid-template-columns: 1fr; gap: 2.5rem; padding: 4rem 2.5rem; }
+    .cta-actions { flex-direction: row; flex-wrap: wrap; }
+    footer { padding: 2.5rem; }
+  }
+
+  @media (max-width: 720px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-links { gap: 1rem; }
+    .nav-links li:not(:last-child) { display: none; }
+    .hero-left { padding: 3.5rem 1.5rem 3rem; }
+    .hero-meta { gap: 1.75rem; margin-top: 2.5rem; }
+    .spaces, .rates, .events-teaser, .included, .membership, .neptunes-section { padding: 3.5rem 1.5rem; }
+    .spaces-head, .membership-head { grid-template-columns: 1fr; gap: 1.75rem; align-items: start; }
+    .spaces-grid { grid-template-columns: 1fr; }
+    .space-card { min-height: 200px; padding: 1.5rem; }
+    .space-card.lead { min-height: 240px; }
+    .space-card.lead .space-name { font-size: 1.6rem; }
+    .rate-card, .tier { padding: 1.75rem; }
+    .events-thumb:nth-child(2), .events-thumb:nth-child(4) { transform: none; }
+    .cta-section { padding: 3.5rem 1.5rem; }
+    .cta-actions { flex-direction: column; }
+    .cta-actions a { width: 100%; }
+    footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<nav>
+  <div class="nav-logo"><a href="index.html" style="text-decoration:none;color:inherit;">Tres <span>Miaus</span></a></div>
+  <ul class="nav-links">
+    <li><a href="tres-miaus-space.html">The space</a></li>
+    <li><a href="tres-miaus-events.html">Events</a></li>
+    <li><a href="tres-miaus-membership.html">Membership</a></li>
+    <li><a href="tres-miaus-about.html">About</a></li>
+    <li><a href="tres-miaus-rent.html" class="nav-cta">Book now</a></li>
+  </ul>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Espai Tres Miaus · Barcelona</div>
+      <h1 class="hero-title">Sun, plants, and<br>room to <em>breathe</em></h1>
+      <p class="hero-desc">
+        A warm, flexible event space built for gatherings of all kinds — with a terrace full of
+        plants, natural light, and three opinionated cats who come with the deal.
+      </p>
+      <div class="hero-actions">
+        <a href="tres-miaus-rent.html" class="btn-primary">Rent the space</a>
+        <a href="tres-miaus-space.html" class="btn-outline">Take a look around</a>
+      </div>
+      <div class="hero-meta">
+        <div>
+          <div class="hero-metric-num">60–100 m²</div>
+          <div class="hero-metric-label">Total space</div>
+        </div>
+        <div>
+          <div class="hero-metric-num">40+</div>
+          <div class="hero-metric-label">Max capacity</div>
+        </div>
+        <div>
+          <div class="hero-metric-num">1 terrace</div>
+          <div class="hero-metric-label">Plants &amp; sun</div>
+        </div>
+        <div>
+          <div class="hero-metric-num">3 cats</div>
+          <div class="hero-metric-label">Resident hosts</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="photo-block">
+      <div class="photo-placeholder">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-6 6"/></svg>
+        <p>Terrace photo</p>
+      </div>
+      <span class="photo-label">The terrace</span>
+    </div>
+    <div class="photo-block">
+      <div class="photo-placeholder">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-6 6"/></svg>
+        <p>Main room</p>
+      </div>
+      <span class="photo-label">Main room</span>
+    </div>
+    <div class="photo-block">
+      <div class="photo-placeholder">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-6 6"/></svg>
+        <p>Cat photo</p>
+      </div>
+      <span class="photo-label">Yuki, Thelma &amp; Louise</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SPACES ══ -->
+<section class="spaces reveal">
+  <div class="spaces-head">
+    <div>
+      <div class="section-eyebrow">Inside &amp; out</div>
+      <h2 class="section-title">Every corner has <em>a story</em></h2>
+    </div>
+    <a href="tres-miaus-space.html" class="text-link">Explore the space
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+  <div class="spaces-grid">
+    <div class="space-card lead">
+      <span class="space-tag">Up to 40 people</span>
+      <h3 class="space-name">The main room</h3>
+      <p class="space-desc">
+        The heart of the space, and fully flexible. Configure it for yoga, workshop circles,
+        seated gatherings, or a standing social — it reconfigures in minutes.
+      </p>
+    </div>
+    <div class="space-card terrace">
+      <span class="space-tag">Outdoor</span>
+      <h3 class="space-name">The terrace</h3>
+      <p class="space-desc">
+        A sun-filled outdoor space dense with plants. Perfect for breaks, drinks, or smaller
+        gatherings in good weather. Included with every booking.
+      </p>
+    </div>
+    <div class="space-card kitchen">
+      <span class="space-tag">For hosts</span>
+      <h3 class="space-name">Kitchenette</h3>
+      <p class="space-desc">Tea, coffee, water, fridge space and a light prep area, plus storage for chairs and supplies.</p>
+    </div>
+    <div class="space-card massage">
+      <span class="space-tag">Max 1.5 hrs</span>
+      <h3 class="space-name">Massage room</h3>
+      <p class="space-desc">A separate, quiet room bookable by the session for treatments and one-to-one work.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHAT'S INCLUDED ══ -->
+<section class="included reveal">
+  <div class="included-inner">
+    <div>
+      <div class="section-eyebrow">What's included</div>
+      <h2 class="section-title">Everything in <em>the price</em></h2>
+      <p class="section-lead">
+        Every booking includes the full space, terrace access, and all of it — set up and ready
+        for you. No hidden extras, no equipment rental line items.
+      </p>
+      <p class="included-note">
+        And the cats. Yuki, Thelma and Louise are resident hosts — non-negotiable, completely free.
+      </p>
+    </div>
+    <div class="included-list">
+      <div class="included-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12.5a10 10 0 0114 0M8.5 16a5.5 5.5 0 017 0"/><circle cx="12" cy="19.5" r="1" fill="currentColor" stroke="none"/></svg> High-speed wifi</div>
+      <div class="included-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/></svg> Bluetooth speaker</div>
+      <div class="included-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="13" height="10" rx="2"/><path d="M16 11l5-3v8l-5-3z"/></svg> Projector &amp; screen</div>
+      <div class="included-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9h12v5a5 5 0 01-5 5H9a5 5 0 01-5-5V9z"/><path d="M16 10h2a2 2 0 010 4h-2"/><path d="M6 5.5c0-1 1-1 1-2M10 5.5c0-1 1-1 1-2"/></svg> Kitchenette access</div>
+      <div class="included-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 20v-6M18 20v-6M5 14h14l-1-5H6l-1 5z"/><path d="M8 9V6a4 4 0 018 0v3"/></svg> Flexible seating</div>
+      <div class="included-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 00-3.5 10.8V15h7v-1.2A6 6 0 0012 3z"/></svg> Dimmable lighting</div>
+      <div class="included-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21c0-6 0-9 0-9"/><path d="M12 12c-4.5 0-7-2.5-7-7 4.5 0 7 2.5 7 7z"/><path d="M12 14c4 0 6.5-2 6.5-6-4 0-6.5 2-6.5 6z"/></svg> Terrace access</div>
+      <div class="included-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8l1-4 3.5 2.5M20 8l-1-4-3.5 2.5"/><path d="M4.5 8c0 5 3 11 7.5 11s7.5-6 7.5-11c0-2-1.5-2.5-3-1.5A8 8 0 0012 6a8 8 0 00-4.5.5C6 5.5 4.5 6 4.5 8z"/></svg> Three cats</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ NEPTUNE'S HERBAL LAB ══ -->
+<section class="neptunes-section reveal">
+  <div class="neptunes-text">
+    <div class="neptunes-eyebrow">Our own programme</div>
+    <h2 class="neptunes-title">Neptune's <em>Herbal Lab</em></h2>
+    <p class="neptunes-body">
+      Our in-house herbal practice series — a recurring programme of workshops, ceremonies and
+      rituals rooted in plant medicine, herbalism and the natural world. A space to slow down,
+      learn, and reconnect.
+    </p>
+    <div class="neptunes-pillars">
+      <div class="neptunes-pillar">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21V11"/><path d="M12 11C7.5 11 5 8.5 5 4c4.5 0 7 2.5 7 7z"/><path d="M12 13c4 0 6.5-2 6.5-6-4 0-6.5 2-6.5 6z"/></svg>
+        <div class="pillar-text"><strong>Herbalism &amp; plant medicine</strong>Hands-on workshops exploring the healing properties of plants and herbs.</div>
+      </div>
+      <div class="neptunes-pillar">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 21h6v-9H9v9z"/><path d="M12 12V8"/><path d="M12 8c1.5-1.5 0-3.5 0-3.5S10.5 6.5 12 8z"/></svg>
+        <div class="pillar-text"><strong>Candle &amp; incense making</strong>Craft ritual candles and incense blends using natural ingredients.</div>
+      </div>
+      <div class="neptunes-pillar">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z"/></svg>
+        <div class="pillar-text"><strong>Moon rituals &amp; ceremonies</strong>New moon and full moon gatherings — intention setting, ceremony, community.</div>
+      </div>
+      <div class="neptunes-pillar">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 21h10l-1-8H8l-1 8z"/><path d="M12 13V9a4 4 0 014-4"/><path d="M12 11a4 4 0 00-4-4"/></svg>
+        <div class="pillar-text"><strong>Ayurveda &amp; witchy arts</strong>Ayurvedic wisdom, seasonal practices, and the kind of knowledge your grandmother had.</div>
+      </div>
+    </div>
+    <a href="tres-miaus-events.html" class="neptunes-link">See what's coming up
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+  <div class="neptunes-visual">
+    <div class="neptunes-card deep">
+      <div class="neptunes-card-label">In-house series</div>
+      <div class="neptunes-card-title">Neptune's Herbal Lab</div>
+      <div class="neptunes-card-desc">
+        Plant medicine, ritual and seasonal practice — run by us, here, roughly two to three times a month.
+      </div>
+      <div class="neptunes-tags">
+        <span class="neptunes-tag">Herbalism</span>
+        <span class="neptunes-tag">Ceremony</span>
+        <span class="neptunes-tag">Seasonal</span>
+      </div>
+    </div>
+    <div class="neptunes-card mid">
+      <div class="neptunes-card-label">Also happening</div>
+      <div class="neptunes-card-title">Whatever the community dreams up</div>
+      <div class="neptunes-card-desc">
+        Language exchanges, book clubs, writing workshops, terrace socials — free and paid,
+        hosted by the people who rent this space.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ RATES ══ -->
+<section class="rates reveal">
+  <div class="rates-head">
+    <div class="section-eyebrow">Pricing</div>
+    <h2 class="section-title">Clear, simple <em>rates</em></h2>
+    <p class="section-lead">
+      Community rates for personal and small independent use. Commercial rates for brands,
+      businesses and high-ticket events. Not sure which applies to you? The FAQs cover it.
+    </p>
+  </div>
+  <div class="rates-grid">
+    <div class="rate-card">
+      <div class="rate-label">Community rate</div>
+      <h3 class="rate-name">Individuals &amp; small groups</h3>
+      <p class="rate-for">Yoga teachers, workshops, personal gatherings, community events.</p>
+      <div class="rate-price">
+        <span class="rate-amount">€20</span>
+        <span class="rate-unit">/ hour</span>
+      </div>
+      <div class="rate-min">Minimum 2 hours</div>
+      <div class="rate-extras">
+        <div class="rate-extra"><span>Massage room, per session</span><span>€15</span></div>
+        <div class="rate-extra"><span>Weekly slot, paid monthly</span><span>20% off</span></div>
+      </div>
+    </div>
+    <div class="rate-card commercial">
+      <div class="rate-label">Commercial rate</div>
+      <h3 class="rate-name">Brands &amp; businesses</h3>
+      <p class="rate-for">Corporate events, brand activations, paid shoots, high-ticket workshops.</p>
+      <div class="rate-price">
+        <span class="rate-amount">€30</span>
+        <span class="rate-unit">/ hour</span>
+      </div>
+      <div class="rate-min">Minimum 2 hours</div>
+      <div class="rate-extras">
+        <div class="rate-extra"><span>Half day &amp; full day</span><span>On request</span></div>
+        <div class="rate-extra"><span>Weekly slot, paid monthly</span><span>20% off</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="rates-foot">
+    <a href="tres-miaus-rent.html" class="text-link">Full pricing, availability &amp; booking
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <span>A capacity surcharge applies for groups of 20 or more.</span>
+  </div>
+</section>
+
+<!-- ══ MEMBERSHIP ══ -->
+<section class="membership reveal">
+  <div class="membership-head">
+    <div>
+      <div class="section-eyebrow">Membership</div>
+      <h2 class="section-title">Three ways <em>to belong</em></h2>
+    </div>
+    <a href="tres-miaus-membership.html" class="text-link">Compare all tiers
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+  <div class="tiers">
+    <div class="tier">
+      <h3 class="tier-name">Amigo/a</h3>
+      <div class="tier-sub">Light access</div>
+      <div class="tier-price"><span class="tier-amount">€30</span><span class="tier-per">/ month</span></div>
+      <p class="tier-hours"><strong>3 hours</strong> included each month</p>
+      <ul class="tier-perks">
+        <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Priority booking window</li>
+        <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Community event invitations</li>
+      </ul>
+    </div>
+    <div class="tier featured">
+      <span class="tier-flag">Most popular</span>
+      <h3 class="tier-name">Vecino/a</h3>
+      <div class="tier-sub">The regular</div>
+      <div class="tier-price"><span class="tier-amount">€70</span><span class="tier-per">/ month</span></div>
+      <p class="tier-hours"><strong>5 hours</strong> included each month</p>
+      <ul class="tier-perks">
+        <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> 10% off additional hours</li>
+        <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Priority booking window</li>
+        <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> 1 guest pass per month</li>
+        <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Discounted photo &amp; video session</li>
+      </ul>
+    </div>
+    <div class="tier">
+      <h3 class="tier-name">Residente</h3>
+      <div class="tier-sub">The regular host</div>
+      <div class="tier-price"><span class="tier-amount">€150</span><span class="tier-per">/ month</span></div>
+      <p class="tier-hours"><strong>12 hours</strong> included each month</p>
+      <ul class="tier-perks">
+        <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> 15% off additional hours</li>
+        <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> First access to the calendar</li>
+        <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> 3 guest passes per month</li>
+        <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Photo &amp; video session included</li>
+        <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Listed on the Tres Miaus website</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ EVENTS TEASER ══ -->
+<section class="events-teaser reveal">
+  <div>
+    <div class="section-eyebrow">What's on</div>
+    <h2 class="section-title">Gatherings that <em>feel like something</em></h2>
+    <p class="section-lead">
+      Two to three events a month — our own Neptune's programme, community workshops, and
+      whatever the people who rent this space dream up. Free and paid tickets.
+    </p>
+    <div class="rates-foot">
+      <a href="tres-miaus-events.html" class="text-link">See the calendar
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="https://instagram.com/treismiaus" class="text-link" target="_blank" rel="noopener">@treismiaus
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="events-strip">
+    <div class="events-thumb"><span class="events-thumb-label">Neptunes Vol. 1</span></div>
+    <div class="events-thumb"><span class="events-thumb-label">Language exchange</span></div>
+    <div class="events-thumb"><span class="events-thumb-label">Terrace social</span></div>
+    <div class="events-thumb"><span class="events-thumb-label">Writing workshop</span></div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section class="cta-section reveal">
+  <div>
+    <div class="cta-eyebrow">Ready when you are</div>
+    <h2 class="cta-title">The space is ready.<br><em>Are you?</em></h2>
+    <p class="cta-sub">
+      Hourly, half-day or full day. Check availability and send a booking request, or just
+      write to us — we reply within 24 to 48 hours.
+    </p>
+  </div>
+  <div class="cta-actions">
+    <a href="tres-miaus-rent.html" class="btn-primary">Check availability</a>
+    <a href="tres-miaus-contact.html" class="btn-outline">Get in touch</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Tres <span>Miaus</span> — Event Space</div>
+  <div class="footer-links">
+    <a href="tres-miaus-space.html">The space</a>
+    <a href="tres-miaus-events.html">Events</a>
+    <a href="tres-miaus-membership.html">Membership</a>
+    <a href="tres-miaus-about.html">About</a>
+    <a href="tres-miaus-contact.html">Contact</a>
+    <a href="https://instagram.com/treismiaus" target="_blank" rel="noopener">Instagram</a>
+  </div>
+  <p>Barcelona · treismiaus@email.com</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
