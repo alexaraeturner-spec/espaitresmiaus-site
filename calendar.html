@@ -151,188 +151,171 @@
 </div>
 
 <script>
-// ── EVENTS — loaded from CMS via manifest ──
-// To add/edit events, use the CMS at /admin → Events
-// Changes publish automatically within 30 seconds
-
-const CHIP_MAP = {
-  "Neptunes":  "chip-opening",
-  "Workshop":  "chip-cooking",
-  "Community": "chip-available",
-  "Social":    "chip-available",
-  "Private":   "chip-cooking",
-  "Cooking":   "chip-cooking",
-  "Theatre":   "chip-theatre",
-  "Massage":   "chip-massage",
+var CHIP_MAP = {
+  "Neptunes":"chip-opening","Workshop":"chip-cooking","Community":"chip-available",
+  "Social":"chip-available","Private":"chip-cooking","Cooking Class":"chip-cooking",
+  "Theatre":"chip-theatre","Massage":"chip-massage"
 };
+var MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+var SHORT=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+var currentYear=2026, currentMonth=8, EVENTS=[];
 
-const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-const SHORT_MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-
-let currentYear = 2026;
-let currentMonth = 8;
-let EVENTS = [];
+function parseYml(text) {
+  var result = {};
+  var lines = text.split('\n');
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (!line || line === '---') continue;
+    var idx = line.indexOf(':');
+    if (idx === -1) continue;
+    var key = line.slice(0, idx).trim();
+    var val = line.slice(idx + 1).trim().replace(/^['"]/, '').replace(/['"]$/, '');
+    result[key] = val;
+  }
+  return result;
+}
 
 async function loadEvents() {
   try {
-    // Try both manifest locations
-    let manifest = null;
-    for (const path of ['/public/events-manifest.json', '/events-manifest.json']) {
+    var manifest = null;
+    var paths = ['/public/events-manifest.json', '/events-manifest.json'];
+    for (var i = 0; i < paths.length; i++) {
       try {
-        const res = await fetch(path);
-        if (res.ok) { manifest = await res.json(); break; }
+        var r = await fetch(paths[i]);
+        if (r.ok) { manifest = await r.json(); break; }
       } catch(e) {}
     }
-
-    if (!manifest || !manifest.events || manifest.events.length === 0) {
+    if (!manifest || !manifest.events || !manifest.events.length) {
       renderCalendar(); return;
     }
-
-    const results = await Promise.all(manifest.events.map(async filename => {
+    var results = [];
+    for (var j = 0; j < manifest.events.length; j++) {
       try {
-        const res = await fetch('/public/events/' + filename);
-        if (!res.ok) return null;
-        const text = await res.text();
-        // Parse YAML frontmatter
-        const match = text.match(/^---
-([\s\S]*?)
----/);
-        if (!match) return null;
-        const yml = match[1];
-        const get = (key) => {
-          for (const line of yml.split('\n')) {
-            if (line.startsWith(key + ':')) {
-              return line.slice(key.length + 1).trim().replace(/^['"]/,'').replace(/['"]$/,'');
-            }
-          }
-          return '';
-        };
-        const type = get('type');
-        const dateStr = get('date');
-        const isoDate = dateStr.slice(0, 10);
-        return {
-          date: isoDate,
-          name: get('title'),
-          time: get('time') || 'TBC',
-          host: get('host') || 'TBC',
-          price: get('price') || 'TBC',
-          note: get('description') || '',
-          chip: CHIP_MAP[type] || 'chip-available'
-        };
-      } catch(e) { return null; }
-    }));
-
-    EVENTS = results.filter(Boolean);
+        var r2 = await fetch('/public/events/' + manifest.events[j]);
+        if (!r2.ok) continue;
+        var text = await r2.text();
+        // Strip frontmatter dashes
+        text = text.replace(/^---\n/, '').replace(/\n---\s*$/, '');
+        var data = parseYml(text);
+        var dateStr = (data.date || '').slice(0, 10);
+        if (!dateStr) continue;
+        results.push({
+          date: dateStr,
+          type: data.type || 'Community',
+          name: data.title || 'Event',
+          time: data.time || 'TBC',
+          host: data.host || 'TBC',
+          price: data.price || 'TBC',
+          note: data.description || '',
+          chip: CHIP_MAP[data.type] || 'chip-available'
+        });
+      } catch(e) { continue; }
+    }
+    EVENTS = results;
     renderCalendar();
   } catch(e) {
-    console.log('Could not load events from CMS:', e);
+    console.log('Error loading events:', e);
     renderCalendar();
   }
 }
 
-function getEventsForDate(y, m, d) {
-  const dateStr = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-  return EVENTS.filter(e => e.date && e.date.slice(0,10) === dateStr);
+function getEvents(y, m, d) {
+  var ds = y + '-' + String(m+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+  return EVENTS.filter(function(e){ return e.date === ds; });
 }
 
 function renderCalendar() {
-  const grid = document.getElementById('calGrid');
-  const title = document.getElementById('monthTitle');
+  var grid = document.getElementById('calGrid');
+  var title = document.getElementById('monthTitle');
+  if (!grid) return;
   grid.innerHTML = '';
-  title.textContent = `${MONTHS[currentMonth]} ${currentYear}`;
-
-  const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-  const offset = firstDay === 0 ? 6 : firstDay - 1;
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-  const today = new Date();
-
-  for (let i = 0; i < offset; i++) {
-    const empty = document.createElement('div');
+  title.textContent = MONTHS[currentMonth] + ' ' + currentYear;
+  var firstDay = new Date(currentYear, currentMonth, 1).getDay();
+  var offset = firstDay === 0 ? 6 : firstDay - 1;
+  var daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  var today = new Date();
+  for (var i = 0; i < offset; i++) {
+    var empty = document.createElement('div');
     empty.className = 'cal-day empty';
     grid.appendChild(empty);
   }
-
-  for (let d = 1; d <= daysInMonth; d++) {
-    const cell = document.createElement('div');
-    const events = getEventsForDate(currentYear, currentMonth, d);
-    const isToday = today.getFullYear() === currentYear && today.getMonth() === currentMonth && today.getDate() === d;
-    cell.className = 'cal-day' + (events.length ? ' has-events' : '') + (isToday ? ' today' : '');
-
-    const num = document.createElement('div');
+  for (var d = 1; d <= daysInMonth; d++) {
+    var cell = document.createElement('div');
+    var events = getEvents(currentYear, currentMonth, d);
+    var isToday = today.getFullYear()===currentYear && today.getMonth()===currentMonth && today.getDate()===d;
+    cell.className = 'cal-day' + (events.length?' has-events':'') + (isToday?' today':'');
+    var num = document.createElement('div');
     num.className = 'day-num';
     num.textContent = d;
     cell.appendChild(num);
-
-    const shown = events.slice(0, 2);
-    shown.forEach(ev => {
-      const chip = document.createElement('div');
-      chip.className = `event-chip ${ev.chip}`;
-      chip.textContent = ev.name.split(' ').slice(0,2).join(' ');
-      chip.onclick = () => openModal(ev, d);
-      cell.appendChild(chip);
-    });
-
+    var shown = events.slice(0, 2);
+    for (var k = 0; k < shown.length; k++) {
+      (function(ev){
+        var chip = document.createElement('div');
+        chip.className = 'event-chip ' + ev.chip;
+        chip.textContent = ev.name.split(' ').slice(0,2).join(' ');
+        chip.onclick = function(){ openModal(ev, d); };
+        cell.appendChild(chip);
+      })(shown[k]);
+    }
     if (events.length > 2) {
-      const more = document.createElement('div');
+      var more = document.createElement('div');
       more.className = 'event-chip chip-available';
-      more.textContent = `+${events.length - 2} more`;
+      more.textContent = '+' + (events.length-2) + ' more';
       cell.appendChild(more);
     }
-
     grid.appendChild(cell);
   }
-
-  renderEventsList();
+  renderList();
 }
 
-function renderEventsList() {
-  const list = document.getElementById('eventsList');
-  const relevant = EVENTS.filter(e => {
-    const eDate = new Date(e.date);
-    return eDate.getFullYear() === currentYear && eDate.getMonth() === currentMonth;
-  }).sort((a,b) => new Date(a.date) - new Date(b.date));
-
-  list.innerHTML = relevant.length ? relevant.map(ev => {
-    const parts = ev.date.slice(0,10).split('-');
-    const d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
-    return `<div class="event-card" onclick='openModal(${JSON.stringify(ev)}, ${d.getDate()})'>
-      <div class="event-date-block">
-        <div class="event-date-day">${d.getDate()}</div>
-        <div class="event-date-mon">${SHORT_MONTHS[d.getMonth()]}</div>
-      </div>
-      <div class="event-info">
-        <div class="event-type-tag">${ev.type}</div>
-        <div class="event-name">${ev.name}</div>
-        <div class="event-meta">${ev.time !== 'TBC' ? '🕐 ' + ev.time : 'Time TBC'} &nbsp;·&nbsp; Host: ${ev.host}</div>
-        ${ev.price && ev.price !== 'TBC' ? `<div class="event-book">🎟 ${ev.price}</div>` : ''}
-      </div>
-    </div>`;
-  }).join('') : '<p style="color:var(--muted);font-size:0.85rem;padding:0.5rem 0;">No events this month yet.</p>';
+function renderList() {
+  var list = document.getElementById('eventsList');
+  if (!list) return;
+  var relevant = EVENTS.filter(function(e){
+    var p = e.date.split('-');
+    return parseInt(p[0])===currentYear && parseInt(p[1])-1===currentMonth;
+  }).sort(function(a,b){ return a.date > b.date ? 1 : -1; });
+  if (!relevant.length) {
+    list.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;padding:0.5rem 0;">No events this month yet.</p>';
+    return;
+  }
+  list.innerHTML = relevant.map(function(ev){
+    var p = ev.date.split('-');
+    var day = parseInt(p[2]);
+    var mon = SHORT[parseInt(p[1])-1];
+    return '<div class="event-card" onclick="openModal('+JSON.stringify(ev).replace(/"/g,"&quot;")+','+day+')">'
+      +'<div class="event-date-block"><div class="event-date-day">'+day+'</div><div class="event-date-mon">'+mon+'</div></div>'
+      +'<div class="event-info"><div class="event-type-tag">'+ev.type+'</div>'
+      +'<div class="event-name">'+ev.name+'</div>'
+      +'<div class="event-meta">'+(ev.time!=='TBC'?'&#128336; '+ev.time:'Time TBC')+' &nbsp;&middot;&nbsp; Host: '+ev.host+'</div>'
+      +(ev.price&&ev.price!=='TBC'?'<div class="event-book">&#127903; '+ev.price+'</div>':'')
+      +'</div></div>';
+  }).join('');
 }
 
 function openModal(ev, day) {
-  const d = typeof ev === 'string' ? JSON.parse(ev) : ev;
-  document.getElementById('modalType').textContent = d.type;
-  document.getElementById('modalTitle').textContent = d.name;
-  document.getElementById('modalDate').textContent = `${day} ${SHORT_MONTHS[currentMonth]} ${currentYear}`;
-  document.getElementById('modalTime').textContent = d.time;
-  document.getElementById('modalHost').textContent = d.host;
-  document.getElementById('modalPrice').textContent = d.price || 'TBC';
-  document.getElementById('modalNote').textContent = d.note || '—';
-  document.getElementById('modalNoteRow').style.display = d.note ? 'flex' : 'none';
+  document.getElementById('modalType').textContent = ev.type;
+  document.getElementById('modalTitle').textContent = ev.name;
+  document.getElementById('modalDate').textContent = day + ' ' + SHORT[currentMonth] + ' ' + currentYear;
+  document.getElementById('modalTime').textContent = ev.time;
+  document.getElementById('modalHost').textContent = ev.host;
+  document.getElementById('modalPrice').textContent = ev.price || 'TBC';
+  document.getElementById('modalNote').textContent = ev.note || '-';
+  document.getElementById('modalNoteRow').style.display = ev.note ? 'flex' : 'none';
   document.getElementById('modalOverlay').classList.add('open');
 }
 
 function closeModal(e) {
-  if (!e || e.target === document.getElementById('modalOverlay')) {
+  if (!e || e.target===document.getElementById('modalOverlay')) {
     document.getElementById('modalOverlay').classList.remove('open');
   }
 }
 
 function changeMonth(dir) {
   currentMonth += dir;
-  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+  if (currentMonth > 11) { currentMonth=0; currentYear++; }
+  if (currentMonth < 0) { currentMonth=11; currentYear--; }
   renderCalendar();
 }
 
