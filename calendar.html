@@ -151,26 +151,85 @@
 </div>
 
 <script>
-// ── EVENTS DATA ──
-// Edit this array to update the calendar!
-const EVENTS = [
-  { date: "2026-08-29", type: "Opening Night", name: "Opening Night!", time: "19:00 – 22:00", host: "Espai Tres Miaus", price: "Free entry", note: "Snacks & sips — come whenever!", chip: "chip-opening" },
-  { date: "2026-09-12", type: "Cooking Class", name: "Georgian Cooking Class", time: "17:00 - 21:00", host: "Masho", price: "60€", note: "", chip: "chip-cooking" },
-  { date: "2026-09-13", type: "Cooking Class", name: "Georgian Cooking Class", time: "11:00 - 15:00", host: "Masho", price: "60€", note: "", chip: "chip-cooking" },
-  { date: "2026-09-17", type: "Theatre", name: "Poly Drama Theatre", time: "18:00 - 20:30", host: "ChaTo", price: "Donation 3€", note: "", chip: "chip-theatre" },
-  { date: "2026-09-18", type: "Cooking Class", name: "Georgian Cooking Class", time: "17:00 - 21:00", host: "Masho", price: "60€", note: "", chip: "chip-cooking" },
-  { date: "2026-09-19", type: "Cooking Class", name: "Georgian Cooking Class", time: "11:00 - 15:00", host: "Masho", price: "60€", note: "", chip: "chip-cooking" },
-  { date: "2026-09-26", type: "Cooking Class", name: "Georgian Cooking Class", time: "17:00 - 21:00", host: "Masho", price: "60€", note: "", chip: "chip-cooking" },
-  { date: "2026-09-27", type: "Cooking Class", name: "Georgian Cooking Class", time: "11:00 - 15:00", host: "Masho", price: "60€", note: "", chip: "chip-cooking" },
-  { date: "2026-09-11", type: "Massage", name: "Massage with Ines", time: "15:00 - 17:00", host: "Ines", price: "TBC", note: "", chip: "chip-massage" },
-  { date: "2026-09-01", type: "Massage", name: "Massage with Ines", time: "Book directly", host: "Ines", price: "Contact Ines", note: "Available throughout September — book directly with Ines", chip: "chip-massage" },
-];
+// ── EVENTS — loaded from CMS via manifest ──
+// To add/edit events, use the CMS at /admin → Events
+// Changes publish automatically within 30 seconds
+
+const CHIP_MAP = {
+  "Neptunes":  "chip-opening",
+  "Workshop":  "chip-cooking",
+  "Community": "chip-available",
+  "Social":    "chip-available",
+  "Private":   "chip-cooking",
+  "Cooking":   "chip-cooking",
+  "Theatre":   "chip-theatre",
+  "Massage":   "chip-massage",
+};
 
 const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const SHORT_MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
 let currentYear = 2026;
-let currentMonth = 8; // 0-indexed, so 8 = September
+let currentMonth = 8;
+let EVENTS = [];
+
+async function loadEvents() {
+  try {
+    // Try both manifest locations
+    let manifest = null;
+    for (const path of ['/events-manifest.json', '/_data/events-manifest.json']) {
+      try {
+        const res = await fetch(path);
+        if (res.ok) { manifest = await res.json(); break; }
+      } catch(e) {}
+    }
+
+    if (!manifest || !manifest.events || manifest.events.length === 0) {
+      renderCalendar(); return;
+    }
+
+    const results = await Promise.all(manifest.events.map(async filename => {
+      try {
+        const res = await fetch('/_data/events/' + filename);
+        if (!res.ok) return null;
+        const text = await res.text();
+        // Parse YAML frontmatter
+        const match = text.match(/^---
+([\s\S]*?)
+---/);
+        if (!match) return null;
+        const yml = match[1];
+        const get = (key) => {
+          const m = yml.match(new RegExp('^' + key + ':\s*["']?([^"'\n]+)["']?', 'm'));
+          return m ? m[1].trim() : '';
+        };
+        const type = get('type');
+        const dateStr = get('date');
+        // Normalise date format
+        let isoDate = dateStr;
+        if (dateStr.match(/\d{2} \w+ \d{4}/)) {
+          isoDate = new Date(dateStr).toISOString().split('T')[0];
+        }
+        return {
+          date: isoDate,
+          type: type,
+          name: get('title'),
+          time: get('date').includes(':') ? get('date').split('T')[1]?.slice(0,5) || 'TBC' : 'TBC',
+          host: get('host') || 'TBC',
+          price: get('price') || 'TBC',
+          note: get('description') || '',
+          chip: CHIP_MAP[type] || 'chip-available'
+        };
+      } catch(e) { return null; }
+    }));
+
+    EVENTS = results.filter(Boolean);
+    renderCalendar();
+  } catch(e) {
+    console.log('Could not load events from CMS:', e);
+    renderCalendar();
+  }
+}
 
 function getEventsForDate(y, m, d) {
   const dateStr = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
@@ -184,11 +243,10 @@ function renderCalendar() {
   title.textContent = `${MONTHS[currentMonth]} ${currentYear}`;
 
   const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-  const offset = firstDay === 0 ? 6 : firstDay - 1; // Mon start
+  const offset = firstDay === 0 ? 6 : firstDay - 1;
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const today = new Date();
 
-  // Empty cells
   for (let i = 0; i < offset; i++) {
     const empty = document.createElement('div');
     empty.className = 'cal-day empty';
@@ -206,7 +264,6 @@ function renderCalendar() {
     num.textContent = d;
     cell.appendChild(num);
 
-    // Show max 2 chips, then +N
     const shown = events.slice(0, 2);
     shown.forEach(ev => {
       const chip = document.createElement('div');
@@ -238,31 +295,30 @@ function renderEventsList() {
 
   list.innerHTML = relevant.length ? relevant.map(ev => {
     const d = new Date(ev.date);
-    const dayNum = d.getDate();
-    const mon = SHORT_MONTHS[d.getMonth()];
-    return `<div class="event-card" onclick="openModal(${JSON.stringify(ev).replace(/"/g,'&quot;')}, ${dayNum === 'All' ? 1 : dayNum})">
+    return `<div class="event-card" onclick='openModal(${JSON.stringify(ev)}, ${d.getDate()})'>
       <div class="event-date-block">
-        <div class="event-date-day">${dayNum}</div>
-        <div class="event-date-mon">${mon}</div>
+        <div class="event-date-day">${d.getDate()}</div>
+        <div class="event-date-mon">${SHORT_MONTHS[d.getMonth()]}</div>
       </div>
       <div class="event-info">
         <div class="event-type-tag">${ev.type}</div>
         <div class="event-name">${ev.name}</div>
-        <div class="event-meta">${ev.time !== 'Book directly' ? '🕐 ' + ev.time : '📱 Book directly with host'} &nbsp;·&nbsp; Host: ${ev.host}</div>
+        <div class="event-meta">${ev.time !== 'TBC' ? '🕐 ' + ev.time : 'Time TBC'} &nbsp;·&nbsp; Host: ${ev.host}</div>
         ${ev.price && ev.price !== 'TBC' ? `<div class="event-book">🎟 ${ev.price}</div>` : ''}
       </div>
     </div>`;
-  }).join('') : '<p style="color:var(--muted);font-size:0.85rem;padding:0.5rem 0;">No events this month yet.</p>';}
+  }).join('') : '<p style="color:var(--muted);font-size:0.85rem;padding:0.5rem 0;">No events this month yet.</p>';
+}
 
 function openModal(ev, day) {
   const d = typeof ev === 'string' ? JSON.parse(ev) : ev;
   document.getElementById('modalType').textContent = d.type;
   document.getElementById('modalTitle').textContent = d.name;
-  document.getElementById('modalDate').textContent = d.type === "Massage" ? "Throughout September" : `${day} ${SHORT_MONTHS[currentMonth]} ${currentYear}`;
+  document.getElementById('modalDate').textContent = `${day} ${SHORT_MONTHS[currentMonth]} ${currentYear}`;
   document.getElementById('modalTime').textContent = d.time;
   document.getElementById('modalHost').textContent = d.host;
-  document.getElementById('modalPrice').textContent = d.price || "TBC";
-  document.getElementById('modalNote').textContent = d.note || "—";
+  document.getElementById('modalPrice').textContent = d.price || 'TBC';
+  document.getElementById('modalNote').textContent = d.note || '—';
   document.getElementById('modalNoteRow').style.display = d.note ? 'flex' : 'none';
   document.getElementById('modalOverlay').classList.add('open');
 }
@@ -280,7 +336,7 @@ function changeMonth(dir) {
   renderCalendar();
 }
 
-renderCalendar();
+loadEvents();
 </script>
 </body>
 </html>

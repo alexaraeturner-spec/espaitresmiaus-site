@@ -7,3 +7,8 @@
   [headers.values]
     Access-Control-Allow-Origin = "*"
     Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/events-manifest.json"
+  [headers.values]
+    Cache-Control = "no-cache"
