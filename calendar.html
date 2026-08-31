@@ -200,19 +200,18 @@ async function loadEvents() {
         if (!match) return null;
         const yml = match[1];
         const get = (key) => {
-          const m = yml.match(new RegExp('^' + key + ':\s*["']?([^"'\n]+)["']?', 'm'));
-          return m ? m[1].trim() : '';
+          for (const line of yml.split('\n')) {
+            if (line.startsWith(key + ':')) {
+              return line.slice(key.length + 1).trim().replace(/^['"]/,'').replace(/['"]$/,'');
+            }
+          }
+          return '';
         };
         const type = get('type');
         const dateStr = get('date');
-        // Normalise date format
-        let isoDate = dateStr;
-        if (dateStr.match(/\d{2} \w+ \d{4}/)) {
-          isoDate = new Date(dateStr).toISOString().split('T')[0];
-        }
+        const isoDate = dateStr.slice(0, 10);
         return {
           date: isoDate,
-          type: type,
           name: get('title'),
           time: get('time') || 'TBC',
           host: get('host') || 'TBC',
@@ -233,7 +232,7 @@ async function loadEvents() {
 
 function getEventsForDate(y, m, d) {
   const dateStr = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-  return EVENTS.filter(e => e.date === dateStr);
+  return EVENTS.filter(e => e.date && e.date.slice(0,10) === dateStr);
 }
 
 function renderCalendar() {
@@ -294,7 +293,8 @@ function renderEventsList() {
   }).sort((a,b) => new Date(a.date) - new Date(b.date));
 
   list.innerHTML = relevant.length ? relevant.map(ev => {
-    const d = new Date(ev.date);
+    const parts = ev.date.slice(0,10).split('-');
+    const d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
     return `<div class="event-card" onclick='openModal(${JSON.stringify(ev)}, ${d.getDate()})'>
       <div class="event-date-block">
         <div class="event-date-day">${d.getDate()}</div>
