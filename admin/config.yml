@@ -19,14 +19,15 @@ collections:
     slug: "{{slug}}"
     fields:
       - { label: "Event name", name: "title", widget: "string" }
-      - { label: "Date", name: "date", widget: "datetime", format: "DD MMMM YYYY", date_format: "DD MMMM YYYY", time_format: "HH:mm" }
+      - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false }
+      - { label: "Time", name: "time", widget: "string", hint: "e.g. 17:00 – 21:00 or TBC" }
       - label: "Event type"
         name: "type"
         widget: "select"
-        options: ["Neptunes", "Workshop", "Community", "Social", "Private"]
-      - { label: "Description", name: "description", widget: "text" }
-      - { label: "Duration", name: "duration", widget: "string", hint: "e.g. 2 hours" }
-      - { label: "Price", name: "price", widget: "string", hint: "e.g. €12 / Free" }
+        options: ["Neptunes", "Workshop", "Community", "Social", "Private", "Cooking Class", "Theatre", "Massage"]
+      - { label: "Host", name: "host", widget: "string", hint: "Who is running the event?" }
+      - { label: "Description", name: "description", widget: "text", required: false }
+      - { label: "Price", name: "price", widget: "string", hint: "e.g. €12 / Free / TBC", required: false }
       - { label: "Max attendees", name: "capacity", widget: "number", required: false }
       - { label: "Featured event?", name: "featured", widget: "boolean", default: false }
       - { label: "Booking link", name: "booking_url", widget: "string", required: false }
