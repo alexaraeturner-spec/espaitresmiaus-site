@@ -264,6 +264,21 @@ function renderCalendar() {
       more.textContent = '+' + (events.length-2) + ' more';
       cell.appendChild(more);
     }
+    // Show available chip — space is bookable every day
+    // If events exist, show "Still available" since bookings rarely fill a whole day
+    // Only hide for past dates
+    var cellDate = new Date(currentYear, currentMonth, d);
+    var todayDate = new Date(); todayDate.setHours(0,0,0,0);
+    if (cellDate >= todayDate) {
+      var avail = document.createElement('div');
+      avail.className = 'event-chip chip-available';
+      avail.style.cursor = 'pointer';
+      avail.textContent = events.length ? 'Still available' : 'Available';
+      avail.onclick = function(){
+        window.open('https://wa.me/34683565985?text=Hi%21%20I%20would%20like%20to%20enquire%20about%20booking%20the%20space.', '_blank');
+      };
+      cell.appendChild(avail);
+    }
     grid.appendChild(cell);
   }
   renderList();
