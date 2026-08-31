@@ -1,9 +1,9 @@
 [build]
-  command = "node -e \"const fs=require('fs'),path=require('path'),ed=path.join(__dirname,'_data','events'),mp=path.join(__dirname,'_data','events-manifest.json'),mr=path.join(__dirname,'events-manifest.json');if(!fs.existsSync(ed))fs.mkdirSync(ed,{recursive:true});const ef=fs.readdirSync(ed).filter(f=>f.endsWith('.yml')||f.endsWith('.yaml')||f.endsWith('.md'));const m=JSON.stringify({events:ef},null,2);fs.writeFileSync(mp,m);fs.writeFileSync(mr,m);console.log('Events manifest updated -',ef.length,'event(s):',ef);\""
+  command = "node -e \"const fs=require('fs'),path=require('path'),ed=path.join(__dirname,'_data','events'),mp=path.join(__dirname,'_data','events-manifest.json'),mr=path.join(__dirname,'events-manifest.json'),pd=path.join(__dirname,'public','events');if(!fs.existsSync(ed))fs.mkdirSync(ed,{recursive:true});if(!fs.existsSync(pd))fs.mkdirSync(pd,{recursive:true});const ef=fs.readdirSync(ed).filter(f=>f.endsWith('.yml')||f.endsWith('.yaml')||f.endsWith('.md'));ef.forEach(f=>fs.copyFileSync(path.join(ed,f),path.join(pd,f)));const m=JSON.stringify({events:ef},null,2);fs.writeFileSync(mp,m);fs.writeFileSync(mr,m);fs.writeFileSync(path.join(__dirname,'public','events-manifest.json'),m);console.log('Events manifest updated -',ef.length,'event(s):',ef);\""
   publish = "."
 
 [[headers]]
-  for = "/_data/*"
+  for = "/public/*"
   [headers.values]
     Access-Control-Allow-Origin = "*"
     Cache-Control = "no-cache"

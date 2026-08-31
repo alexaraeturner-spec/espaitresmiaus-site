@@ -306,10 +306,10 @@
     if (featuredEl || gridEl) {
       try {
         console.log('TM: fetching manifest...');
-        let manifest = await fetchJSON('/_data/events-manifest.json');
+        let manifest = await fetchJSON('/public/events-manifest.json');
         console.log('TM: _data manifest:', manifest);
         if (!manifest) {
-          manifest = await fetchJSON('/events-manifest.json');
+          manifest = await fetchJSON('/public/events-manifest.json');
           console.log('TM: root manifest:', manifest);
         }
 
@@ -317,7 +317,7 @@
           console.log('TM: found events:', manifest.events);
           const eventData = await Promise.all(
             manifest.events.map(async filename => {
-              const data = await fetchYAML('/_data/events/' + filename);
+              const data = await fetchYAML('/public/events/' + filename);
               console.log('TM: parsed', filename, ':', data);
               return data;
             })

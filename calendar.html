@@ -177,7 +177,7 @@ async function loadEvents() {
   try {
     // Try both manifest locations
     let manifest = null;
-    for (const path of ['/events-manifest.json', '/_data/events-manifest.json']) {
+    for (const path of ['/public/events-manifest.json', '/events-manifest.json']) {
       try {
         const res = await fetch(path);
         if (res.ok) { manifest = await res.json(); break; }
@@ -190,7 +190,7 @@ async function loadEvents() {
 
     const results = await Promise.all(manifest.events.map(async filename => {
       try {
-        const res = await fetch('/_data/events/' + filename);
+        const res = await fetch('/public/events/' + filename);
         if (!res.ok) return null;
         const text = await res.text();
         // Parse YAML frontmatter
@@ -214,7 +214,7 @@ async function loadEvents() {
           date: isoDate,
           type: type,
           name: get('title'),
-          time: get('date').includes(':') ? get('date').split('T')[1]?.slice(0,5) || 'TBC' : 'TBC',
+          time: get('time') || 'TBC',
           host: get('host') || 'TBC',
           price: get('price') || 'TBC',
           note: get('description') || '',
