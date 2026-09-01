@@ -24,7 +24,7 @@ collections:
       - label: "Event type"
         name: "type"
         widget: "select"
-        options: ["Neptunes", "Workshop", "Community", "Social", "Private", "Cooking Class", "Theatre", "Massage"]
+        options: ["Neptunes", "Workshop", "Community", "Social", "Private", "Cooking Class", "Theatre", "Massage", "Blocked"]
       - { label: "Host", name: "host", widget: "string", hint: "Who is running the event?" }
       - { label: "Description", name: "description", widget: "text", required: false }
       - { label: "Price", name: "price", widget: "string", hint: "e.g. €12 / Free / TBC", required: false }
