@@ -53,6 +53,7 @@
   .chip-massage { background: #EDE8F5; color: #534AB7; }
   .chip-opening { background: #8B1E1E; color: #FFFFFF; }
   .chip-available { background: #E8F5EC; color: #1A6B3C; }
+  .chip-blocked { background: #EBEBEB; color: #888888; }
 
   /* EVENT LIST BELOW */
   .events-section { padding: 0 0.75rem 1.5rem; }
@@ -113,6 +114,7 @@
   <div class="legend-item"><div class="legend-dot" style="background:#9A4C34"></div> Theatre</div>
   <div class="legend-item"><div class="legend-dot" style="background:#7B6DAE"></div> Massage</div>
   <div class="legend-item"><div class="legend-dot" style="background:#1A6B3C"></div> Available to book</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#BBBBBB"></div> Not available</div>
 </div>
 
 <div class="cal-wrap">
@@ -154,7 +156,8 @@
 var CHIP_MAP = {
   "Neptunes":"chip-opening","Workshop":"chip-cooking","Community":"chip-available",
   "Social":"chip-available","Private":"chip-cooking","Cooking Class":"chip-cooking",
-  "Theatre":"chip-theatre","Massage":"chip-massage"
+  "Theatre":"chip-theatre","Massage":"chip-massage",
+  "Blocked":"chip-blocked"
 };
 var MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
 var SHORT=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -264,20 +267,26 @@ function renderCalendar() {
       more.textContent = '+' + (events.length-2) + ' more';
       cell.appendChild(more);
     }
-    // Show available chip — space is bookable every day
-    // If events exist, show "Still available" since bookings rarely fill a whole day
-    // Only hide for past dates
+    // Show available/blocked chip
     var cellDate = new Date(currentYear, currentMonth, d);
     var todayDate = new Date(); todayDate.setHours(0,0,0,0);
+    var isBlocked = events.some(function(e){ return e.type === 'Blocked'; });
     if (cellDate >= todayDate) {
-      var avail = document.createElement('div');
-      avail.className = 'event-chip chip-available';
-      avail.style.cursor = 'pointer';
-      avail.textContent = events.length ? 'Still available' : 'Available';
-      avail.onclick = function(){
-        window.open('https://wa.me/34683565985?text=Hi%21%20I%20would%20like%20to%20enquire%20about%20booking%20the%20space.', '_blank');
-      };
-      cell.appendChild(avail);
+      if (isBlocked) {
+        var blockedChip = document.createElement('div');
+        blockedChip.className = 'event-chip chip-blocked';
+        blockedChip.textContent = 'Not available';
+        cell.appendChild(blockedChip);
+      } else {
+        var avail = document.createElement('div');
+        avail.className = 'event-chip chip-available';
+        avail.style.cursor = 'pointer';
+        avail.textContent = events.length ? 'Still available' : 'Available';
+        avail.onclick = function(){
+          window.open('https://wa.me/34683565985?text=Hi%21%20I%20would%20like%20to%20enquire%20about%20booking%20the%20space.', '_blank');
+        };
+        cell.appendChild(avail);
+      }
     }
     grid.appendChild(cell);
   }
