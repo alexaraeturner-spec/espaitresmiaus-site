@@ -1,7 +1,19 @@
 name: Thelma
-role: Resident beauty, keeping her distance
+role_home: RESIDENT BEAUTY, KEEPING HER DISTANCE
+image_home: /images/img_20260831_145948.jpg
+role_about: BROWN OMBRÉ · BLUE EYES RESIDENT BEAUTY, KEEPING HER DISTANCE
 bio: Brown ombré coat, blue eyes, absolutely stunning - and she knows it. Thelma
   prefers to admire gatherings from afar. Please don't approach or touch her;
   she'll come to you if and when she's ready.
-warning: If you stare, she runs away
+bio_home: Brown ombré coat, blue eyes, absolutely stunning — and she knows it.
+  Thelma prefers to admire gatherings from afar. Please don't approach or touch
+  her; she'll come to you if and when she's ready.
+bio_about: Thelma is stunning — brown ombré coat, blue eyes, the kind of cat you
+  can't help but stare at. She observes gatherings from a safe distance and has
+  no interest in being approached. She's been through things. She deserves
+  respect.
+image_about: /images/img_20260830_120345.jpg
+role: Resident beauty, keeping her distance
 image: /images/img_20260831_145948.jpg
+warning: ⚠ Please do not approach or try to touch Thelma. She will come to you
+  if and when she's ready — and that's entirely her call.
