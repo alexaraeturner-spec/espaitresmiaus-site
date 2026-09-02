@@ -1,0 +1,190 @@
+/* ============================================================
+   Espai Tres Miaus — Mobile Responsive Overrides
+   Linked on every page after the page's own inline <style> block,
+   so these rules win on equal specificity at narrower widths.
+   ============================================================ */
+
+/* ---------- MOBILE NAV (hamburger) ---------- */
+.tm-nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 200;
+}
+.tm-nav-toggle span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--bark, #2B2B28);
+  border-radius: 2px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+nav.tm-nav-open .tm-nav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+nav.tm-nav-open .tm-nav-toggle span:nth-child(2) { opacity: 0; }
+nav.tm-nav-open .tm-nav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 860px) {
+  nav { flex-wrap: wrap; padding: 1rem 1.25rem !important; }
+  .tm-nav-toggle { display: flex; }
+  .nav-links {
+    display: none;
+    flex-direction: column !important;
+    width: 100%;
+    gap: 0 !important;
+    padding-top: 1rem;
+  }
+  nav.tm-nav-open .nav-links { display: flex; }
+  .nav-links li { width: 100%; }
+  .nav-links a {
+    display: block;
+    padding: 0.85rem 0.25rem;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    font-size: 0.85rem !important;
+  }
+  .nav-links li:first-child a { border-top: none; }
+  .nav-links .nav-cta { display: inline-block; margin: 0.75rem 0.25rem; border-top: none; }
+}
+
+/* ---------- GENERIC TWO/THREE/FOUR COLUMN GRIDS → SINGLE COLUMN ---------- */
+@media (max-width: 900px) {
+  .hero,
+  .page-hero,
+  .page-hero-right,
+  .alexa-section,
+  .neighbourhood-section,
+  .cta-section,
+  .photo-section,
+  .calendar-section,
+  .pricing-grid,
+  .compare-grid,
+  .faq-grid,
+  .field-group {
+    grid-template-columns: 1fr !important;
+  }
+
+  .stats-strip,
+  .gallery-grid,
+  .tiers-grid,
+  .who-grid,
+  .cats-grid,
+  .what-grid,
+  .steps-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .hero,
+  .page-hero {
+    min-height: auto !important;
+  }
+
+  .hero-left,
+  .page-hero-left,
+  .alexa-section,
+  .photo-section,
+  .cta-section,
+  .calendar-section {
+    padding: 3rem 1.5rem !important;
+  }
+
+  .page-hero-right { min-height: 280px; }
+}
+
+@media (max-width: 640px) {
+  .stats-strip,
+  .gallery-grid,
+  .tiers-grid,
+  .who-grid,
+  .cats-grid,
+  .what-grid,
+  .steps-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .field-group { grid-template-columns: 1fr !important; }
+
+  section, .section, main > div {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+
+  .cta-section {
+    text-align: center;
+  }
+  .cta-section > * { justify-self: center !important; }
+}
+
+/* ---------- FOOTER ---------- */
+@media (max-width: 700px) {
+  footer {
+    flex-direction: column !important;
+    gap: 1rem;
+    text-align: center;
+    padding: 2rem 1.5rem !important;
+  }
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem 1.25rem !important;
+  }
+}
+
+/* ---------- COMPARISON TABLE (membership page) ---------- */
+@media (max-width: 700px) {
+  .compare-table,
+  .compare-table thead,
+  .compare-table tbody {
+    display: block;
+    width: 100%;
+  }
+  .compare-table {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    display: block;
+    white-space: nowrap;
+  }
+  .compare-table table { width: 100%; }
+}
+
+/* Simpler, more robust fallback: wrap table in a scroll container via JS-added class */
+@media (max-width: 700px) {
+  .tm-table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ---------- CALENDAR GRID ---------- */
+@media (max-width: 640px) {
+  .day-headers, .cal-grid {
+    gap: 2px !important;
+  }
+  .cal-grid > * {
+    font-size: 0.7rem !important;
+    padding: 0.35rem 0.15rem !important;
+  }
+}
+
+/* ---------- FORM FIELD GROUPS (contact page) ---------- */
+@media (max-width: 640px) {
+  .contact-form { gap: 1rem !important; }
+}
+
+/* ---------- GENERAL TYPE SCALE SAFETY NET ---------- */
+@media (max-width: 480px) {
+  .page-hero-title, .hero-title { font-size: 2.1rem !important; }
+  .section-title { font-size: 1.6rem !important; }
+}
+
+/* ---------- IMAGES / PHOTO BLOCKS ---------- */
+@media (max-width: 900px) {
+  .photo-block, .hero-photo, .gallery-item {
+    min-height: 220px;
+  }
+}

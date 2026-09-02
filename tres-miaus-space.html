@@ -169,7 +169,7 @@
 
   .page-hero-right {
     display: grid;
-    grid-template-rows: 1fr;
+    grid-template-rows: 1fr 1fr;
   }
 
   .photo-block {
@@ -630,6 +630,8 @@
 
   .reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
+<link rel="stylesheet" href="/mobile.css">
+<script src="/mobile-nav.js" defer></script>
 </head>
 <body>
 
@@ -665,6 +667,13 @@
         <p>Main room photo</p>
       </div>
       <span class="photo-block-label">Main room</span>
+    </div>
+    <div class="photo-block sage-bg">
+      <div id="tm-img-space-hero_balcony_image" class="photo-placeholder" style="overflow:hidden;position:relative; color: var(--sage);">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <p>Balcony photo</p>
+      </div>
+      <span class="photo-block-label">The balcony</span>
     </div>
   </div>
 </section>
