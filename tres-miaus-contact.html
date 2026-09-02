@@ -250,21 +250,23 @@
     <h2 class="form-title">What can we help with?</h2>
     <p class="form-sub">Fill in the form and we'll come back to you. If you're enquiring about a booking, let us know the date and duration you have in mind.</p>
 
-    <form class="contact-form" onsubmit="handleSubmit(event)">
+    <form class="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleSubmit(event)">
+      <input type="hidden" name="form-name" value="contact">
+      <p style="display:none;"><input name="bot-field"></p>
       <div class="field-group">
         <div class="field">
           <label for="name">Your name</label>
-          <input type="text" id="name" placeholder="Alexa" required>
+          <input type="text" id="name" name="name" placeholder="Alexa" required>
         </div>
         <div class="field">
           <label for="email">Email address</label>
-          <input type="email" id="email" placeholder="you@email.com" required>
+          <input type="email" id="email" name="email" placeholder="you@email.com" required>
         </div>
       </div>
 
       <div class="field">
         <label for="reason">What's this about?</label>
-        <select id="reason">
+        <select id="reason" name="reason">
           <option value="" disabled selected>Choose one...</option>
           <option value="booking">Booking the space</option>
           <option value="membership">Membership enquiry</option>
@@ -277,11 +279,11 @@
       <div class="field-group">
         <div class="field">
           <label for="date">Preferred date (if booking)</label>
-          <input type="date" id="date">
+          <input type="date" id="date" name="date" name="date">
         </div>
         <div class="field">
           <label for="duration">Duration</label>
-          <select id="duration">
+          <select id="duration" name="duration" name="duration">
             <option value="" disabled selected>How long?</option>
             <option value="hourly">Hourly (2 hrs min)</option>
             <option value="half">Half day (4 hrs)</option>
@@ -293,7 +295,7 @@
 
       <div class="field">
         <label for="message">Your message</label>
-        <textarea id="message" placeholder="Tell us a bit about what you're planning — we'd love to hear it." required></textarea>
+        <textarea id="message" name="message" placeholder="Tell us a bit about what you're planning — we'd love to hear it." required></textarea>
       </div>
 
       <div class="submit-row">
@@ -312,21 +314,21 @@
 
     <div class="info-card">
       <p class="info-card-label">Email</p>
-      <p class="info-card-title">treismiaus@email.com</p>
+      <p class="info-card-title">espaitresmiaus@gmail.com</p>
       <p class="info-card-text">For bookings, membership enquiries, and anything else. We check this daily.</p>
-      <a href="mailto:treismiaus@email.com" class="info-card-link">Send an email →</a>
+      <a href="mailto:espaitresmiaus@gmail.com" class="info-card-link">Send an email →</a>
     </div>
 
     <div class="info-card sage-card">
       <p class="info-card-label">Instagram</p>
-      <p class="info-card-title">@treismiaus</p>
+      <p class="info-card-title">@espaitresmiaus</p>
       <p class="info-card-text">Follow for upcoming events, cat content, and space updates. DMs are open — often the fastest way to reach us for quick questions.</p>
       <div class="social-row">
-        <a href="#" class="social-btn">
+        <a href="https://instagram.com/espaitresmiaus" target="_blank" class="social-btn">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-          @treismiaus
+          @espaitresmiaus
         </a>
-        <a href="#" class="social-btn">
+        <a href="https://instagram.com/neptunesherblab" target="_blank" class="social-btn">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
           @neptunesherblab
         </a>
@@ -337,14 +339,14 @@
       <p class="info-card-label">Booking calendar</p>
       <p class="info-card-title">Check availability</p>
       <p class="info-card-text">See what slots are open and submit a booking request directly through our calendar.</p>
-      <a href="#" class="info-card-link">View calendar →</a>
+      <a href="calendar.html" class="info-card-link">View calendar →</a>
     </div>
 
     <div class="info-card">
       <p class="info-card-label">Quick questions?</p>
       <p class="info-card-title">Check the FAQs first</p>
       <p class="info-card-text">Cancellations, what's included, the cats, music policy — it's probably answered there.</p>
-      <a href="#" class="info-card-link">Read the FAQs →</a>
+      <a href="tres-miaus-rent.html" class="info-card-link">Read the FAQs →</a>
     </div>
 
   </div>
@@ -400,10 +402,10 @@
 <footer>
   <div class="footer-logo">Tres <span>Miaus</span> — Event Space</div>
   <div class="footer-links">
-    <a href="#">Instagram</a>
-    <a href="#">Book now</a>
+    <a href="https://instagram.com/espaitresmiaus">Instagram</a>
+    <a href="tres-miaus-rent.html">Book now</a>
   </div>
-  <p>Barcelona · treismiaus@email.com</p>
+  <p>Barcelona · espaitresmiaus@gmail.com</p>
 </footer>
 
 <script>
