@@ -393,6 +393,16 @@
     justify-content: center;
     font-size: 2.5rem;
     border: 3px solid var(--terracotta-light);
+    overflow: hidden;
+    position: relative;
+  }
+  .cat-photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
   }
 
   .cat-name {
@@ -633,19 +643,19 @@
   </div>
   <div class="cats-grid">
     <div class="cat-card reveal">
-      <div class="cat-photo" id="tm-img-yuki-image" style="font-size:2rem;display:flex;align-items:center;justify-content:center;">🐱</div>
+      <div class="cat-photo" id="tm-img-yuki-image_home" style="font-size:2rem;display:flex;align-items:center;justify-content:center;">🐱</div>
       <p class="cat-name" id="tm-yuki-name">Yuki</p>
       <p class="cat-role" id="tm-yuki-role">Independent spirit & selective bestie</p>
       <p class="cat-bio" id="tm-yuki-bio-home">Grey and white. Gloriously fluffy. Does entirely her own thing — unless she likes you, in which case she'll silently appear beside you. If Yuki sits near you, consider it the highest honour.</p>
     </div>
     <div class="cat-card reveal">
-      <div class="cat-photo" id="tm-img-thelma-image" style="font-size:2rem;display:flex;align-items:center;justify-content:center;">🐈</div>
+      <div class="cat-photo" id="tm-img-thelma-image_home" style="font-size:2rem;display:flex;align-items:center;justify-content:center;">🐈</div>
       <p class="cat-name" id="tm-thelma-name">Thelma</p>
       <p class="cat-role" id="tm-thelma-role">Resident beauty, keeping her distance</p>
       <p class="cat-bio" id="tm-thelma-bio-home">Brown ombré coat, blue eyes, absolutely stunning — and she knows it. Thelma prefers to admire gatherings from afar. Please don't approach or touch her; she'll come to you if and when she's ready.</p>
     </div>
     <div class="cat-card reveal">
-      <div class="cat-photo" id="tm-img-louise-image" style="font-size:2rem;display:flex;align-items:center;justify-content:center;">🐈‍⬛</div>
+      <div class="cat-photo" id="tm-img-louise-image_home" style="font-size:2rem;display:flex;align-items:center;justify-content:center;">🐈‍⬛</div>
       <p class="cat-name" id="tm-louise-name">Louise</p>
       <p class="cat-role" id="tm-louise-role">Chief of chaos & head of entertainment</p>
       <p class="cat-bio" id="tm-louise-bio-home">Black, green-eyed, and absolutely feral in the best way. Louise will meow until you acknowledge her, play until you're tired, and demand pets on her own schedule — which is always. The life of every event.</p>

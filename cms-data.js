@@ -419,24 +419,26 @@
 
     [[yuki,'yuki'],[thelma,'thelma'],[louise,'louise']].forEach(([cat, id]) => {
       if (!cat) return;
-      // Text — homepage cat cards
+
+      const injectImg = (elId, src, altText) => {
+        const el = document.getElementById(elId);
+        if (!el || !src) return;
+        el.style.padding = '0';
+        el.style.background = 'none';
+        el.innerHTML = `<img src="${src}" alt="${altText || id}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit;">`;
+      };
+
+      // Homepage — use _home fields, fall back to shared fields
       setText(`tm-${id}-name`, cat.name);
-      setText(`tm-${id}-role`, cat.role);
-      setText(`tm-${id}-bio-home`, cat.bio);
-      // Text — about page cat cards
+      setText(`tm-${id}-role`, cat.role_home || cat.role);
+      setText(`tm-${id}-bio-home`, cat.bio_home || cat.bio);
+      injectImg(`tm-img-${id}-image_home`, cat.image_home || cat.image, cat.name);
+
+      // About page — use _about fields, fall back to _home or shared
       setText(`tm-${id}-name-about`, cat.name);
-      setText(`tm-${id}-role-about`, cat.role);
-      setText(`tm-${id}-bio-about`, cat.bio);
-      // Images — inject into both homepage and about page photo elements
-      if (cat.image) {
-        [`tm-img-${id}-image`, `tm-img-${id}-image-about`].forEach(imgId => {
-          const el = document.getElementById(imgId);
-          if (!el) return;
-          el.style.padding = '0';
-          el.style.background = 'none';
-          el.innerHTML = `<img src="${cat.image}" alt="${cat.name || id}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
-        });
-      }
+      setText(`tm-${id}-role-about`, cat.role_about || cat.role_home || cat.role);
+      setText(`tm-${id}-bio-about`, cat.bio_about || cat.bio_home || cat.bio);
+      injectImg(`tm-img-${id}-image_about`, cat.image_about || cat.image_home || cat.image, cat.name);
     });
 
     if (document.getElementById('tm-community-aug') || document.getElementById('tm-massage-aug')) {
