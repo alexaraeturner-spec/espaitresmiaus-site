@@ -150,30 +150,39 @@ collections:
         file: "_data/cats/yuki.yml"
         fields:
           - { label: "Name", name: "name", widget: "string" }
-          - { label: "Role / title", name: "role", widget: "string" }
-          - { label: "Bio", name: "bio", widget: "text" }
+          - { label: "Homepage role", name: "role_home", widget: "string", hint: "Short tagline shown on homepage card" }
+          - { label: "Homepage bio", name: "bio_home", widget: "text", hint: "Short bio for homepage cat card" }
+          - { label: "Homepage photo", name: "image_home", widget: "image", required: false }
+          - { label: "About page role", name: "role_about", widget: "string", hint: "Role shown on about page" }
+          - { label: "About page bio", name: "bio_about", widget: "text", hint: "Full bio for about page" }
           - { label: "Fun note", name: "note", widget: "string" }
-          - { label: "Photo", name: "image", widget: "image", required: false }
+          - { label: "About page photo", name: "image_about", widget: "image", required: false }
 
       - label: "Thelma"
         name: "thelma"
         file: "_data/cats/thelma.yml"
         fields:
           - { label: "Name", name: "name", widget: "string" }
-          - { label: "Role / title", name: "role", widget: "string" }
-          - { label: "Bio", name: "bio", widget: "text" }
+          - { label: "Homepage role", name: "role_home", widget: "string" }
+          - { label: "Homepage bio", name: "bio_home", widget: "text" }
+          - { label: "Homepage photo", name: "image_home", widget: "image", required: false }
+          - { label: "About page role", name: "role_about", widget: "string" }
+          - { label: "About page bio", name: "bio_about", widget: "text" }
           - { label: "Warning note", name: "warning", widget: "string" }
-          - { label: "Photo", name: "image", widget: "image", required: false }
+          - { label: "About page photo", name: "image_about", widget: "image", required: false }
 
       - label: "Louise"
         name: "louise"
         file: "_data/cats/louise.yml"
         fields:
           - { label: "Name", name: "name", widget: "string" }
-          - { label: "Role / title", name: "role", widget: "string" }
-          - { label: "Bio", name: "bio", widget: "text" }
+          - { label: "Homepage role", name: "role_home", widget: "string" }
+          - { label: "Homepage bio", name: "bio_home", widget: "text" }
+          - { label: "Homepage photo", name: "image_home", widget: "image", required: false }
+          - { label: "About page role", name: "role_about", widget: "string" }
+          - { label: "About page bio", name: "bio_about", widget: "text" }
           - { label: "Fun note", name: "note", widget: "string" }
-          - { label: "Photo", name: "image", widget: "image", required: false }
+          - { label: "About page photo", name: "image_about", widget: "image", required: false }
 
   # ── CONTACT ─────────────────────────────────────────
   - name: "contact"
