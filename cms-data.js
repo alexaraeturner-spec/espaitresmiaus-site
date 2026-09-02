@@ -393,15 +393,25 @@
     if (spacePage) renderImages(spacePage, 'space');
     if (aboutPage) renderImages(aboutPage, 'about');
 
-    // Load cat images
+    // Load cat data and wire text + images to both homepage and about page
     const [yuki, thelma, louise] = await Promise.all([
       fetchYAML('/_data/cats/yuki.yml'),
       fetchYAML('/_data/cats/thelma.yml'),
       fetchYAML('/_data/cats/louise.yml'),
     ]);
-    if (yuki) renderImages(yuki, 'yuki');
-    if (thelma) renderImages(thelma, 'thelma');
-    if (louise) renderImages(louise, 'louise');
+
+    [[yuki,'yuki'],[thelma,'thelma'],[louise,'louise']].forEach(([cat, id]) => {
+      if (!cat) return;
+      // Text — homepage and about page
+      setText(`tm-${id}-name`, cat.name);
+      setText(`tm-${id}-role`, cat.role);
+      setText(`tm-${id}-bio-home`, cat.bio);
+      setText(`tm-${id}-name-about`, cat.name);
+      setText(`tm-${id}-role-about`, cat.role);
+      setText(`tm-${id}-bio-about`, cat.bio);
+      // Images
+      renderImages(cat, id);
+    });
 
     if (document.getElementById('tm-community-aug') || document.getElementById('tm-massage-aug')) {
       renderPricing(spaceRates, massageRates, weeklyPkg);
