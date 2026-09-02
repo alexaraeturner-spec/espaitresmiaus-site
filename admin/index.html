@@ -1,13 +1,692 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <script src="/site-theme.js"></script>
-  <script src="/cms-data.js"></script>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Espai Tres Miaus — Admin</title>
+<script src="/site-theme.js"></script>
+<script src="/cms-data.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tres Miaus — Event Space</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F1E6;
+    --warm-white: #EAE3D0;
+    --terracotta: #9A4C34;
+    --terracotta-light: #C47058;
+    --terracotta-pale: #F0D8D0;
+    --sage: #65704A;
+    --sage-dark: #4A5235;
+    --sage-light: #8A9668;
+    --sage-tint: #B8C4A0;
+    --sage-pale: #DDE3D0;
+    --ochre: #C4A030;
+    --ochre-pale: #E8D9A0;
+    --pink: #D4A0A0;
+    --bark: #2B2B28;
+    --bark-light: #4A4A44;
+    --text-main: #2B2B28;
+    --text-muted: #6B6B62;
+    --text-light: #9A9A90;
+    --border: #D8CFB8;
+    --accent: #8B1E1E;
+    --neptunes: #2D3B6B;
+    --neptunes-mid: #4A5C96;
+    --neptunes-light: #8FA3D4;
+    --neptunes-pale: #E8ECF7;
+    --neptunes-purple: #6B5A9E;
+    --herb: #2E7D5A;
+    --herb-deep: #1E4D3A;
+    --herb-light: #6DB89A;
+    --herb-pale: #DDF0E8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--text-main);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.25rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(245, 240, 232, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(196, 99, 58, 0.12);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--bark);
+    letter-spacing: 0.01em;
+  }
+
+  .nav-logo span {
+    color: var(--terracotta);
+    font-style: italic;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--terracotta); }
+
+  .nav-cta {
+    background: var(--terracotta);
+    color: var(--warm-white) !important;
+    padding: 0.5rem 1.25rem;
+    border-radius: 2rem;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--bark) !important; color: var(--warm-white) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 5rem;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 3rem 4rem 5rem;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    line-height: 1.08;
+    color: var(--bark);
+    margin-bottom: 1.75rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-title em {
+    color: var(--terracotta);
+    font-style: italic;
+  }
+
+  .hero-tagline {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 380px;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-tagline-bilingual {
+    font-size: 0.82rem;
+    color: var(--text-light);
+    font-style: italic;
+    margin-top: 0.25rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .btn-primary {
+    background: var(--terracotta);
+    color: var(--warm-white);
+    padding: 0.85rem 2rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { background: var(--bark); transform: translateY(-1px); }
+
+  .btn-secondary {
+    border: 1.5px solid var(--bark-light);
+    color: var(--bark);
+    padding: 0.85rem 2rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    transition: border-color 0.2s, color 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+
+  .btn-secondary:hover { border-color: var(--terracotta); color: var(--terracotta); transform: translateY(-1px); }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-photo {
+    width: 100%;
+    height: 100%;
+    background: var(--terracotta-pale);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeIn 1s 0.5s forwards;
+  }
+
+  .photo-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--terracotta-light);
+  }
+
+  .photo-placeholder svg { opacity: 0.5; }
+
+  .photo-placeholder p {
+    font-size: 0.8rem;
+    color: var(--terracotta);
+    opacity: 0.6;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hero-badge {
+    position: absolute;
+    bottom: 2.5rem;
+    left: -1.5rem;
+    background: var(--warm-white);
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 8px 32px rgba(61, 43, 31, 0.12);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    animation: fadeUp 0.8s 1s forwards;
+    opacity: 0;
+  }
+
+  .badge-cats { font-size: 1.4rem; }
+
+  .badge-text { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; }
+  .badge-text strong { display: block; color: var(--bark); font-weight: 500; font-size: 0.85rem; }
+
+  /* INTRO STRIP */
+  .intro-strip {
+    background: var(--bark);
+    color: var(--cream);
+    padding: 3rem 5rem;
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+  }
+
+  .intro-strip-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    font-weight: 400;
+    max-width: 520px;
+    flex-shrink: 0;
+  }
+
+  .intro-strip-text em { color: var(--terracotta-light); font-style: italic; }
+
+  .intro-strip-divider {
+    width: 1px;
+    height: 60px;
+    background: rgba(245,240,232,0.2);
+    flex-shrink: 0;
+  }
+
+  .intro-strip-sub {
+    font-size: 0.85rem;
+    color: rgba(245,240,232,0.55);
+    line-height: 1.8;
+  }
+
+  /* EVENT TYPES */
+  .section {
+    padding: 5rem 5rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    font-weight: 500;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.25rem;
+    color: var(--bark);
+    line-height: 1.2;
+  }
+
+  .event-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .event-card {
+    background: var(--warm-white);
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid rgba(196, 99, 58, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .event-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(61,43,31,0.1); }
+
+  .event-card-photo {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+  }
+
+  .event-card-photo.yoga { background: var(--sage-pale); }
+  .event-card-photo.social { background: var(--ochre-pale); }
+  .event-card-photo.neptunes { background: var(--terracotta-pale); }
+  .event-card-photo.meditation { background: #EAE8F5; }
+  .event-card-photo.workshop { background: #E8F0E5; }
+  .event-card-photo.private { background: #FFF3E0; }
+
+  .event-card-body { padding: 1.25rem; }
+  .event-card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--bark);
+    margin-bottom: 0.4rem;
+  }
+  .event-card-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* CATS SECTION */
+  .cats-section {
+    background: var(--terracotta-pale);
+    padding: 5rem;
+  }
+
+  .cats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .cat-card {
+    background: var(--warm-white);
+    border-radius: 1.25rem;
+    padding: 2rem;
+    text-align: center;
+    border: 1px solid rgba(196,99,58,0.12);
+    transition: transform 0.2s;
+  }
+
+  .cat-card:hover { transform: translateY(-4px); }
+
+  .cat-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--terracotta-pale);
+    margin: 0 auto 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    border: 3px solid var(--terracotta-light);
+  }
+
+  .cat-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--bark);
+    margin-bottom: 0.25rem;
+  }
+
+  .cat-role {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+  }
+
+  .cat-bio { font-size: 0.83rem; color: var(--text-muted); line-height: 1.7; }
+
+  /* CTA SECTION */
+  .cta-section {
+    background: var(--sage);
+    color: var(--warm-white);
+    padding: 5rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 4rem;
+  }
+
+  .cta-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .cta-title em { font-style: italic; color: var(--ochre-pale); }
+
+  .cta-sub { font-size: 0.9rem; color: rgba(253,250,245,0.7); line-height: 1.7; max-width: 480px; }
+
+  .cta-actions { display: flex; flex-direction: column; gap: 1rem; }
+
+  .btn-white {
+    background: var(--warm-white);
+    color: var(--bark);
+    padding: 0.9rem 2rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    transition: background 0.2s, transform 0.15s;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .btn-white:hover { background: var(--cream); transform: translateY(-1px); }
+
+  .btn-outline-white {
+    border: 1.5px solid rgba(253,250,245,0.45);
+    color: var(--warm-white);
+    padding: 0.9rem 2rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    transition: border-color 0.2s, transform 0.15s;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .btn-outline-white:hover { border-color: rgba(253,250,245,0.9); transform: translateY(-1px); }
+
+  /* FOOTER */
+  footer {
+    background: var(--bark);
+    color: rgba(245,240,232,0.5);
+    padding: 2.5rem 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.78rem;
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--cream);
+  }
+
+  .footer-logo span { color: var(--terracotta-light); font-style: italic; }
+
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { color: rgba(245,240,232,0.45); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--terracotta-light); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
 </head>
 <body>
-  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><a href="index.html" style="text-decoration:none;color:inherit;">Tres <span>Miaus</span></a></div>
+  <ul class="nav-links">
+    <li><a href="tres-miaus-space.html">The space</a></li>
+    <li><a href="calendar.html">Calendar</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="tres-miaus-membership.html">Membership</a></li>
+    <li><a href="tres-miaus-about.html">About</a></li>
+    <li><a href="tres-miaus-contact.html">Contact</a></li>
+    <li><a href="tres-miaus-rent.html" class="nav-cta">Book now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Barcelona · Event Space & Rental</p>
+    <h1 class="hero-title">
+      A space to<br><em>gather,</em><br>and call yours
+    </h1>
+    <p class="hero-tagline">
+      Alquila el espacio, quédate por la comunidad.<br>
+      <span class="hero-tagline-bilingual">Rent the space, stay for the community.</span>
+    </p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">Book the space</a>
+      <a href="#" class="btn-secondary">Explore memberships</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-photo" id="tm-img-home-hero_image">
+      <div class="photo-placeholder">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+        </svg>
+        <p>Terrace photo goes here</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTRO STRIP -->
+<div class="intro-strip reveal">
+  <p class="intro-strip-text">
+    A sun-filled terrace, three opinionated cats, and a community that makes every gathering feel <em>like home.</em>
+  </p>
+  <div class="intro-strip-divider"></div>
+  <p class="intro-strip-sub">
+    Yoga & meditation · Workshops · Social gatherings<br>
+    Neptunes events · Private rentals · Community meetups<br>
+    <br>
+    Barcelona — available to rent, hourly or by the day
+  </p>
+</div>
+
+<!-- EVENT TYPES -->
+<section class="section">
+  <div class="section-header reveal">
+    <span class="section-label">The space is yours for</span>
+  </div>
+  <div class="event-grid">
+    <div class="event-card reveal">
+      <div class="event-card-photo yoga">🧘</div>
+      <div class="event-card-body">
+        <p class="event-card-name">Yoga & meditation</p>
+        <p class="event-card-desc">A calm, light-filled room with a terrace — the perfect setting for movement and stillness.</p>
+      </div>
+    </div>
+    <div class="event-card reveal">
+      <div class="event-card-photo social">🌿</div>
+      <div class="event-card-body">
+        <p class="event-card-name">Social gatherings</p>
+        <p class="event-card-desc">Birthdays, farewells, dinners, meetups — bring your people and make it yours.</p>
+      </div>
+    </div>
+    <div class="event-card reveal">
+      <div class="event-card-photo neptunes">🎵</div>
+      <div class="event-card-body">
+        <p class="event-card-name">Neptunes events</p>
+        <p class="event-card-desc">Our own programme of community workshops, listening sessions, and gatherings.</p>
+      </div>
+    </div>
+    <div class="event-card reveal">
+      <div class="event-card-photo meditation">✨</div>
+      <div class="event-card-body">
+        <p class="event-card-name">Workshops & classes</p>
+        <p class="event-card-desc">Creative workshops, skill shares, talks — the space adapts to whatever you're building.</p>
+      </div>
+    </div>
+    <div class="event-card reveal">
+      <div class="event-card-photo workshop">🌱</div>
+      <div class="event-card-body">
+        <p class="event-card-name">Community meetups</p>
+        <p class="event-card-desc">Language groups, hobby clubs, neighbourhood collectives — all welcome.</p>
+      </div>
+    </div>
+    <div class="event-card reveal">
+      <div class="event-card-photo private">🏡</div>
+      <div class="event-card-body">
+        <p class="event-card-name">Private rentals</p>
+        <p class="event-card-desc">Need the space for a team offsite or brand activation? Commercial bookings available too.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATS -->
+<section class="cats-section">
+  <div class="section-header reveal">
+    <span class="section-label">Meet the team</span>
+    <h2 class="section-title">The three bosses</h2>
+  </div>
+  <div class="cats-grid">
+    <div class="cat-card reveal">
+      <div class="cat-photo">🐱</div>
+      <p class="cat-name">Yuki</p>
+      <p class="cat-role">Independent spirit & selective bestie</p>
+      <p class="cat-bio">Grey and white. Gloriously fluffy. Does entirely her own thing — unless she likes you, in which case she'll silently appear beside you. If Yuki sits near you, consider it the highest honour.</p>
+    </div>
+    <div class="cat-card reveal">
+      <div class="cat-photo">🐈</div>
+      <p class="cat-name">Thelma</p>
+      <p class="cat-role">Resident beauty, keeping her distance</p>
+      <p class="cat-bio">Brown ombré coat, blue eyes, absolutely stunning — and she knows it. Thelma prefers to admire gatherings from afar. Please don't approach or touch her; she'll come to you if and when she's ready.</p>
+    </div>
+    <div class="cat-card reveal">
+      <div class="cat-photo">🐈‍⬛</div>
+      <p class="cat-name">Louise</p>
+      <p class="cat-role">Chief of chaos & head of entertainment</p>
+      <p class="cat-bio">Black, green-eyed, and absolutely feral in the best way. Louise will meow until you acknowledge her, play until you're tired, and demand pets on her own schedule — which is always. The life of every event.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section reveal">
+  <div>
+    <h2 class="cta-title">Ready to make it <em>yours?</em></h2>
+    <p class="cta-sub">Book the space for your next event, or join the community as a member and make Tres Miaus your regular spot in Barcelona.</p>
+  </div>
+  <div class="cta-actions">
+    <a href="#" class="btn-white">Book the space</a>
+    <a href="#" class="btn-outline-white">View memberships</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Tres <span>Miaus</span> — Event Space</div>
+  <div class="footer-links">
+    <a href="#">Instagram</a>
+    <a href="#">Contact</a>
+    <a href="#">Book now</a>
+  </div>
+  <p>Barcelona · treismiaus@email.com</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
