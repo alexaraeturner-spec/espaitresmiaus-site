@@ -148,7 +148,7 @@
     <div class="modal-row" id="modalPriceRow"><span>Price</span><span id="modalPrice"></span></div>
     <div class="modal-row" id="modalNoteRow"><span>Note</span><span id="modalNote"></span></div>
     <button class="modal-close" onclick="closeModal()">Close</button>
-    <a class="modal-book" href="https://wa.me/34683565985" target="_blank">📱 WhatsApp to enquire about booking</a>
+    <a id="modalBookLink" class="modal-book" href="https://wa.me/34683565985" target="_blank">📱 WhatsApp to enquire about booking</a>
   </div>
 </div>
 
@@ -200,10 +200,12 @@ async function loadEvents() {
         // Strip frontmatter dashes
         text = text.replace(/^---\n/, '').replace(/\n---\s*$/, '');
         var data = parseYml(text);
-        var dateStr = (data.date || '').slice(0, 10);
-        if (!dateStr) continue;
+        var rawDate = (data.date || '').trim();
+        // Always take first 10 chars YYYY-MM-DD, never parse through Date object
+        var isoDate = rawDate.slice(0, 10);
+        if (!isoDate.match(/^\d{4}-\d{2}-\d{2}$/)) continue;
         results.push({
-          date: dateStr,
+          date: isoDate,
           type: data.type || 'Community',
           name: data.title || 'Event',
           time: data.time || 'TBC',
@@ -251,7 +253,8 @@ function renderCalendar() {
     num.className = 'day-num';
     num.textContent = d;
     cell.appendChild(num);
-    var shown = events.slice(0, 2);
+    var visibleEvents = events.filter(function(e){ return e.type !== 'Blocked'; });
+    var shown = visibleEvents.slice(0, 2);
     for (var k = 0; k < shown.length; k++) {
       (function(ev){
         var chip = document.createElement('div');
@@ -261,10 +264,10 @@ function renderCalendar() {
         cell.appendChild(chip);
       })(shown[k]);
     }
-    if (events.length > 2) {
+    if (visibleEvents.length > 2) {
       var more = document.createElement('div');
       more.className = 'event-chip chip-available';
-      more.textContent = '+' + (events.length-2) + ' more';
+      more.textContent = '+' + (visibleEvents.length-2) + ' more';
       cell.appendChild(more);
     }
     // Show available/blocked chip
@@ -298,7 +301,7 @@ function renderList() {
   if (!list) return;
   var relevant = EVENTS.filter(function(e){
     var p = e.date.split('-');
-    return parseInt(p[0])===currentYear && parseInt(p[1])-1===currentMonth;
+    return parseInt(p[0])===currentYear && parseInt(p[1])-1===currentMonth && e.type !== 'Blocked';
   }).sort(function(a,b){ return a.date > b.date ? 1 : -1; });
   if (!relevant.length) {
     list.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;padding:0.5rem 0;">No events this month yet.</p>';
@@ -327,6 +330,8 @@ function openModal(ev, day) {
   document.getElementById('modalPrice').textContent = ev.price || 'TBC';
   document.getElementById('modalNote').textContent = ev.note || '-';
   document.getElementById('modalNoteRow').style.display = ev.note ? 'flex' : 'none';
+  var bookLink = document.getElementById('modalBookLink');
+  if (bookLink) bookLink.style.display = ev.type === 'Blocked' ? 'none' : 'block';
   document.getElementById('modalOverlay').classList.add('open');
 }
 

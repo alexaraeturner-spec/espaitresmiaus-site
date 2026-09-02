@@ -1,5 +1,5 @@
 [build]
-  command = "node -e \"const fs=require('fs'),path=require('path'),ed=path.join(__dirname,'_data','events'),mp=path.join(__dirname,'_data','events-manifest.json'),mr=path.join(__dirname,'events-manifest.json'),pd=path.join(__dirname,'public','events');if(!fs.existsSync(ed))fs.mkdirSync(ed,{recursive:true});if(!fs.existsSync(pd))fs.mkdirSync(pd,{recursive:true});const ef=fs.readdirSync(ed).filter(f=>f.endsWith('.yml')||f.endsWith('.yaml')||f.endsWith('.md'));ef.forEach(f=>fs.copyFileSync(path.join(ed,f),path.join(pd,f)));const m=JSON.stringify({events:ef},null,2);fs.writeFileSync(mp,m);fs.writeFileSync(mr,m);fs.writeFileSync(path.join(__dirname,'public','events-manifest.json'),m);console.log('Events manifest updated -',ef.length,'event(s):',ef);\""
+  command = "node -e \"const fs=require('fs'),path=require('path'),ed=path.join(__dirname,'_data','events'),gd=path.join(__dirname,'_data','gallery'),mp=path.join(__dirname,'_data','events-manifest.json'),mr=path.join(__dirname,'events-manifest.json'),pe=path.join(__dirname,'public','events'),pg=path.join(__dirname,'public','gallery'),gm=path.join(__dirname,'public','gallery-manifest.json');[ed,gd,pe,pg].forEach(d=>{if(!fs.existsSync(d))fs.mkdirSync(d,{recursive:true})});const ef=fs.readdirSync(ed).filter(f=>f.endsWith('.yml')||f.endsWith('.yaml')||f.endsWith('.md'));ef.forEach(f=>fs.copyFileSync(path.join(ed,f),path.join(pe,f)));const em=JSON.stringify({events:ef},null,2);fs.writeFileSync(mp,em);fs.writeFileSync(mr,em);fs.writeFileSync(path.join(__dirname,'public','events-manifest.json'),em);const gf=fs.readdirSync(gd).filter(f=>f.endsWith('.yml')||f.endsWith('.yaml'));gf.forEach(f=>fs.copyFileSync(path.join(gd,f),path.join(pg,f)));fs.writeFileSync(gm,JSON.stringify({photos:gf},null,2));console.log('Events:',ef.length,'Gallery:',gf.length);\""
   publish = "."
 
 [[headers]]
@@ -12,3 +12,9 @@
   for = "/events-manifest.json"
   [headers.values]
     Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Cache-Control = "public, max-age=31536000"

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="/site-theme.js"></script>
+  <script src="/cms-data.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery — Espai Tres Miaus</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #F5F1E6; --warm-white: #EAE3D0; --terracotta: #9A4C34;
+      --terracotta-light: #C47058; --sage: #65704A; --sage-dark: #4A5235;
+      --sage-tint: #B8C4A0; --bark: #2B2B28; --text-muted: #6B6B62;
+      --text-light: #9A9A90; --border: #D8CFB8; --accent: #8B1E1E;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--cream); font-family: 'DM Sans', sans-serif; font-weight: 300; color: var(--bark); }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(245,241,230,0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 0 2rem; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--bark); text-decoration: none; }
+    .nav-logo span { color: var(--terracotta); font-style: italic; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
+    .nav-links a { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--sage); }
+    .nav-cta { background: var(--accent) !important; color: white !important; padding: 0.4rem 1.1rem; border-radius: 2rem; }
+
+    /* HERO */
+    .hero { padding: 100px 2rem 3rem; text-align: center; }
+    .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sage); font-weight: 500; margin-bottom: 0.75rem; }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: 2.8rem; color: var(--bark); line-height: 1.1; margin-bottom: 0.75rem; }
+    .hero-title em { color: var(--terracotta); font-style: italic; }
+    .hero-sub { font-size: 0.95rem; color: var(--text-muted); max-width: 500px; margin: 0 auto; }
+
+    /* FILTER BUTTONS */
+    .filters { display: flex; justify-content: center; gap: 0.75rem; padding: 1.5rem 2rem; flex-wrap: wrap; }
+    .filter-btn { padding: 0.5rem 1.25rem; border-radius: 2rem; border: 1.5px solid var(--border); background: white; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; }
+    .filter-btn:hover { border-color: var(--sage); color: var(--sage); }
+    .filter-btn.active { background: var(--sage); border-color: var(--sage); color: white; }
+    .filter-btn[data-filter="Events"].active { background: var(--terracotta); border-color: var(--terracotta); }
+    .filter-btn[data-filter="Cats"].active { background: var(--accent); border-color: var(--accent); }
+
+    /* MASONRY GRID */
+    .gallery-wrap { padding: 0 1.5rem 4rem; max-width: 1200px; margin: 0 auto; }
+    .masonry { columns: 3; column-gap: 1rem; }
+    @media (max-width: 900px) { .masonry { columns: 2; } }
+    @media (max-width: 540px) { .masonry { columns: 1; } }
+
+    .photo-card { break-inside: avoid; margin-bottom: 1rem; border-radius: 10px; overflow: hidden; background: white; border: 1px solid var(--border); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+    .photo-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(43,43,40,0.12); }
+    .photo-card img { width: 100%; display: block; }
+    .photo-card-body { padding: 0.75rem 1rem 1rem; }
+    .photo-cat-tag { font-size: 0.65rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--sage); margin-bottom: 0.3rem; }
+    .photo-cat-tag.Events { color: var(--terracotta); }
+    .photo-cat-tag.Cats { color: var(--accent); }
+    .photo-title { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--bark); }
+    .photo-desc { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.25rem; line-height: 1.5; }
+
+    /* EMPTY STATE */
+    .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-muted); }
+    .empty-state h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--bark); margin-bottom: 0.5rem; }
+    .empty-state p { font-size: 0.9rem; }
+
+    /* LIGHTBOX */
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(43,43,40,0.92); z-index: 200; align-items: center; justify-content: center; padding: 1.5rem; }
+    .lightbox.open { display: flex; }
+    .lightbox-inner { max-width: 900px; width: 100%; }
+    .lightbox img { width: 100%; max-height: 80vh; object-fit: contain; border-radius: 8px; }
+    .lightbox-caption { color: white; text-align: center; margin-top: 1rem; }
+    .lightbox-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; }
+    .lightbox-desc { font-size: 0.85rem; color: rgba(255,255,255,0.65); margin-top: 0.25rem; }
+    .lightbox-close { position: fixed; top: 1.5rem; right: 1.5rem; background: rgba(255,255,255,0.15); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .lightbox-nav { position: fixed; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); border: none; color: white; width: 44px; height: 44px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .lightbox-prev { left: 1rem; }
+    .lightbox-next { right: 1rem; }
+
+    /* LOADING */
+    .loading { text-align: center; padding: 4rem; color: var(--text-muted); font-style: italic; }
+
+    /* FOOTER */
+    footer { background: var(--bark); padding: 2rem; text-align: center; }
+    footer p { color: var(--sage-tint); font-size: 0.82rem; }
+    footer a { color: var(--terracotta-light); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Tres <span>Miaus</span></a>
+  <ul class="nav-links">
+    <li><a href="tres-miaus-space.html">The space</a></li>
+    <li><a href="calendar.html">Calendar</a></li>
+    <li><a href="gallery.html" style="color:var(--sage)">Gallery</a></li>
+    <li><a href="tres-miaus-membership.html">Membership</a></li>
+    <li><a href="tres-miaus-about.html">About</a></li>
+    <li><a href="tres-miaus-contact.html">Contact</a></li>
+    <li><a href="tres-miaus-rent.html" class="nav-cta">Book now</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <p class="hero-eyebrow">Espai Tres Miaus · Barcelona</p>
+  <h1 class="hero-title">The <em>space,</em> the cats,<br>the community</h1>
+  <p class="hero-sub">A glimpse into life at Riereta 32 — events, gatherings, and three very opinionated cats.</p>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" data-filter="All" onclick="filterGallery('All')">All</button>
+  <button class="filter-btn" data-filter="Space" onclick="filterGallery('Space')">The space</button>
+  <button class="filter-btn" data-filter="Events" onclick="filterGallery('Events')">Events</button>
+  <button class="filter-btn" data-filter="Cats" onclick="filterGallery('Cats')">The cats</button>
+</div>
+
+<div class="gallery-wrap">
+  <div class="masonry" id="masonryGrid">
+    <div class="loading">Loading photos...</div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-nav lightbox-prev" onclick="navLightbox(-1)">‹</button>
+  <button class="lightbox-nav lightbox-next" onclick="navLightbox(1)">›</button>
+  <div class="lightbox-inner">
+    <img id="lightboxImg" src="" alt="">
+    <div class="lightbox-caption">
+      <div class="lightbox-title" id="lightboxTitle"></div>
+      <div class="lightbox-desc" id="lightboxDesc"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>Espai Tres Miaus · Calle Riereta 32, Pral 2 · Raval, Barcelona</p>
+  <p style="margin-top:0.5rem"><a href="https://instagram.com/espaitresmiaus">@espaitresmiaus</a> · <a href="https://wa.me/34683565985">WhatsApp</a></p>
+</footer>
+
+<script>
+var allPhotos = [];
+var filtered = [];
+var currentLightbox = 0;
+var currentFilter = 'All';
+
+function parseYml(text) {
+  var result = {};
+  var lines = text.split('\n');
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (!line || line === '---') continue;
+    var idx = line.indexOf(':');
+    if (idx === -1) continue;
+    var key = line.slice(0, idx).trim();
+    var val = line.slice(idx + 1).trim().replace(/^['"]/, '').replace(/['"]$/, '');
+    result[key] = val;
+  }
+  return result;
+}
+
+async function loadGallery() {
+  var grid = document.getElementById('masonryGrid');
+  try {
+    var r = await fetch('/public/gallery-manifest.json');
+    if (!r.ok) throw new Error('No manifest');
+    var manifest = await r.json();
+    if (!manifest.photos || !manifest.photos.length) {
+      showEmpty(); return;
+    }
+    var results = [];
+    for (var i = 0; i < manifest.photos.length; i++) {
+      try {
+        var r2 = await fetch('/public/gallery/' + manifest.photos[i]);
+        if (!r2.ok) continue;
+        var text = await r2.text();
+        text = text.replace(/^---\n/, '').replace(/\n---\s*$/, '');
+        var data = parseYml(text);
+        if (!data.image) continue;
+        results.push({
+          title: data.title || '',
+          image: data.image,
+          category: data.category || 'Space',
+          description: data.description || '',
+          featured: data.featured === 'true'
+        });
+      } catch(e) { continue; }
+    }
+    // Featured first, then rest
+    results.sort(function(a,b){ return b.featured - a.featured; });
+    allPhotos = results;
+    filtered = results;
+    renderGrid();
+  } catch(e) {
+    showEmpty();
+  }
+}
+
+function showEmpty() {
+  document.getElementById('masonryGrid').innerHTML =
+    '<div class="empty-state"><h3>Photos coming soon</h3><p>We\'re just getting started — check back soon for photos of the space, events and the cats.</p></div>';
+}
+
+function renderGrid() {
+  var grid = document.getElementById('masonryGrid');
+  if (!filtered.length) { showEmpty(); return; }
+  grid.innerHTML = filtered.map(function(photo, i) {
+    return '<div class="photo-card" onclick="openLightbox(' + i + ')">'
+      + '<img src="' + photo.image + '" alt="' + photo.title + '" loading="lazy">'
+      + '<div class="photo-card-body">'
+      + '<div class="photo-cat-tag ' + photo.category + '">' + photo.category + '</div>'
+      + '<div class="photo-title">' + photo.title + '</div>'
+      + (photo.description ? '<div class="photo-desc">' + photo.description + '</div>' : '')
+      + '</div></div>';
+  }).join('');
+}
+
+function filterGallery(cat) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.dataset.filter === cat);
+  });
+  filtered = cat === 'All' ? allPhotos : allPhotos.filter(function(p){ return p.category === cat; });
+  renderGrid();
+}
+
+function openLightbox(i) {
+  currentLightbox = i;
+  var photo = filtered[i];
+  document.getElementById('lightboxImg').src = photo.image;
+  document.getElementById('lightboxTitle').textContent = photo.title;
+  document.getElementById('lightboxDesc').textContent = photo.description || '';
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox(e) {
+  if (!e || e.target === document.getElementById('lightbox')) {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+function navLightbox(dir) {
+  currentLightbox = (currentLightbox + dir + filtered.length) % filtered.length;
+  openLightbox(currentLightbox);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowLeft') navLightbox(-1);
+  if (e.key === 'ArrowRight') navLightbox(1);
+  if (e.key === 'Escape') closeLightbox();
+});
+
+loadGallery();
+</script>
+</body>
+</html>
