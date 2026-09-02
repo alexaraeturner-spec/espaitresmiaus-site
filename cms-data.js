@@ -408,7 +408,22 @@
     // Inject images from CMS content files
     if (homepage) renderImages(homepage, 'home');
     if (spacePage) renderImages(spacePage, 'space');
-    if (aboutPage) renderImages(aboutPage, 'about');
+
+    // About page — inject each photo into its specific element
+    if (aboutPage) {
+      const injectAbout = (elId, src) => {
+        if (!src) return;
+        const el = document.getElementById(elId);
+        if (!el) return;
+        el.style.padding = '0';
+        el.style.background = 'none';
+        el.innerHTML = `<img src="${src}" alt="" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit;">`;
+      };
+      injectAbout('tm-img-about-alexa', aboutPage.alexa_image);
+      injectAbout('tm-img-about-barcelona', aboutPage.barcelona_image);
+      injectAbout('tm-img-about-alexa-portrait', aboutPage.alexa_portrait);
+      injectAbout('tm-img-about-photographer', aboutPage.photographer_image);
+    }
 
     // Load cat data and wire text + images to both homepage and about page
     const [yuki, thelma, louise] = await Promise.all([
@@ -420,25 +435,28 @@
     [[yuki,'yuki'],[thelma,'thelma'],[louise,'louise']].forEach(([cat, id]) => {
       if (!cat) return;
 
-      const injectImg = (elId, src, altText) => {
+      const injectImg = (elId, src) => {
+        if (!src) return;
         const el = document.getElementById(elId);
-        if (!el || !src) return;
+        if (!el) return;
         el.style.padding = '0';
         el.style.background = 'none';
-        el.innerHTML = `<img src="${src}" alt="${altText || id}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit;">`;
+        el.innerHTML = `<img src="${src}" alt="${cat.name || id}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit;">`;
       };
 
-      // Homepage — use _home fields, fall back to shared fields
+      // Homepage text
       setText(`tm-${id}-name`, cat.name);
       setText(`tm-${id}-role`, cat.role_home || cat.role);
       setText(`tm-${id}-bio-home`, cat.bio_home || cat.bio);
-      injectImg(`tm-img-${id}-image_home`, cat.image_home || cat.image, cat.name);
+      // Homepage photo (circle)
+      injectImg(`tm-img-${id}-image_home`, cat.image_home || cat.image);
 
-      // About page — use _about fields, fall back to _home or shared
+      // About page text
       setText(`tm-${id}-name-about`, cat.name);
       setText(`tm-${id}-role-about`, cat.role_about || cat.role_home || cat.role);
       setText(`tm-${id}-bio-about`, cat.bio_about || cat.bio_home || cat.bio);
-      injectImg(`tm-img-${id}-image_about`, cat.image_about || cat.image_home || cat.image, cat.name);
+      // About page photo (cat-photo-block)
+      injectImg(`tm-img-${id}-image_about`, cat.image_about || cat.image_home || cat.image);
     });
 
     if (document.getElementById('tm-community-aug') || document.getElementById('tm-massage-aug')) {
