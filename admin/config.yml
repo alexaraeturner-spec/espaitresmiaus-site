@@ -82,6 +82,7 @@ collections:
           - { label: "Tagline (Spanish)", name: "tagline_es", widget: "string" }
           - { label: "Tagline (English)", name: "tagline_en", widget: "string" }
           - { label: "Intro strip text", name: "intro_strip", widget: "text" }
+          - { label: "Hero photo", name: "hero_image", widget: "image", required: false, hint: "Main photo shown on the homepage hero section" }
 
       - label: "The Space page"
         name: "space_page"
@@ -93,6 +94,11 @@ collections:
           - { label: "Max capacity", name: "max_capacity", widget: "number" }
           - { label: "Neighbourhood", name: "neighbourhood", widget: "string" }
           - { label: "Neighbourhood description", name: "neighbourhood_desc", widget: "text" }
+          - { label: "Gallery photo 1", name: "gallery_1", widget: "image", required: false }
+          - { label: "Gallery photo 2", name: "gallery_2", widget: "image", required: false }
+          - { label: "Gallery photo 3", name: "gallery_3", widget: "image", required: false }
+          - { label: "Gallery photo 4", name: "gallery_4", widget: "image", required: false }
+          - { label: "Gallery photo 5", name: "gallery_5", widget: "image", required: false }
 
       - label: "About page"
         name: "about_page"
@@ -104,6 +110,8 @@ collections:
           - { label: "Neptunes description 1", name: "neptunes_1", widget: "text" }
           - { label: "Neptunes description 2", name: "neptunes_2", widget: "text" }
           - { label: "Photographer bio", name: "photographer_bio", widget: "text" }
+          - { label: "Your photo", name: "alexa_image", widget: "image", required: false, hint: "Photo of you for the about page" }
+          - { label: "Photographer photo", name: "photographer_image", widget: "image", required: false }
 
   # ── CATS ────────────────────────────────────────────
   - name: "cats"
@@ -117,6 +125,7 @@ collections:
           - { label: "Role / title", name: "role", widget: "string" }
           - { label: "Bio", name: "bio", widget: "text" }
           - { label: "Fun note", name: "note", widget: "string" }
+          - { label: "Photo", name: "image", widget: "image", required: false }
 
       - label: "Thelma"
         name: "thelma"
