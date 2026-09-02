@@ -20,13 +20,10 @@
     const result = {};
     if (!text || !text.trim()) return result;
 
-    // Strip frontmatter delimiters if present
     let content = text.trim();
     if (content.startsWith('---')) {
       const secondDash = content.indexOf('---', 3);
-      if (secondDash !== -1) {
-        content = content.slice(3, secondDash).trim();
-      }
+      if (secondDash !== -1) content = content.slice(3, secondDash).trim();
     }
 
     const lines = content.split('\n');
@@ -40,19 +37,39 @@
       const key = line.slice(0, colonIdx).trim();
       let val = line.slice(colonIdx + 1).trim();
 
-      // Handle multiline quoted strings — collect continuation lines
-      if (val.startsWith('"')) {
-        while (!val.endsWith('"') || val.length === 1) {
+      // Block scalar — | or > (multiline text widget)
+      if (val === '|' || val === '>') {
+        const blockLines = [];
+        const baseIndent = (lines[i + 1] || '').match(/^(\s*)/)[1].length;
+        i++;
+        while (i < lines.length) {
+          const nextLine = lines[i];
+          const nextIndent = nextLine.match(/^(\s*)/)[1].length;
+          if (nextLine.trim() === '') { blockLines.push(''); i++; continue; }
+          if (nextIndent < baseIndent && nextLine.trim()) break;
+          blockLines.push(nextLine.slice(baseIndent));
           i++;
-          if (i >= lines.length) break;
+        }
+        i--; // rewind so outer loop re-checks this line
+        result[key] = blockLines.join('\n').trim();
+        continue;
+      }
+
+      // Inline quoted strings
+      if (val.startsWith('"')) {
+        while ((!val.endsWith('"') || val.length === 1) && i < lines.length - 1) {
+          i++;
           val += ' ' + lines[i].trim();
         }
-        val = val.slice(1, -1); // strip surrounding quotes
+        val = val.slice(1, -1);
       } else if (val.startsWith("'")) {
+        while ((!val.endsWith("'") || val.length === 1) && i < lines.length - 1) {
+          i++;
+          val += ' ' + lines[i].trim();
+        }
         val = val.slice(1, -1);
       }
 
-      // Type conversion
       if (val === 'true') result[key] = true;
       else if (val === 'false') result[key] = false;
       else if (val !== '' && !isNaN(val)) result[key] = Number(val);
@@ -402,15 +419,24 @@
 
     [[yuki,'yuki'],[thelma,'thelma'],[louise,'louise']].forEach(([cat, id]) => {
       if (!cat) return;
-      // Text — homepage and about page
+      // Text — homepage cat cards
       setText(`tm-${id}-name`, cat.name);
       setText(`tm-${id}-role`, cat.role);
       setText(`tm-${id}-bio-home`, cat.bio);
+      // Text — about page cat cards
       setText(`tm-${id}-name-about`, cat.name);
       setText(`tm-${id}-role-about`, cat.role);
       setText(`tm-${id}-bio-about`, cat.bio);
-      // Images
-      renderImages(cat, id);
+      // Images — inject into both homepage and about page photo elements
+      if (cat.image) {
+        [`tm-img-${id}-image`, `tm-img-${id}-image-about`].forEach(imgId => {
+          const el = document.getElementById(imgId);
+          if (!el) return;
+          el.style.padding = '0';
+          el.style.background = 'none';
+          el.innerHTML = `<img src="${cat.image}" alt="${cat.name || id}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+        });
+      }
     });
 
     if (document.getElementById('tm-community-aug') || document.getElementById('tm-massage-aug')) {
