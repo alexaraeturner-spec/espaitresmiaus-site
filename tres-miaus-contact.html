@@ -250,9 +250,10 @@
     <h2 class="form-title">What can we help with?</h2>
     <p class="form-sub">Fill in the form and we'll come back to you. If you're enquiring about a booking, let us know the date and duration you have in mind.</p>
 
-    <form class="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleSubmit(event)">
-      <input type="hidden" name="form-name" value="contact">
-      <p style="display:none;"><input name="bot-field"></p>
+    <form class="contact-form" name="contact" method="POST" action="https://api.web3forms.com/submit" onsubmit="handleSubmit(event)">
+      <input type="hidden" name="access_key" value="3cb1e013-6d0d-4f77-a056-ee25ca84261e">
+      <input type="hidden" name="subject" value="New message from espaitresmiaus.es contact form">
+      <input type="checkbox" name="botcheck" style="display:none;" tabindex="-1" autocomplete="off">
       <div class="field-group">
         <div class="field">
           <label for="name">Your name</label>
@@ -421,13 +422,37 @@
     const form = e.target;
     const btn = form.querySelector('.btn-submit');
     const success = document.getElementById('success-msg');
+    const originalBtnText = btn.textContent;
     btn.textContent = 'Sending...';
     btn.disabled = true;
-    setTimeout(() => {
-      form.querySelectorAll('input, select, textarea').forEach(el => el.value = '');
-      btn.style.display = 'none';
-      success.style.display = 'block';
-    }, 900);
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    })
+      .then(res => res.json())
+      .then(result => {
+        if (result.success) {
+          form.querySelectorAll('input, select, textarea').forEach(el => {
+            if (el.type !== 'hidden' && el.type !== 'checkbox') el.value = '';
+          });
+          btn.style.display = 'none';
+          success.style.display = 'block';
+        } else {
+          btn.textContent = originalBtnText;
+          btn.disabled = false;
+          alert('Something went wrong sending your message. Please try again or email us directly at espaitresmiaus@gmail.com.');
+        }
+      })
+      .catch(() => {
+        btn.textContent = originalBtnText;
+        btn.disabled = false;
+        alert('Something went wrong sending your message. Please try again or email us directly at espaitresmiaus@gmail.com.');
+      });
   }
 </script>
 </body>
