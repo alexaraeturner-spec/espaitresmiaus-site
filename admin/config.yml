@@ -96,11 +96,11 @@ collections:
           - { label: "Neighbourhood title", name: "neighbourhood_title", widget: "string" }
           - { label: "Neighbourhood", name: "neighbourhood", widget: "string" }
           - { label: "Neighbourhood description", name: "neighbourhood_desc", widget: "text" }
-          - { label: "Gallery photo 1", name: "gallery_1", widget: "image", required: false }
-          - { label: "Gallery photo 2", name: "gallery_2", widget: "image", required: false }
-          - { label: "Gallery photo 3", name: "gallery_3", widget: "image", required: false }
-          - { label: "Gallery photo 4", name: "gallery_4", widget: "image", required: false }
-          - { label: "Gallery photo 5", name: "gallery_5", widget: "image", required: false }
+          - { label: "Gallery photo 1 — Main room", name: "gallery_1", widget: "image", required: false }
+          - { label: "Gallery photo 2 — Main room", name: "gallery_2", widget: "image", required: false }
+          - { label: "Gallery photo 3 — Terrace", name: "gallery_3", widget: "image", required: false }
+          - { label: "Gallery photo 4 — Terrace", name: "gallery_4", widget: "image", required: false }
+          - { label: "Gallery photo 5 — Detail / other", name: "gallery_5", widget: "image", required: false }
 
       - label: "About page"
         name: "about_page"
