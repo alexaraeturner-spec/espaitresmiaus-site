@@ -91,15 +91,17 @@ collections:
           - { label: "Eyebrow text", name: "eyebrow", widget: "string", hint: "Small text above the title e.g. 'Barcelona · Event Space'" }
           - { label: "Hero title", name: "hero_title", widget: "string" }
           - { label: "Hero description", name: "hero_desc", widget: "text" }
-          - { label: "Space size (m²)", name: "size_sqm", widget: "string" }
-          - { label: "Max capacity", name: "max_capacity", widget: "number" }
+          - { label: "Space size (m²)", name: "size_sqm", widget: "string", hint: "Just the number(s), e.g. 60–100 — 'm²' is added automatically" }
+          - { label: "Max capacity", name: "max_capacity", widget: "number", hint: "Just the number — '+' is added automatically" }
+          - { label: "Hero photo — Main room", name: "hero_main_room_image", widget: "image", required: false, hint: "Top-right photo block on the Space page" }
+          - { label: "Hero photo — Balcony", name: "hero_balcony_image", widget: "image", required: false, hint: "Top-right photo block on the Space page" }
           - { label: "Neighbourhood title", name: "neighbourhood_title", widget: "string" }
           - { label: "Neighbourhood", name: "neighbourhood", widget: "string" }
           - { label: "Neighbourhood description", name: "neighbourhood_desc", widget: "text" }
           - { label: "Gallery photo 1 — Main room", name: "gallery_1", widget: "image", required: false }
           - { label: "Gallery photo 2 — Main room", name: "gallery_2", widget: "image", required: false }
-          - { label: "Gallery photo 3 — Terrace", name: "gallery_3", widget: "image", required: false }
-          - { label: "Gallery photo 4 — Terrace", name: "gallery_4", widget: "image", required: false }
+          - { label: "Gallery photo 3 — Balcony", name: "gallery_3", widget: "image", required: false }
+          - { label: "Gallery photo 4 — Balcony", name: "gallery_4", widget: "image", required: false }
           - { label: "Gallery photo 5 — Detail / other", name: "gallery_5", widget: "image", required: false }
 
       - label: "About page"
@@ -131,9 +133,83 @@ collections:
         fields:
           - { label: "Hero title", name: "hero_title", widget: "string" }
           - { label: "Hero description", name: "hero_desc", widget: "text" }
-          - { label: "Amigo/a description", name: "amigo_desc", widget: "text" }
-          - { label: "Vecino/a description", name: "vecino_desc", widget: "text" }
-          - { label: "Residente description", name: "residente_desc", widget: "text" }
+
+          - label: "── Amigo/a tier ──"
+            name: "amigo_heading"
+            widget: "hidden"
+            default: ""
+          - { label: "Amigo/a — price (€/month)", name: "amigo_price", widget: "number" }
+          - { label: "Amigo/a — short description", name: "amigo_desc", widget: "text" }
+          - { label: "Amigo/a — feature 1", name: "amigo_feature_1", widget: "string", required: false }
+          - { label: "Amigo/a — feature 2", name: "amigo_feature_2", widget: "string", required: false }
+          - { label: "Amigo/a — feature 3", name: "amigo_feature_3", widget: "string", required: false }
+
+          - label: "── Vecino/a tier ──"
+            name: "vecino_heading"
+            widget: "hidden"
+            default: ""
+          - { label: "Vecino/a — price (€/month)", name: "vecino_price", widget: "number" }
+          - { label: "Vecino/a — short description", name: "vecino_desc", widget: "text" }
+          - { label: "Vecino/a — feature 1", name: "vecino_feature_1", widget: "string", required: false }
+          - { label: "Vecino/a — feature 2", name: "vecino_feature_2", widget: "string", required: false }
+          - { label: "Vecino/a — feature 3", name: "vecino_feature_3", widget: "string", required: false }
+          - { label: "Vecino/a — feature 4", name: "vecino_feature_4", widget: "string", required: false }
+          - { label: "Vecino/a — feature 5", name: "vecino_feature_5", widget: "string", required: false }
+          - { label: "Vecino/a — photo/video perk title", name: "vecino_camera_title", widget: "string", required: false }
+          - { label: "Vecino/a — photo/video perk description", name: "vecino_camera_text", widget: "string", required: false }
+
+          - label: "── Residente tier ──"
+            name: "residente_heading"
+            widget: "hidden"
+            default: ""
+          - { label: "Residente — price (€/month)", name: "residente_price", widget: "number" }
+          - { label: "Residente — short description", name: "residente_desc", widget: "text" }
+          - { label: "Residente — feature 1", name: "residente_feature_1", widget: "string", required: false }
+          - { label: "Residente — feature 2", name: "residente_feature_2", widget: "string", required: false }
+          - { label: "Residente — feature 3", name: "residente_feature_3", widget: "string", required: false }
+          - { label: "Residente — feature 4", name: "residente_feature_4", widget: "string", required: false }
+          - { label: "Residente — feature 5", name: "residente_feature_5", widget: "string", required: false }
+          - { label: "Residente — feature 6", name: "residente_feature_6", widget: "string", required: false }
+          - { label: "Residente — photo/video perk title", name: "residente_camera_title", widget: "string", required: false }
+          - { label: "Residente — photo/video perk description", name: "residente_camera_text", widget: "string", required: false }
+
+          - label: "── Comparison table ──"
+            name: "compare_heading"
+            widget: "hidden"
+            default: ""
+          - { label: "Comparison hint", name: "compare_hint", widget: "hidden", default: "For each column below: type 'yes' for a checkmark, 'no' for a dash, or free text like '3 hrs'" }
+          - { label: "Row 1 — label", name: "compare_1_label", widget: "string" }
+          - { label: "Row 1 — Amigo/a", name: "compare_1_amigo", widget: "string" }
+          - { label: "Row 1 — Vecino/a", name: "compare_1_vecino", widget: "string" }
+          - { label: "Row 1 — Residente", name: "compare_1_residente", widget: "string" }
+          - { label: "Row 2 — label", name: "compare_2_label", widget: "string" }
+          - { label: "Row 2 — Amigo/a", name: "compare_2_amigo", widget: "string" }
+          - { label: "Row 2 — Vecino/a", name: "compare_2_vecino", widget: "string" }
+          - { label: "Row 2 — Residente", name: "compare_2_residente", widget: "string" }
+          - { label: "Row 3 — label", name: "compare_3_label", widget: "string" }
+          - { label: "Row 3 — Amigo/a", name: "compare_3_amigo", widget: "string" }
+          - { label: "Row 3 — Vecino/a", name: "compare_3_vecino", widget: "string" }
+          - { label: "Row 3 — Residente", name: "compare_3_residente", widget: "string" }
+          - { label: "Row 4 — label", name: "compare_4_label", widget: "string" }
+          - { label: "Row 4 — Amigo/a", name: "compare_4_amigo", widget: "string" }
+          - { label: "Row 4 — Vecino/a", name: "compare_4_vecino", widget: "string" }
+          - { label: "Row 4 — Residente", name: "compare_4_residente", widget: "string" }
+          - { label: "Row 5 — label", name: "compare_5_label", widget: "string" }
+          - { label: "Row 5 — Amigo/a", name: "compare_5_amigo", widget: "string" }
+          - { label: "Row 5 — Vecino/a", name: "compare_5_vecino", widget: "string" }
+          - { label: "Row 5 — Residente", name: "compare_5_residente", widget: "string" }
+          - { label: "Row 6 — label", name: "compare_6_label", widget: "string" }
+          - { label: "Row 6 — Amigo/a", name: "compare_6_amigo", widget: "string" }
+          - { label: "Row 6 — Vecino/a", name: "compare_6_vecino", widget: "string" }
+          - { label: "Row 6 — Residente", name: "compare_6_residente", widget: "string" }
+          - { label: "Row 7 — label", name: "compare_7_label", widget: "string" }
+          - { label: "Row 7 — Amigo/a", name: "compare_7_amigo", widget: "string" }
+          - { label: "Row 7 — Vecino/a", name: "compare_7_vecino", widget: "string" }
+          - { label: "Row 7 — Residente", name: "compare_7_residente", widget: "string" }
+          - { label: "Row 8 — label", name: "compare_8_label", widget: "string" }
+          - { label: "Row 8 — Amigo/a", name: "compare_8_amigo", widget: "string" }
+          - { label: "Row 8 — Vecino/a", name: "compare_8_vecino", widget: "string" }
+          - { label: "Row 8 — Residente", name: "compare_8_residente", widget: "string" }
 
       - label: "Contact page"
         name: "contact_page"
