@@ -361,3 +361,24 @@ collections:
             widget: "color"
             default: "#6DB89A"
             hint: "Labels on dark herb backgrounds"
+
+  # ── GALLERY ─────────────────────────────────────────
+  - name: "gallery"
+    label: "📸 Gallery"
+    label_singular: "Photo"
+    folder: "_data/gallery"
+    create: true
+    delete: true
+    extension: "yml"
+    format: "yml"
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title / caption", name: "title", widget: "string" }
+      - { label: "Photo", name: "image", widget: "image" }
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options: ["Space", "Events", "Cats"]
+      - { label: "Description", name: "description", widget: "text", required: false }
+      - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false, required: false }
+      - { label: "Featured?", name: "featured", widget: "boolean", default: false }
