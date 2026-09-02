@@ -305,7 +305,7 @@
     console.log('TM: init started, readyState:', document.readyState);
 
     const [colours, spaceRates, massageRates, weeklyPkg, contact,
-           homepage, spacePage, aboutPage] = await Promise.all([
+           homepage, spacePage, aboutPage, rentPage, memPage, contactPage] = await Promise.all([
       fetchYAML('/_data/colours.yml'),
       fetchYAML('/_data/pricing/space_rates.yml'),
       fetchYAML('/_data/pricing/massage_rates.yml'),
@@ -314,6 +314,9 @@
       fetchYAML('/_data/content/homepage.yml'),
       fetchYAML('/_data/content/space.yml'),
       fetchYAML('/_data/content/about.yml'),
+      fetchYAML('/_data/content/rent.yml'),
+      fetchYAML('/_data/content/membership.yml'),
+      fetchYAML('/_data/content/contact_page.yml'),
     ]);
 
     window.TM = { colours, pricing: { space: spaceRates, massage: massageRates, weekly: weeklyPkg },
@@ -321,6 +324,69 @@
 
     if (colours) applyColours(colours);
     if (contact) renderContact(contact);
+
+    // Helper to set text on element by id
+    const setText = (id, val) => {
+      const el = document.getElementById(id);
+      if (el && val) el.textContent = val;
+    };
+    const setHTML = (id, val) => {
+      const el = document.getElementById(id);
+      if (el && val) el.innerHTML = val;
+    };
+
+    // ── HOMEPAGE text ──
+    if (homepage) {
+      setText('tm-text-tagline-es', homepage.tagline_es);
+      setText('tm-text-tagline-en', homepage.tagline_en);
+      setText('tm-text-intro-strip', homepage.intro_strip);
+      const heroEl = document.getElementById('tm-text-hero-title');
+      if (heroEl && (homepage.hero_title_1 || homepage.hero_title_2)) {
+        heroEl.innerHTML = (homepage.hero_title_1 || '') +
+          (homepage.hero_title_2 ? '<br><em>' + homepage.hero_title_2 + '</em>' : '');
+      }
+    }
+
+    // ── SPACE PAGE text ──
+    if (spacePage) {
+      setText('tm-space-eyebrow', spacePage.eyebrow);
+      setText('tm-space-title', spacePage.hero_title);
+      setText('tm-space-desc', spacePage.hero_desc);
+      setText('tm-space-neighbourhood-title', spacePage.neighbourhood_title);
+      setText('tm-space-neighbourhood-desc', spacePage.neighbourhood_desc);
+    }
+
+    // ── RENT PAGE text ──
+    if (rentPage) {
+      setText('tm-rent-title', rentPage.hero_title);
+      setText('tm-rent-desc', rentPage.hero_desc);
+    }
+
+    // ── MEMBERSHIP PAGE text ──
+    if (memPage) {
+      setText('tm-mem-title', memPage.hero_title);
+      setText('tm-mem-desc', memPage.hero_desc);
+      setText('tm-mem-tier-1', memPage.amigo_desc);
+      setText('tm-mem-tier-2', memPage.vecino_desc);
+      setText('tm-mem-tier-3', memPage.residente_desc);
+    }
+
+    // ── ABOUT PAGE text ──
+    if (aboutPage) {
+      setText('tm-about-title', aboutPage.hero_title);
+      setText('tm-about-bio-1', aboutPage.bio_1);
+      setText('tm-about-bio-2', aboutPage.bio_2);
+      setText('tm-about-neptunes-1', aboutPage.neptunes_1);
+      setText('tm-about-neptunes-2', aboutPage.neptunes_2);
+      setText('tm-about-photographer', aboutPage.photographer_bio);
+    }
+
+    // ── CONTACT PAGE text ──
+    if (contactPage) {
+      setText('tm-contact-title', contactPage.hero_title);
+      setText('tm-contact-desc', contactPage.intro_desc);
+      setText('tm-contact-response', contactPage.response_note);
+    }
 
     // Inject images from CMS content files
     if (homepage) renderImages(homepage, 'home');
