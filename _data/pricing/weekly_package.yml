@@ -1,8 +1,7 @@
-discount_percent: 20
-description: |-
-  1 hr/week × 4 sessions
-  vs €40 / €60 pay-as-you-go
-  August €32/
-  September €48/mo
-  Save €8 / €12
+discount_percent: 15
+description: >+
+  If Tres Miaus is your kind of place, a membership makes it your regular spot —
+  with included hours, priority booking, and a discount on photo and video
+  coverage.
+
 cancellation_days: 2
