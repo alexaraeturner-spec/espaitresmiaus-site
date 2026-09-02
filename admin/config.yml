@@ -88,10 +88,12 @@ collections:
         name: "space_page"
         file: "_data/content/space.yml"
         fields:
+          - { label: "Eyebrow text", name: "eyebrow", widget: "string", hint: "Small text above the title e.g. 'Barcelona · Event Space'" }
           - { label: "Hero title", name: "hero_title", widget: "string" }
           - { label: "Hero description", name: "hero_desc", widget: "text" }
           - { label: "Space size (m²)", name: "size_sqm", widget: "string" }
           - { label: "Max capacity", name: "max_capacity", widget: "number" }
+          - { label: "Neighbourhood title", name: "neighbourhood_title", widget: "string" }
           - { label: "Neighbourhood", name: "neighbourhood", widget: "string" }
           - { label: "Neighbourhood description", name: "neighbourhood_desc", widget: "text" }
           - { label: "Gallery photo 1", name: "gallery_1", widget: "image", required: false }
@@ -104,14 +106,40 @@ collections:
         name: "about_page"
         file: "_data/content/about.yml"
         fields:
+          - { label: "Hero title", name: "hero_title", widget: "string" }
           - { label: "Bio paragraph 1", name: "bio_1", widget: "text" }
           - { label: "Bio paragraph 2", name: "bio_2", widget: "text" }
           - { label: "Pull quote", name: "quote", widget: "text" }
           - { label: "Neptunes description 1", name: "neptunes_1", widget: "text" }
           - { label: "Neptunes description 2", name: "neptunes_2", widget: "text" }
           - { label: "Photographer bio", name: "photographer_bio", widget: "text" }
-          - { label: "Your photo", name: "alexa_image", widget: "image", required: false, hint: "Photo of you for the about page" }
+          - { label: "Your photo", name: "alexa_image", widget: "image", required: false }
           - { label: "Photographer photo", name: "photographer_image", widget: "image", required: false }
+
+      - label: "Rent page"
+        name: "rent_page"
+        file: "_data/content/rent.yml"
+        fields:
+          - { label: "Hero title", name: "hero_title", widget: "string" }
+          - { label: "Hero description", name: "hero_desc", widget: "text" }
+
+      - label: "Membership page"
+        name: "membership_page"
+        file: "_data/content/membership.yml"
+        fields:
+          - { label: "Hero title", name: "hero_title", widget: "string" }
+          - { label: "Hero description", name: "hero_desc", widget: "text" }
+          - { label: "Amigo/a description", name: "amigo_desc", widget: "text" }
+          - { label: "Vecino/a description", name: "vecino_desc", widget: "text" }
+          - { label: "Residente description", name: "residente_desc", widget: "text" }
+
+      - label: "Contact page"
+        name: "contact_page"
+        file: "_data/content/contact_page.yml"
+        fields:
+          - { label: "Hero title", name: "hero_title", widget: "string" }
+          - { label: "Intro text", name: "intro_desc", widget: "text" }
+          - { label: "Response time note", name: "response_note", widget: "string", hint: "e.g. We reply within 24-48 hours" }
 
   # ── CATS ────────────────────────────────────────────
   - name: "cats"
