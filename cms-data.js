@@ -391,6 +391,8 @@
       setText('tm-space-desc', spacePage.hero_desc);
       setText('tm-space-neighbourhood-title', spacePage.neighbourhood_title);
       setText('tm-space-neighbourhood-desc', spacePage.neighbourhood_desc);
+      setText('tm-space-size-sqm', spacePage.size_sqm);
+      setText('tm-space-max-capacity', spacePage.max_capacity);
     }
 
     // ── RENT PAGE text ──
@@ -399,13 +401,71 @@
       setText('tm-rent-desc', rentPage.hero_desc);
     }
 
-    // ── MEMBERSHIP PAGE text ──
+    // ── MEMBERSHIP PAGE ──
     if (memPage) {
       setText('tm-mem-title', memPage.hero_title);
       setText('tm-mem-desc', memPage.hero_desc);
-      setText('tm-mem-tier-1', memPage.amigo_desc);
-      setText('tm-mem-tier-2', memPage.vecino_desc);
-      setText('tm-mem-tier-3', memPage.residente_desc);
+
+      const fmtPrice = (n) => (n || n === 0) ? '€' + n : null;
+      const setFeatures = (ulId, values) => {
+        const items = values.filter(v => v !== undefined && v !== null && v !== '');
+        if (!items.length) return;
+        const ul = document.getElementById(ulId);
+        if (!ul) return;
+        const existingCheck = ul.querySelector('.check');
+        const checkClass = existingCheck ? existingCheck.className.replace('check ', '') : '';
+        ul.innerHTML = items.map(text =>
+          '<li><span class="check ' + checkClass + '">✓</span>' + text + '</li>'
+        ).join('');
+      };
+
+      const tiers = {
+        amigo: { max: 3, camera: false },
+        vecino: { max: 5, camera: true },
+        residente: { max: 6, camera: true }
+      };
+
+      Object.keys(tiers).forEach(tier => {
+        const cfg = tiers[tier];
+        const priceStr = fmtPrice(memPage[tier + '_price']);
+        setText('tm-mem-' + tier + '-price', priceStr);
+        setText('tm-mem-compare-' + tier + '-price', priceStr);
+        setText('tm-mem-who-' + tier + '-price', priceStr);
+        setText('tm-mem-' + tier + '-desc', memPage[tier + '_desc']);
+
+        const features = [];
+        for (let n = 1; n <= cfg.max; n++) features.push(memPage[tier + '_feature_' + n]);
+        setFeatures('tm-mem-' + tier + '-features', features);
+
+        if (cfg.camera) {
+          setText('tm-mem-' + tier + '-camera-title', memPage[tier + '_camera_title']);
+          setText('tm-mem-' + tier + '-camera-text', memPage[tier + '_camera_text']);
+        }
+      });
+
+      // Comparison table rows (up to 8)
+      const tbody = document.getElementById('tm-mem-compare-tbody');
+      if (tbody) {
+        const cell = (val) => {
+          const v = (val === undefined || val === null) ? '' : val.toString().trim().toLowerCase();
+          if (v === 'yes') return '<td><span class="tick">✓</span></td>';
+          if (v === 'no' || v === '') return '<td><span class="cross">—</span></td>';
+          return '<td><span class="val">' + val + '</span></td>';
+        };
+        const rows = [];
+        for (let n = 1; n <= 8; n++) {
+          const label = memPage['compare_' + n + '_label'];
+          if (!label) continue;
+          rows.push(
+            '<tr><td>' + label + '</td>' +
+            cell(memPage['compare_' + n + '_amigo']) +
+            cell(memPage['compare_' + n + '_vecino']) +
+            cell(memPage['compare_' + n + '_residente']) +
+            '</tr>'
+          );
+        }
+        if (rows.length) tbody.innerHTML = rows.join('');
+      }
     }
 
     // ── ABOUT PAGE text ──

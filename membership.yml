@@ -1,0 +1,69 @@
+hero_title: Become part of the community
+hero_desc: If Tres Miaus is your kind of place, a membership makes it your regular spot — with included hours, priority booking, and a discount on photo and video coverage.
+
+amigo_price: 30
+amigo_desc: For occasional users who want to stay connected
+amigo_feature_1: 3 hours included per month
+amigo_feature_2: Priority booking window
+amigo_feature_3: Community event invitations
+
+vecino_price: 70
+vecino_desc: For practitioners and regulars who use the space often
+vecino_feature_1: 5 hours included per month
+vecino_feature_2: 10% off additional hours
+vecino_feature_3: Priority booking window
+vecino_feature_4: 1 guest pass per month
+vecino_feature_5: Community event invitations
+vecino_camera_title: Photo & video — discounted
+vecino_camera_text: 1 discounted coverage session per month at member rate
+
+residente_price: 150
+residente_desc: For weekly regulars, instructors, and community builders
+residente_feature_1: 12 hours included per month
+residente_feature_2: 15% off additional hours
+residente_feature_3: First access to the booking calendar
+residente_feature_4: 3 guest passes per month
+residente_feature_5: Listed on the Tres Miaus website
+residente_feature_6: Community event invitations
+residente_camera_title: Photo & video — included
+residente_camera_text: 1 full coverage session included per month, no extra charge
+
+compare_1_label: Hours included / month
+compare_1_amigo: "3 hrs"
+compare_1_vecino: "5 hrs"
+compare_1_residente: "12 hrs"
+
+compare_2_label: Discount on extra hours
+compare_2_amigo: "no"
+compare_2_vecino: "10% off"
+compare_2_residente: "15% off"
+
+compare_3_label: Priority booking window
+compare_3_amigo: "yes"
+compare_3_vecino: "yes"
+compare_3_residente: "yes"
+
+compare_4_label: First booking access
+compare_4_amigo: "no"
+compare_4_vecino: "no"
+compare_4_residente: "yes"
+
+compare_5_label: Guest passes / month
+compare_5_amigo: "no"
+compare_5_vecino: "1 pass"
+compare_5_residente: "3 passes"
+
+compare_6_label: Community event invitations
+compare_6_amigo: "yes"
+compare_6_vecino: "yes"
+compare_6_residente: "yes"
+
+compare_7_label: Listed on Tres Miaus website
+compare_7_amigo: "no"
+compare_7_vecino: "no"
+compare_7_residente: "yes"
+
+compare_8_label: Photo & video coverage
+compare_8_amigo: "no"
+compare_8_vecino: "1 discounted session"
+compare_8_residente: "1 free session / month"

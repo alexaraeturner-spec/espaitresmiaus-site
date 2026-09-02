@@ -208,8 +208,8 @@
 <section class="page-hero">
   <div class="hero-left">
     <p class="page-eyebrow">Membership</p>
-    <h1 class="page-hero-title">Become part of<br>the <em>community</em></h1>
-    <p class="page-hero-desc">If Tres Miaus is your kind of place, a membership makes it your regular spot — with included hours, priority booking, and a discount on photo and video coverage.</p>
+    <h1 class="page-hero-title" id="tm-mem-title">Become part of<br>the <em>community</em></h1>
+    <p class="page-hero-desc" id="tm-mem-desc">If Tres Miaus is your kind of place, a membership makes it your regular spot — with included hours, priority booking, and a discount on photo and video coverage.</p>
   </div>
   <div class="hero-right">
     <div class="hero-perks">
@@ -249,14 +249,14 @@
         <p class="tier-name">Friend</p>
         <p class="tier-name-es">El acceso ligero · Light access</p>
         <div class="tier-price">
-          <span class="tier-price-num">€30</span>
+          <span class="tier-price-num" id="tm-mem-amigo-price">€30</span>
           <span class="tier-price-unit">/month</span>
         </div>
-        <p class="tier-price-sub">For occasional users who want to stay connected</p>
+        <p class="tier-price-sub" id="tm-mem-amigo-desc">For occasional users who want to stay connected</p>
       </div>
       <div class="tier-body">
         <hr class="tier-divider">
-        <ul class="tier-features">
+        <ul class="tier-features" id="tm-mem-amigo-features">
           <li><span class="check terracotta">✓</span>3 hours included per month</li>
           <li><span class="check terracotta">✓</span>Priority booking window</li>
           <li><span class="check terracotta">✓</span>Community event invitations</li>
@@ -275,14 +275,14 @@
         <p class="tier-name">Neighbour</p>
         <p class="tier-name-es">El regular · The regular</p>
         <div class="tier-price">
-          <span class="tier-price-num">€70</span>
+          <span class="tier-price-num" id="tm-mem-vecino-price">€70</span>
           <span class="tier-price-unit">/month</span>
         </div>
-        <p class="tier-price-sub">For practitioners and regulars who use the space often</p>
+        <p class="tier-price-sub" id="tm-mem-vecino-desc">For practitioners and regulars who use the space often</p>
       </div>
       <div class="tier-body">
         <hr class="tier-divider">
-        <ul class="tier-features">
+        <ul class="tier-features" id="tm-mem-vecino-features">
           <li><span class="check sage">✓</span>5 hours included per month</li>
           <li><span class="check sage">✓</span>10% off additional hours</li>
           <li><span class="check sage">✓</span>Priority booking window</li>
@@ -292,8 +292,8 @@
         <div class="tier-camera sage-bg">
           <span style="font-size:1rem; flex-shrink:0;">📸</span>
           <div class="tier-camera-text">
-            <strong>Photo & video — discounted</strong>
-            1 discounted coverage session per month at member rate
+            <strong id="tm-mem-vecino-camera-title">Photo & video — discounted</strong>
+            <span id="tm-mem-vecino-camera-text">1 discounted coverage session per month at member rate</span>
           </div>
         </div>
         <a href="https://wa.me/34683565985" class="tier-cta sage">Get started</a>
@@ -307,14 +307,14 @@
         <p class="tier-name">Resident</p>
         <p class="tier-name-es">El habitual · The regular host</p>
         <div class="tier-price">
-          <span class="tier-price-num">€150</span>
+          <span class="tier-price-num" id="tm-mem-residente-price">€150</span>
           <span class="tier-price-unit">/month</span>
         </div>
-        <p class="tier-price-sub">For weekly regulars, instructors, and community builders</p>
+        <p class="tier-price-sub" id="tm-mem-residente-desc">For weekly regulars, instructors, and community builders</p>
       </div>
       <div class="tier-body">
         <hr class="tier-divider">
-        <ul class="tier-features">
+        <ul class="tier-features" id="tm-mem-residente-features">
           <li><span class="check ochre">✓</span>12 hours included per month</li>
           <li><span class="check ochre">✓</span>15% off additional hours</li>
           <li><span class="check ochre">✓</span>First access to the booking calendar</li>
@@ -325,8 +325,8 @@
         <div class="tier-camera ochre-bg">
           <span style="font-size:1rem; flex-shrink:0;">📸</span>
           <div class="tier-camera-text">
-            <strong>Photo & video — included</strong>
-            1 full coverage session included per month, no extra charge
+            <strong id="tm-mem-residente-camera-title">Photo & video — included</strong>
+            <span id="tm-mem-residente-camera-text">1 full coverage session included per month, no extra charge</span>
           </div>
         </div>
         <a href="https://wa.me/34683565985" class="tier-cta ochre">Get started</a>
@@ -344,12 +344,12 @@
     <thead>
       <tr>
         <th>What you get</th>
-        <th>Amigo/a · €30</th>
-        <th>Vecino/a · €70</th>
-        <th>Residente · €150</th>
+        <th>Amigo/a · <span id="tm-mem-compare-amigo-price">€30</span></th>
+        <th>Vecino/a · <span id="tm-mem-compare-vecino-price">€70</span></th>
+        <th>Residente · <span id="tm-mem-compare-residente-price">€150</span></th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="tm-mem-compare-tbody">
       <tr>
         <td>Hours included / month</td>
         <td><span class="val">3 hrs</span></td>
@@ -409,19 +409,19 @@
   <div class="who-grid">
     <div class="who-card">
       <p class="who-icon">🧘</p>
-      <p class="who-tier amigo">Amigo/a — €30/mo</p>
+      <p class="who-tier amigo">Amigo/a — <span id="tm-mem-who-amigo-price">€30</span>/mo</p>
       <p class="who-title">The occasional visitor</p>
       <p class="who-desc">You love the space and want to use it once in a while — a monthly gathering, a personal project, or a small get-together. You want to stay connected without committing heavily.</p>
     </div>
     <div class="who-card">
       <p class="who-icon">🌿</p>
-      <p class="who-tier vecino">Vecino/a — €70/mo</p>
+      <p class="who-tier vecino">Vecino/a — <span id="tm-mem-who-vecino-price">€70</span>/mo</p>
       <p class="who-title">The regular practitioner</p>
       <p class="who-desc">You run yoga classes, workshops, or community sessions every few weeks. You need reliable access, a good deal on hours, and content to promote what you do.</p>
     </div>
     <div class="who-card">
       <p class="who-icon">🏡</p>
-      <p class="who-tier residente">Residente — €150/mo</p>
+      <p class="who-tier residente">Residente — <span id="tm-mem-who-residente-price">€150</span>/mo</p>
       <p class="who-title">The weekly host</p>
       <p class="who-desc">Tres Miaus is essentially your studio. You run regular sessions, want first pick of the calendar, and benefit from being promoted as part of the space's community.</p>
     </div>
