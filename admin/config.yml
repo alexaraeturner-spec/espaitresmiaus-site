@@ -113,7 +113,9 @@ collections:
           - { label: "Neptunes description 1", name: "neptunes_1", widget: "text" }
           - { label: "Neptunes description 2", name: "neptunes_2", widget: "text" }
           - { label: "Photographer bio", name: "photographer_bio", widget: "text" }
-          - { label: "Your photo", name: "alexa_image", widget: "image", required: false }
+          - { label: "Hero — Alexa photo (top right)", name: "alexa_image", widget: "image", required: false, hint: "Small photo top right of hero section" }
+          - { label: "Hero — Barcelona/space photo", name: "barcelona_image", widget: "image", required: false, hint: "Second small photo in hero section" }
+          - { label: "Alexa portrait (main bio section)", name: "alexa_portrait", widget: "image", required: false, hint: "Large portrait in the founder section" }
           - { label: "Photographer photo", name: "photographer_image", widget: "image", required: false }
 
       - label: "Rent page"
