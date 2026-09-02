@@ -93,8 +93,7 @@ collections:
           - { label: "Hero description", name: "hero_desc", widget: "text" }
           - { label: "Space size (m²)", name: "size_sqm", widget: "string", hint: "Just the number(s), e.g. 60–100 — 'm²' is added automatically" }
           - { label: "Max capacity", name: "max_capacity", widget: "number", hint: "Just the number — '+' is added automatically" }
-          - { label: "Hero photo — Main room", name: "hero_main_room_image", widget: "image", required: false, hint: "Top-right photo block on the Space page" }
-          - { label: "Hero photo — Balcony", name: "hero_balcony_image", widget: "image", required: false, hint: "Top-right photo block on the Space page" }
+          - { label: "Hero photo — Main room", name: "hero_main_room_image", widget: "image", required: false, hint: "Photo block on the Space page hero" }
           - { label: "Neighbourhood title", name: "neighbourhood_title", widget: "string" }
           - { label: "Neighbourhood", name: "neighbourhood", widget: "string" }
           - { label: "Neighbourhood description", name: "neighbourhood_desc", widget: "text" }
