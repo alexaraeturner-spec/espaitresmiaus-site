@@ -27,53 +27,73 @@
     }
 
     const lines = content.split('\n');
-    for (let i = 0; i < lines.length; i++) {
+    let i = 0;
+    while (i < lines.length) {
       const line = lines[i];
-      if (!line.trim() || line.trim().startsWith('#')) continue;
+      if (!line.trim() || line.trim().startsWith('#')) { i++; continue; }
 
       const colonIdx = line.indexOf(':');
-      if (colonIdx === -1) continue;
+      if (colonIdx === -1) { i++; continue; }
 
       const key = line.slice(0, colonIdx).trim();
       let val = line.slice(colonIdx + 1).trim();
 
-      // Block scalar — | or > (multiline text widget)
+      // Block scalar | or >
       if (val === '|' || val === '>') {
-        const blockLines = [];
+        const block = [];
         const baseIndent = (lines[i + 1] || '').match(/^(\s*)/)[1].length;
         i++;
         while (i < lines.length) {
-          const nextLine = lines[i];
-          const nextIndent = nextLine.match(/^(\s*)/)[1].length;
-          if (nextLine.trim() === '') { blockLines.push(''); i++; continue; }
-          if (nextIndent < baseIndent && nextLine.trim()) break;
-          blockLines.push(nextLine.slice(baseIndent));
+          const l = lines[i];
+          if (l.trim() === '') { block.push(''); i++; continue; }
+          const indent = l.match(/^(\s*)/)[1].length;
+          if (indent < baseIndent && l.trim()) break;
+          block.push(l.slice(baseIndent));
           i++;
         }
-        i--; // rewind so outer loop re-checks this line
-        result[key] = blockLines.join('\n').trim();
+        result[key] = block.join('\n').trim();
         continue;
       }
 
-      // Inline quoted strings
+      // Flow scalar — value may continue on indented lines below
+      // e.g. bio_home: First line of text
+      //   continuation of the same value
       if (val.startsWith('"')) {
-        while ((!val.endsWith('"') || val.length === 1) && i < lines.length - 1) {
+        // Quoted — collect until closing quote
+        while (!val.endsWith('"') || val.length === 1) {
+          if (i + 1 >= lines.length) break;
           i++;
           val += ' ' + lines[i].trim();
         }
         val = val.slice(1, -1);
       } else if (val.startsWith("'")) {
-        while ((!val.endsWith("'") || val.length === 1) && i < lines.length - 1) {
+        while (!val.endsWith("'") || val.length === 1) {
+          if (i + 1 >= lines.length) break;
           i++;
           val += ' ' + lines[i].trim();
         }
         val = val.slice(1, -1);
+      } else {
+        // Plain scalar — collect indented continuation lines
+        while (i + 1 < lines.length) {
+          const next = lines[i + 1];
+          const nextIndent = next.match(/^(\s*)/)[1].length;
+          const keyIndent = line.match(/^(\s*)/)[1].length;
+          // Continuation line is indented more than the key
+          if (next.trim() !== '' && nextIndent > keyIndent) {
+            val += ' ' + next.trim();
+            i++;
+          } else {
+            break;
+          }
+        }
       }
 
       if (val === 'true') result[key] = true;
       else if (val === 'false') result[key] = false;
       else if (val !== '' && !isNaN(val)) result[key] = Number(val);
       else result[key] = val;
+      i++;
     }
     return result;
   }
