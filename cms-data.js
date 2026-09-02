@@ -276,24 +276,66 @@
     });
   }
 
+  // ── IMAGE RENDERER ───────────────────────────────────────────────────────
+  function renderImages(data, prefix) {
+    // For each key ending in _image or _photo or matching gallery_N, inject into matching element
+    Object.keys(data || {}).forEach(key => {
+      const val = data[key];
+      if (!val || typeof val !== 'string') return;
+      // Match image fields
+      if (key.endsWith('_image') || key.endsWith('_photo') || key.match(/^gallery_\d+$/)) {
+        const el = document.getElementById('tm-img-' + (prefix ? prefix + '-' : '') + key);
+        if (el) {
+          if (el.tagName === 'IMG') {
+            el.src = val;
+            el.style.display = 'block';
+          } else {
+            // Replace placeholder with actual image
+            el.innerHTML = '<img src="' + val + '" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">';
+          }
+        }
+      }
+    });
+  }
+
   // ── MAIN INIT ────────────────────────────────────────────────────────────
   window.TM = {};
 
   async function init() {
     console.log('TM: init started, readyState:', document.readyState);
 
-    const [colours, spaceRates, massageRates, weeklyPkg, contact] = await Promise.all([
+    const [colours, spaceRates, massageRates, weeklyPkg, contact,
+           homepage, spacePage, aboutPage] = await Promise.all([
       fetchYAML('/_data/colours.yml'),
       fetchYAML('/_data/pricing/space_rates.yml'),
       fetchYAML('/_data/pricing/massage_rates.yml'),
       fetchYAML('/_data/pricing/weekly_package.yml'),
       fetchYAML('/_data/content/contact.yml'),
+      fetchYAML('/_data/content/homepage.yml'),
+      fetchYAML('/_data/content/space.yml'),
+      fetchYAML('/_data/content/about.yml'),
     ]);
 
-    window.TM = { colours, pricing: { space: spaceRates, massage: massageRates, weekly: weeklyPkg }, contact };
+    window.TM = { colours, pricing: { space: spaceRates, massage: massageRates, weekly: weeklyPkg },
+                  contact, homepage, spacePage, aboutPage };
 
     if (colours) applyColours(colours);
     if (contact) renderContact(contact);
+
+    // Inject images from CMS content files
+    if (homepage) renderImages(homepage, 'home');
+    if (spacePage) renderImages(spacePage, 'space');
+    if (aboutPage) renderImages(aboutPage, 'about');
+
+    // Load cat images
+    const [yuki, thelma, louise] = await Promise.all([
+      fetchYAML('/_data/cats/yuki.yml'),
+      fetchYAML('/_data/cats/thelma.yml'),
+      fetchYAML('/_data/cats/louise.yml'),
+    ]);
+    if (yuki) renderImages(yuki, 'yuki');
+    if (thelma) renderImages(thelma, 'thelma');
+    if (louise) renderImages(louise, 'louise');
 
     if (document.getElementById('tm-community-aug') || document.getElementById('tm-massage-aug')) {
       renderPricing(spaceRates, massageRates, weeklyPkg);
