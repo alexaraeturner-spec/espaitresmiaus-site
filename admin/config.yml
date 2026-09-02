@@ -163,6 +163,7 @@ collections:
           - { label: "Role / title", name: "role", widget: "string" }
           - { label: "Bio", name: "bio", widget: "text" }
           - { label: "Warning note", name: "warning", widget: "string" }
+          - { label: "Photo", name: "image", widget: "image", required: false }
 
       - label: "Louise"
         name: "louise"
@@ -172,6 +173,7 @@ collections:
           - { label: "Role / title", name: "role", widget: "string" }
           - { label: "Bio", name: "bio", widget: "text" }
           - { label: "Fun note", name: "note", widget: "string" }
+          - { label: "Photo", name: "image", widget: "image", required: false }
 
   # ── CONTACT ─────────────────────────────────────────
   - name: "contact"
