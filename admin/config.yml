@@ -155,7 +155,6 @@ collections:
           - { label: "Vecino/a — feature 2", name: "vecino_feature_2", widget: "string", required: false }
           - { label: "Vecino/a — feature 3", name: "vecino_feature_3", widget: "string", required: false }
           - { label: "Vecino/a — feature 4", name: "vecino_feature_4", widget: "string", required: false }
-          - { label: "Vecino/a — feature 5", name: "vecino_feature_5", widget: "string", required: false }
           - { label: "Vecino/a — photo/video perk title", name: "vecino_camera_title", widget: "string", required: false }
           - { label: "Vecino/a — photo/video perk description", name: "vecino_camera_text", widget: "string", required: false }
 
@@ -169,8 +168,6 @@ collections:
           - { label: "Residente — feature 2", name: "residente_feature_2", widget: "string", required: false }
           - { label: "Residente — feature 3", name: "residente_feature_3", widget: "string", required: false }
           - { label: "Residente — feature 4", name: "residente_feature_4", widget: "string", required: false }
-          - { label: "Residente — feature 5", name: "residente_feature_5", widget: "string", required: false }
-          - { label: "Residente — feature 6", name: "residente_feature_6", widget: "string", required: false }
           - { label: "Residente — photo/video perk title", name: "residente_camera_title", widget: "string", required: false }
           - { label: "Residente — photo/video perk description", name: "residente_camera_text", widget: "string", required: false }
 
@@ -203,14 +200,6 @@ collections:
           - { label: "Row 6 — Amigo/a", name: "compare_6_amigo", widget: "string" }
           - { label: "Row 6 — Vecino/a", name: "compare_6_vecino", widget: "string" }
           - { label: "Row 6 — Residente", name: "compare_6_residente", widget: "string" }
-          - { label: "Row 7 — label", name: "compare_7_label", widget: "string" }
-          - { label: "Row 7 — Amigo/a", name: "compare_7_amigo", widget: "string" }
-          - { label: "Row 7 — Vecino/a", name: "compare_7_vecino", widget: "string" }
-          - { label: "Row 7 — Residente", name: "compare_7_residente", widget: "string" }
-          - { label: "Row 8 — label", name: "compare_8_label", widget: "string" }
-          - { label: "Row 8 — Amigo/a", name: "compare_8_amigo", widget: "string" }
-          - { label: "Row 8 — Vecino/a", name: "compare_8_vecino", widget: "string" }
-          - { label: "Row 8 — Residente", name: "compare_8_residente", widget: "string" }
 
       - label: "Contact page"
         name: "contact_page"
