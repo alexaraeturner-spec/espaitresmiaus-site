@@ -168,14 +168,42 @@ var currentYear=2026, currentMonth=8, EVENTS=[];
 function parseYml(text) {
   var result = {};
   var lines = text.split('\n');
-  for (var i = 0; i < lines.length; i++) {
+  var i = 0;
+  while (i < lines.length) {
     var line = lines[i].trim();
-    if (!line || line === '---') continue;
+    if (!line || line === '---') { i++; continue; }
     var idx = line.indexOf(':');
-    if (idx === -1) continue;
+    if (idx === -1) { i++; continue; }
     var key = line.slice(0, idx).trim();
-    var val = line.slice(idx + 1).trim().replace(/^['"]/, '').replace(/['"]$/, '');
+    var rest = line.slice(idx + 1).trim();
+
+    // Block scalar | or > (with optional chomping indicator -/+)
+    if (/^[|>][+-]?\d*$/.test(rest)) {
+      var folded = rest.charAt(0) === '>';
+      var block = [];
+      var baseIndent = null;
+      var j = i + 1;
+      while (j < lines.length) {
+        var l = lines[j];
+        if (l.trim() === '') { block.push(''); j++; continue; }
+        var indent = l.match(/^(\s*)/)[1].length;
+        if (baseIndent === null) {
+          if (indent === 0) break;
+          baseIndent = indent;
+        }
+        if (indent < baseIndent) break;
+        block.push(l.slice(baseIndent));
+        j++;
+      }
+      while (block.length && block[block.length - 1] === '') block.pop();
+      result[key] = folded ? block.join(' ').replace(/\s+/g, ' ').trim() : block.join('\n').trim();
+      i = j;
+      continue;
+    }
+
+    var val = rest.replace(/^['"]/, '').replace(/['"]$/, '');
     result[key] = val;
+    i++;
   }
   return result;
 }

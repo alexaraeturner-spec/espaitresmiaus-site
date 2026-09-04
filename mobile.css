@@ -4,6 +4,11 @@
    so these rules win on equal specificity at narrower widths.
    ============================================================ */
 
+/* Prevent horizontal scroll/overflow site-wide — several sections use
+   decorative circles positioned with negative offsets that bleed past
+   the viewport edge on narrow screens */
+html, body { overflow-x: hidden; max-width: 100%; }
+
 /* ---------- MOBILE NAV (hamburger) ---------- */
 .tm-nav-toggle {
   display: none;
@@ -21,24 +26,32 @@
 .tm-nav-toggle span {
   display: block;
   width: 100%;
-  height: 2px;
-  background: var(--bark, #2B2B28);
+  height: 2.5px;
+  background: var(--bark, #1a1a17);
   border-radius: 2px;
   transition: transform 0.2s, opacity 0.2s;
+  box-shadow: 0 0 1px rgba(0,0,0,0.3);
 }
 nav.tm-nav-open .tm-nav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 nav.tm-nav-open .tm-nav-toggle span:nth-child(2) { opacity: 0; }
 nav.tm-nav-open .tm-nav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 @media (max-width: 860px) {
-  nav { flex-wrap: wrap; padding: 1rem 1.25rem !important; }
+  nav { padding: 1rem 1.25rem !important; }
   .tm-nav-toggle { display: flex; }
   .nav-links {
     display: none;
     flex-direction: column !important;
-    width: 100%;
     gap: 0 !important;
-    padding-top: 1rem;
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--cream, var(--warm-white, #F5F1E6));
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    padding: 0.5rem 1.25rem 1.25rem;
+    box-sizing: border-box;
   }
   nav.tm-nav-open .nav-links { display: flex; }
   .nav-links li { width: 100%; }

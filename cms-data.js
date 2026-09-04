@@ -38,8 +38,9 @@
       const key = line.slice(0, colonIdx).trim();
       let val = line.slice(colonIdx + 1).trim();
 
-      // Block scalar | or >
-      if (val === '|' || val === '>') {
+      // Block scalar | or > (with optional chomping indicator -/+ and rare indent digit)
+      if (/^[|>][+-]?\d*$/.test(val)) {
+        const folded = val.charAt(0) === '>';
         const block = [];
         const baseIndent = (lines[i + 1] || '').match(/^(\s*)/)[1].length;
         i++;
@@ -51,7 +52,8 @@
           block.push(l.slice(baseIndent));
           i++;
         }
-        result[key] = block.join('\n').trim();
+        while (block.length && block[block.length - 1] === '') block.pop();
+        result[key] = folded ? block.join(' ').replace(/\s+/g, ' ').trim() : block.join('\n').trim();
         continue;
       }
 
@@ -326,8 +328,11 @@
           if (el.tagName === 'IMG') {
             el.src = val;
             el.style.display = 'block';
+            el.style.opacity = '1';
           } else {
-            // Replace placeholder with actual image
+            // Replace placeholder with actual image — reset opacity in case
+            // the placeholder styling (e.g. .photo-placeholder) faded it
+            el.style.opacity = '1';
             el.innerHTML = '<img src="' + val + '" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">';
           }
         }
@@ -488,6 +493,7 @@
     // Inject images from CMS content files
     if (homepage) renderImages(homepage, 'home');
     if (spacePage) renderImages(spacePage, 'space');
+    if (rentPage) renderImages(rentPage, 'rent');
 
     // About page — inject each photo into its specific element
     if (aboutPage) {
@@ -497,6 +503,7 @@
         if (!el) return;
         el.style.padding = '0';
         el.style.background = 'none';
+        el.style.opacity = '1';
         el.innerHTML = `<img src="${src}" alt="" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit;">`;
       };
       injectAbout('tm-img-about-alexa', aboutPage.alexa_image);
