@@ -71,14 +71,14 @@
   .page-hero {
     padding-top: 5rem;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    min-height: 60vh;
+    grid-template-columns: 1.3fr 1fr;
+    min-height: auto;
   }
 
   .hero-left {
     background: var(--sage-pale);
     display: flex; flex-direction: column; justify-content: center;
-    padding: 5rem 3.5rem 4rem 5rem;
+    padding: 4rem 3.5rem 4rem 5rem;
   }
 
   .page-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bark-light); font-weight: 500; margin-bottom: 1.25rem; opacity: 0; animation: fadeUp 0.7s 0.2s forwards; }
@@ -94,10 +94,17 @@
   .quick-link:hover { border-color: var(--terracotta); color: var(--terracotta); }
 
   .hero-right {
-    display: grid; grid-template-rows: 1fr 1fr;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 1rem;
+    align-self: center;
+    justify-self: stretch;
+    height: 240px;
+    padding: 2rem 3rem 2rem 1rem;
   }
 
-  .photo-block { display: flex; align-items: center; justify-content: center; position: relative; opacity: 0; animation: fadeIn 1s 0.4s forwards; }
+  .photo-block { display: flex; align-items: center; justify-content: center; position: relative; opacity: 0; animation: fadeIn 1s 0.4s forwards; border-radius: 1rem; overflow: hidden; }
   .photo-block.tc { background: var(--terracotta-pale); }
   .photo-block.sc { background: var(--sage-pale); }
   .photo-label { position: absolute; bottom: 1rem; left: 1rem; background: rgba(61,43,31,0.5); color: var(--cream); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3rem 0.75rem; border-radius: 2rem; }

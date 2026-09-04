@@ -99,14 +99,36 @@ nav.tm-nav-open .tm-nav-toggle span:nth-child(3) { transform: translateY(-7px) r
 
   .hero-left,
   .page-hero-left,
+  .hero-right,
+  .page-hero-right,
   .alexa-section,
   .photo-section,
   .cta-section,
-  .calendar-section {
+  .calendar-section,
+  .response-note {
     padding: 3rem 1.5rem !important;
   }
 
   .page-hero-right { min-height: 280px; }
+
+  /* Prevent any grid/flex child (esp. photo/image containers) from
+     forcing its row wider than the viewport, which pushes sibling
+     text content off-screen on the right */
+  .hero-left, .hero-right,
+  .page-hero-left, .page-hero-right,
+  .photo-block, .hero-photo, .response-note,
+  .alexa-photo-col, .alexa-photo-main,
+  .photographer-photo, .photo-section > * {
+    min-width: 0;
+  }
+
+  /* Safety net: long words/text never force a box wider than its container */
+  .page-hero-desc, .hero-tagline, .hero-tagline-bilingual,
+  .page-hero-title, .hero-title, .section-sub,
+  .response-note-text, p, h1, h2, h3 {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
 }
 
 @media (max-width: 640px) {
@@ -175,7 +197,12 @@ nav.tm-nav-open .tm-nav-toggle span:nth-child(3) { transform: translateY(-7px) r
 
 /* ---------- CALENDAR GRID ---------- */
 @media (max-width: 640px) {
+  .cal-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   .day-headers, .cal-grid {
+    min-width: 480px;
     gap: 2px !important;
   }
   .cal-grid > * {
