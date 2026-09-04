@@ -93,7 +93,7 @@ collections:
           - { label: "Hero description", name: "hero_desc", widget: "text" }
           - { label: "Space size (m²)", name: "size_sqm", widget: "string", hint: "Just the number(s), e.g. 60–100 — 'm²' is added automatically" }
           - { label: "Max capacity", name: "max_capacity", widget: "number", hint: "Just the number — '+' is added automatically" }
-          - { label: "Hero photo — Main room", name: "hero_main_room_image", widget: "image", required: false, hint: "Photo block on the Space page hero" }
+          - { label: "Hero photo — Balcony", name: "hero_balcony_image", widget: "image", required: false, hint: "Photo block on the Space page hero" }
           - { label: "Neighbourhood title", name: "neighbourhood_title", widget: "string" }
           - { label: "Neighbourhood", name: "neighbourhood", widget: "string" }
           - { label: "Neighbourhood description", name: "neighbourhood_desc", widget: "text" }
@@ -125,6 +125,8 @@ collections:
         fields:
           - { label: "Hero title", name: "hero_title", widget: "string" }
           - { label: "Hero description", name: "hero_desc", widget: "text" }
+          - { label: "Hero photo — Event setup", name: "hero_event_setup_image", widget: "image", required: false }
+          - { label: "Hero photo — Balcony", name: "hero_balcony_image", widget: "image", required: false }
 
       - label: "Membership page"
         name: "membership_page"
