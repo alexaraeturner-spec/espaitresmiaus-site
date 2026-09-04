@@ -426,8 +426,8 @@
 
       const tiers = {
         amigo: { max: 3, camera: false },
-        vecino: { max: 5, camera: true },
-        residente: { max: 6, camera: true }
+        vecino: { max: 4, camera: true },
+        residente: { max: 4, camera: true }
       };
 
       Object.keys(tiers).forEach(tier => {
@@ -458,7 +458,7 @@
           return '<td><span class="val">' + val + '</span></td>';
         };
         const rows = [];
-        for (let n = 1; n <= 8; n++) {
+        for (let n = 1; n <= 6; n++) {
           const label = memPage['compare_' + n + '_label'];
           if (!label) continue;
           rows.push(
